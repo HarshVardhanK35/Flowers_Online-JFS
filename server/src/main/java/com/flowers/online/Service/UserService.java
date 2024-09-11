@@ -19,7 +19,7 @@ public class UserService {
 
     public User registerNewUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword())); // Hash the password
-        user.setRole("CUSTOMER"); // Default role for a new user
+//        user.setRole("CUSTOMER"); // Default role for a new user
         return userRepository.save(user);
     }
 

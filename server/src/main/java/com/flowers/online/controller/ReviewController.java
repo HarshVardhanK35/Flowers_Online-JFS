@@ -1,4 +1,4 @@
-package com.flowers.online.Controller;
+package com.flowers.online.controller;
 
 import com.flowers.online.Model.Review;
 import com.flowers.online.Service.ReviewService;

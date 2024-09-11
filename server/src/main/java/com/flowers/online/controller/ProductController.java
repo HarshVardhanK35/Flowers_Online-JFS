@@ -1,4 +1,4 @@
-package com.flowers.online.Controller;
+package com.flowers.online.controller;
 
 import com.flowers.online.Model.Product;
 import com.flowers.online.Service.ProductService;
@@ -36,6 +36,7 @@ public class ProductController {
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
+
     }
 
     // Only ADMIN should be able to update products

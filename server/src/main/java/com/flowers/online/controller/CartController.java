@@ -1,4 +1,4 @@
-package com.flowers.online.Controller;
+package com.flowers.online.controller;
 
 import com.flowers.online.Model.Cart;
 import com.flowers.online.Model.Product;
