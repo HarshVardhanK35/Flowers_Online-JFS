@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;  // Import the correct PasswordEncoder
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,13 +27,17 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
+    public ResponseEntity<?> registerUser(@RequestBody User user) {
         // Log the registration attempt
-        logger.info("Registering user with username: {}", user.getUsername());
+        logger.info("Registering user with email: {}", user.getEmail());
+
+        if (userService.emailExists(user.getEmail())) {
+            return ResponseEntity.status(409).body("Email already exists");  // Return 409 Conflict if email exists
+        }
 
         // Ensure the role is set correctly. If no role is provided, default to USER
         if (user.getRole() == null || user.getRole().isEmpty()) {
-            user.setRole("ROLE_USER");  // Default to ROLE_USER if no role provided
+            user.setRole("ROLE_CUSTOMER");  // Default to ROLE_USER if no role provided
         }
         else if (!user.getRole().startsWith("ROLE_")) {
             user.setRole("ROLE_" + user.getRole().toUpperCase());  // Ensure role is prefixed with ROLE_
@@ -44,6 +50,7 @@ public class UserController {
         // Log success
         logger.info("User registered successfully with username: {}", user.getUsername());
 
+        logger.info("User registered successfully with email: {}", user.getEmail());
         return ResponseEntity.status(201).body(newUser);
     }
 
@@ -74,6 +81,40 @@ public class UserController {
         }
         else {
             logger.warn("User not found for username: {}", loginUser.getUsername());
+            return ResponseEntity.status(404).body("User not found");
+        }
+    }
+
+    @GetMapping("/check-email")
+    public ResponseEntity<?> checkEmailExists(@RequestParam String email) {
+        boolean exists = userService.emailExists(email);
+        return ResponseEntity.ok(Collections.singletonMap("exists", exists));
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> emailRequest) {
+        String email = emailRequest.get("email");
+        Optional<User> user = userService.findByEmail(email);
+
+        if (user.isPresent()) {
+            return ResponseEntity.ok("Email verified");
+        } else {
+            return ResponseEntity.status(404).body("Email not found");
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> passwordRequest) {
+        String email = passwordRequest.get("email");
+        String newPassword = passwordRequest.get("password");
+
+        Optional<User> user = userService.findByEmail(email);
+        if (user.isPresent()) {
+            User existingUser = user.get();
+            existingUser.setPassword(passwordEncoder.encode(newPassword));
+            userService.save(existingUser);  // Save the updated user with new password
+            return ResponseEntity.ok("Password reset successfully");
+        } else {
             return ResponseEntity.status(404).body("User not found");
         }
     }

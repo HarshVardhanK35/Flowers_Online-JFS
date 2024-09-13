@@ -18,12 +18,28 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public User registerNewUser(User user) {
+
+        if (emailExists(user.getEmail())) {
+            throw new IllegalStateException("Email already exists");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword())); // Hash the password
 //        user.setRole("CUSTOMER"); // Default role for a new user
         return userRepository.save(user);
     }
 
+    public boolean emailExists(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
     }
 }

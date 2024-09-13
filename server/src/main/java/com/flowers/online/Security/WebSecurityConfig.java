@@ -28,7 +28,7 @@ public class WebSecurityConfig {
                         .requestMatchers("DELETE", "/api/products/**").hasRole("ADMIN")
 
                         // Allow public access to user registration and login
-                        .requestMatchers("/api/users/register", "/api/users/login").permitAll()
+                        .requestMatchers("/api/users/check-email", "/api/users/register", "/api/users/login", "/api/users/forgot-password", "/api/users/reset-password").permitAll()
 
                         // Restrict all other routes to authenticated users
                         .anyRequest().authenticated()
