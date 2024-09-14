@@ -1,12 +1,12 @@
 import React from "react";
 import { Route, Routes, BrowserRouter} from "react-router-dom";
-import ProductList from "./components/ProductList";
-import AddProduct from "./components/AddProduct";
-import LoginRegister from "./components/LoginRegister";
-import "./App.css";
-import Register from "./components/Register";
-import ForgotPassword from "./components/ForgotPassword";
-import ResetPassword from "./components/ResetPassword";
+import ProductList from "./components/products/ProductList";
+import Register from "./components/Account/Register";
+import ForgotPassword from "./components/Account/ForgotPassword";
+import ResetPassword from "./components/Account/ResetPassword";
+import Home from "./components/Home/Home";
+import Login from "./components/Account/Login";
+import Regis from "./components/Account/Regis";
 
 function App() {
 	return (
@@ -14,13 +14,14 @@ function App() {
 				<div className="App">
 					<Routes>
 						<Route>
-              <Route path="/login" element={<LoginRegister />} />
-              <Route path="/" element={<LoginRegister />} />
-              <Route path="/products" element={<ProductList/>}></Route>
-              <Route path="/add-product" element={<AddProduct/>}></Route>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login/>} />
               <Route path="/register" element={<Register/>}></Route>
+              <Route path="/reg" element={<Regis/>}></Route>
               <Route path="/forgot-password" element={<ForgotPassword/>}></Route>
               <Route path="/reset-password" element={<ResetPassword/>}></Route>
+
+              <Route path="/products" element={<ProductList/>}></Route>
             </Route>
 					</Routes>
 				</div>

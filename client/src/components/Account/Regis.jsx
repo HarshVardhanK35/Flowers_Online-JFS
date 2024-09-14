@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Register() {
+function Regis() {
   const [title, setTitle] = useState('None');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -149,4 +149,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default Regis;
