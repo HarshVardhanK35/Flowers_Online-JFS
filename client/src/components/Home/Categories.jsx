@@ -6,45 +6,40 @@ const Categories = () => {
   const callouts = [
     {
       name: 'All Categories',
-      description: 'Journals and note-taking',
+      description: 'All categories of flowers are available here',
       imageSrc: '/categories/all.jpg',
       imageAlt: 'Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug.',
       href: '/categories/all',
     },
     {
       name: 'Birthdays',
-      description: 'Journals and note-taking',
+      description: 'Flowers for birthdays',
       imageSrc: '/categories/birthdays.jpg',
-      imageAlt: 'Wood table with porcelain mug, leather journal, brass pen, leather key ring, and a houseplant.',
-      href: '/categories/birthdays',
+      href: '/products/birthdays',
     },
     {
       name: 'Love',
-      description: 'Daily commute essentials',
+      description: 'Flowers for love occasions',
       imageSrc: '/categories/love.jpg',
-      imageAlt: 'Collection of four insulated travel bottles on wooden shelf.',
-      href: '/categories/love',
+      href: '/products/love',
     },
     {
       name: 'Marriages',
-      description: 'Daily commute essentials',
+      description: 'Flowers for marriages',
       imageSrc: '/categories/marriages.jpg',
-      imageAlt: 'Collection of four insulated travel bottles on wooden shelf.',
-      href: '/categories/love',
+      href: '/products/marriages',
     },
     {
       name: 'Grand Openings',
-      description: 'Daily commute essentials',
+      description: 'Flowers for grand openings',
       imageSrc: '/categories/grandopenings.jpg',
-      imageAlt: 'Collection of four insulated travel bottles on wooden shelf.',
-      href: '/categories/love',
+      href: '/products/grand-openings',
     },
     {
       name: 'Sympathy',
-      description: 'Daily commute essentials',
+      description: 'Flowers for sympathy',
       imageSrc: '/categories/sympathy.jpg',
-      imageAlt: 'Collection of four insulated travel bottles on wooden shelf.',
-      href: '/categories/love',
+      href: '/products/sympathy',
     },
   ]
 
@@ -53,10 +48,10 @@ const Categories = () => {
     <Navbar />
     <div className="bg-gray-100">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl py-16 sm:py-24 lg:max-w-none lg:py-12">
-          <h2 className="text-2xl font-bold text-gray-900">Collections</h2>
+        <div className="mx-auto max-w-2xl py-16 sm:py-24 lg:max-w-none lg:py-10">
+          <h2 className="text-2xl font-bold text-gray-900">Categories</h2>
 
-          <div className="mt-1 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0">
+          <div className="mt-3 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0.5">
             {callouts.map((callout) => (
               <div key={callout.name} className="group relative">
                 <div className="relative h-60 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-64">
@@ -66,13 +61,13 @@ const Categories = () => {
                     className="h-full w-full object-cover object-center"
                   />
                 </div>
-                <h3 className="mt-2 text-gray-500">
-                  <a href={callout.href}>
+                <a href={callout.href}>
+                  <h3 className="mt-2 text-gray-500">
                     <span className="absolute inset-1" />
                     {callout.name}
-                  </a>
-                </h3>
-                <p className="text-base font-semibold text-gray-900">{callout.description}</p>
+                  </h3>
+                  <p className="text-base font-semibold text-gray-900">{callout.description} <span aria-hidden="true">→</span></p>
+                </a>
               </div>
             ))}
           </div>

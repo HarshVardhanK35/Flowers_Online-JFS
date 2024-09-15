@@ -7,7 +7,7 @@ import Home from "./components/Home/Home";
 import Login from "./components/Account/Login";
 import Admin from "./components/Admin/Admin";
 import Categories from "./components/Home/Categories";
-import Navbar from "./components/Common/Navbar";
+import ProductList from "./components/Products/ProductList";
 
 function App() {
 	return (
@@ -22,7 +22,7 @@ function App() {
               <Route path="/reset-password" element={<ResetPassword/>}></Route>
 
               <Route path="/categories" element={<Categories/>}></Route>
-              <Route path="/navbar" element={<Navbar/>}></Route>
+              <Route path="/products/:categoryName" element={<ProductList />} />
 
               <Route path="/admin" element={<Admin/>}></Route>
             </Route>
