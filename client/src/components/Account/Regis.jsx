@@ -18,20 +18,18 @@ function Regis() {
   const handleRegister = (e) => {
     e.preventDefault();
 
-    // Validate passwords match
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
 
-    // Check if email is unique
     fetch(`http://localhost:8080/api/users/check-email?email=${email}`)
       .then(response => response.json())
       .then(data => {
         if (data.exists) {
           setEmailExists(true);
         } else {
-          // Register the user
+
           const userData = { title, firstName, lastName, email, password, phone, country };
           fetch('http://localhost:8080/api/users/register', {
             method: 'POST',
@@ -115,7 +113,7 @@ function Regis() {
         <div className="form-group">
           <label>Phone</label>
           <input
-            type="text"
+            type="tel"
             className="form-control"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}

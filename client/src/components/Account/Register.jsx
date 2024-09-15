@@ -19,20 +19,18 @@ export default function Register() {
 	const handleRegister = (e) => {
 		e.preventDefault();
 
-		// Validate passwords match
 		if (password !== confirmPassword) {
 			alert("Passwords do not match!");
 			return;
 		}
 
-		// Check if email is unique
 		fetch(`http://localhost:8080/api/users/check-email?email=${email}`)
 			.then((response) => response.json())
 			.then((data) => {
 				if (data.exists) {
 					setEmailExists(true);
 				} else {
-					// Register the user
+
 					const userData = {
 						title,
 						firstName,
@@ -64,6 +62,9 @@ export default function Register() {
 				className="max-w-3xl w-full p-6 bg-white shadow-lg rounded-lg"
 				onSubmit={handleRegister}
 			>
+				<h2 className="mt- text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+					Register here
+				</h2>
 				<div className="space-y-12">
 					<div className="border-b border-gray-900/10 pb-10">
 						<h2 className="text-base font-semibold leading-7 text-gray-900">
@@ -74,6 +75,7 @@ export default function Register() {
 						</p>
 
 						<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-5">
+
 							<div className="sm:col-span-1">
 								<label
 									htmlFor="title"
@@ -140,7 +142,7 @@ export default function Register() {
 								</div>
 							</div>
 
-							<div className="sm:col-span-3">
+							<div className="sm:col-span-4">
 								<label
 									htmlFor="email"
 									className="block text-sm font-medium leading-6 text-gray-900"
@@ -149,19 +151,20 @@ export default function Register() {
 								</label>
 								<div className="mt-2">
 									<input
-										id="email"
+										className={`${emailExists ? 'is-invalid' : ''} form-control block w-full rounded-md border-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
+										onChange={(e) => setEmail(e.target.value)}
+										autoComplete="email"
+										value={email}
 										name="email"
 										type="email"
-										value={email}
-										onChange={(e) => setEmail(e.target.value)}
+										id="email"
 										required
-										autoComplete="email"
-										className="form-control block w-full rounded-md border-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 									/>
+                  {emailExists && <div className="invalid-feedback">Email already exists!</div>}
 								</div>
 							</div>
 
-							<div className="sm:col-span-3">
+							<div className="sm:col-span-2">
 								<label
 									htmlFor="password"
 									className="block text-sm font-medium leading-6 text-gray-900"
@@ -174,15 +177,15 @@ export default function Register() {
 										name="password"
 										type="password"
 										autoComplete="password"
-                    value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+										value={password}
+										onChange={(e) => setPassword(e.target.value)}
+										required
 										className="form-control block w-full rounded-md border-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 									/>
 								</div>
 							</div>
 
-							<div className="sm:col-span-3">
+							<div className="sm:col-span-2">
 								<label
 									htmlFor="password"
 									className="block text-sm font-medium leading-6 text-gray-900"
@@ -195,15 +198,15 @@ export default function Register() {
 										name="password"
 										type="password"
 										autoComplete="confirm-password"
-                    value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
+										value={confirmPassword}
+										onChange={(e) => setConfirmPassword(e.target.value)}
+										required
 										className="form-control block w-full rounded-md border-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 									/>
 								</div>
 							</div>
 
-							<div className="sm:col-span-3">
+							<div className="sm:col-span-4">
 								<label
 									htmlFor="phone"
 									className="block text-sm font-medium leading-6 text-gray-900"
@@ -220,7 +223,7 @@ export default function Register() {
 								/>
 							</div>
 
-							<div className="sm:col-span-3">
+							<div className="sm:col-span-4">
 								<label
 									htmlFor="city"
 									className="block text-sm font-medium leading-6 text-gray-900"
@@ -253,6 +256,29 @@ export default function Register() {
 									</select>
 								</div>
 							</div>
+
+							<div className="sm:col-span-5">
+								<div className="flex items-start">
+									<div className="flex h-5 items-center">
+										<input
+											type="checkbox"
+											id="terms"
+											className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+											checked={acceptedTerms}
+											onChange={() => setAcceptedTerms(!acceptedTerms)}
+											required
+										/>
+									</div>
+									<div className="ml-3 text-sm">
+										<label
+											htmlFor="terms"
+											className="font-medium text-gray-700"
+										>
+											I accept the terms and conditions
+										</label>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -260,6 +286,7 @@ export default function Register() {
 					<button
 						type="button"
 						className="text-sm font-semibold leading-6 text-gray-900"
+            onClick={() => navigate('/')}
 					>
 						Cancel
 					</button>
