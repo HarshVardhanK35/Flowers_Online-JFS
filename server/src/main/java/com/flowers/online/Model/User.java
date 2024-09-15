@@ -14,7 +14,7 @@ public class User {
     private Long id;
 
     @Setter
-    private String title;  // Mr., Mrs., etc.
+    private String title;
 
     @Setter
     private String firstName;
@@ -23,16 +23,13 @@ public class User {
     private String lastName;
 
     @Setter
-    private String email;  // Email must be unique
+    private String email;
 
     @Setter
     private String phone;
 
     @Setter
-    private String country;
-
-    @Setter
-    private String username;  // Optional if separate from email
+    private String city;
 
     @Setter
     private String password;
@@ -42,13 +39,13 @@ public class User {
 
     public User() {}
 
-    public User(String title, String firstName, String lastName, String email, String phone, String country, String password, String role) {
+    public User(String title, String firstName, String lastName, String email, String phone, String city, String password, String role) {
         this.title = title;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
-        this.country = country;
+        this.city = city;
         this.password = password;
         this.role = role;
     }
@@ -77,12 +74,8 @@ public class User {
         return phone;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public String getUsername() {
-        return username;
+    public String getCity() {
+        return city;
     }
 
     public String getPassword() {

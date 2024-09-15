@@ -1,0 +1,42 @@
+/* eslint-disable no-unused-vars */
+import React from 'react'
+import { useNavigate } from 'react-router-dom';
+
+const Admin = () => {
+
+  const navigate = useNavigate();
+
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-5xl">
+
+      <div
+        className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl cursor-pointer transition duration-300"
+        onClick={() => navigate("/admin/details")}
+      >
+        <h2 className="text-xl font-bold mb-2">Admin Details</h2>
+        <p>Modify admin details here.</p>
+      </div>
+
+      <div
+        className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl cursor-pointer transition duration-300"
+        onClick={() => navigate("/admin/add-product")}
+      >
+        <h2 className="text-xl font-bold mb-2">Add Products</h2>
+        <p>Add new products/flowers to the inventory.</p>
+      </div>
+
+      <div
+        className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl cursor-pointer transition duration-300"
+        onClick={() => navigate("/admin/add-shop")}
+      >
+        <h2 className="text-xl font-bold mb-2">Add Shop Location</h2>
+        <p>Add a new shop location for your flower business.</p>
+      </div>
+
+    </div>
+  </div>
+  )
+}
+
+export default Admin

@@ -23,7 +23,7 @@ public class OrderService {
     public Order createOrder(Order order) {
         Order savedOrder = orderRepository.save(order);
         String emailBody = "Your order has been placed successfully. Order details: " + savedOrder.toString();
-        emailService.sendOrderConfirmationEmail(order.getUser().getUsername(), "Order Confirmation", emailBody);
+        emailService.sendOrderConfirmationEmail(order.getUser().getEmail(), "Order Confirmation", emailBody);
         return savedOrder;
     }
 }

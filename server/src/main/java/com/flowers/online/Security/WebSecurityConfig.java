@@ -19,19 +19,19 @@ public class WebSecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Disable CSRF protection (if needed)
                 .authorizeHttpRequests(auth -> auth
 
-                        // Allow public access to product listing
-                        .requestMatchers("GET", "/api/products/**").permitAll()
+                        // Public routes
+//                        .requestMatchers("/api/users/check-email", "/api/users/register", "/api/users/login", "/api/users/forgot-password", "/api/users/reset-password").permitAll()
+                        .requestMatchers("/api/users/**", "/home", "/categories", "/products/**").permitAll()
 
-                        // Restrict product creation, update, and deletion to admins
-                        .requestMatchers("POST", "/api/products/**").hasRole("ADMIN")
-                        .requestMatchers("PUT", "/api/products/**").hasRole("ADMIN")
-                        .requestMatchers("DELETE", "/api/products/**").hasRole("ADMIN")
+                        // Admin routes
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
 
-                        // Allow public access to user registration and login
-                        .requestMatchers("/api/users/check-email", "/api/users/register", "/api/users/login", "/api/users/forgot-password", "/api/users/reset-password").permitAll()
+                        // Cart routes should be protected for logged-in users only
+                        .requestMatchers("/cart").authenticated()
 
-                        // Restrict all other routes to authenticated users
+                        // Any other request should be authenticated
                         .anyRequest().authenticated()
+
                 )
                 .httpBasic(basic -> {})  // Enable HTTP Basic authentication
                 .sessionManagement(session -> session

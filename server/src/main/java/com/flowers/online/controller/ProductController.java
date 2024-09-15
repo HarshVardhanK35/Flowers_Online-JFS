@@ -20,9 +20,14 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    @GetMapping("/{category}")
+    public String getProductsByCategory(@PathVariable String category) {
+        return "Displaying products for category: " + category;
+    }
+
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
-        return productService.getProductById(id);
+    public String getProductDetails(@PathVariable Long id) {
+        return "Displaying details for product: " + id;
     }
 
     // Only ADMIN should be able to add products

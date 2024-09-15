@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react/jsx-no-duplicate-props */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

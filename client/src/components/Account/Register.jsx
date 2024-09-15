@@ -62,10 +62,10 @@ export default function Register() {
 				className="max-w-3xl w-full p-6 bg-white shadow-lg rounded-lg"
 				onSubmit={handleRegister}
 			>
-				<h2 className="mt- text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+				<h2 className="mt-0 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
 					Register here
 				</h2>
-				<div className="space-y-12">
+				<div className="space-y-10">
 					<div className="border-b border-gray-900/10 pb-10">
 						<h2 className="text-base font-semibold leading-7 text-gray-900">
 							Personal Information

@@ -28,59 +28,44 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
-        // Log the registration attempt
         logger.info("Registering user with email: {}", user.getEmail());
 
         if (userService.emailExists(user.getEmail())) {
-            return ResponseEntity.status(409).body("Email already exists");  // Return 409 Conflict if email exists
+            return ResponseEntity.status(409).body("Email already exists");
         }
 
-        // Ensure the role is set correctly. If no role is provided, default to USER
         if (user.getRole() == null || user.getRole().isEmpty()) {
-            user.setRole("ROLE_CUSTOMER");  // Default to ROLE_USER if no role provided
+            user.setRole("ROLE_CUSTOMER");
         }
         else if (!user.getRole().startsWith("ROLE_")) {
-            user.setRole("ROLE_" + user.getRole().toUpperCase());  // Ensure role is prefixed with ROLE_
+            user.setRole("ROLE_" + user.getRole().toUpperCase());
         }
 
         // Encode the password before saving
 //         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User newUser = userService.registerNewUser(user);
 
-        // Log success
-        logger.info("User registered successfully with username: {}", user.getUsername());
-
         logger.info("User registered successfully with email: {}", user.getEmail());
         return ResponseEntity.status(201).body(newUser);
     }
 
-    // Custom login method
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User loginUser) {
-        logger.info("Login attempt for username: {}", loginUser.getUsername());
+        logger.info("Login attempt for email: {}", loginUser.getEmail());
 
-        // Check if the user exists
-        Optional<User> user = userService.findByUsername(loginUser.getUsername());
+        Optional<User> user = userService.findByEmail(loginUser.getEmail());
 
         if (user.isPresent()) {
-            logger.info("User found for username: {}", loginUser.getUsername());
-
-            // Verify the password
             if (passwordEncoder.matches(loginUser.getPassword(), user.get().getPassword())) {
-                logger.info("Password match for username: {}", loginUser.getUsername());
-
-                // Remove password before returning the response
                 User loggedInUser = user.get();
                 loggedInUser.setPassword(null);  // Don't return the password
                 return ResponseEntity.ok(loggedInUser);
             }
             else {
-                logger.warn("Password mismatch for username: {}", loginUser.getUsername());
                 return ResponseEntity.status(401).body("Invalid credentials");
             }
         }
         else {
-            logger.warn("User not found for username: {}", loginUser.getUsername());
             return ResponseEntity.status(404).body("User not found");
         }
     }
@@ -112,7 +97,7 @@ public class UserController {
         if (user.isPresent()) {
             User existingUser = user.get();
             existingUser.setPassword(passwordEncoder.encode(newPassword));
-            userService.save(existingUser);  // Save the updated user with new password
+            userService.save(existingUser);
             return ResponseEntity.ok("Password reset successfully");
         } else {
             return ResponseEntity.status(404).body("User not found");
