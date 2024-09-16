@@ -30,7 +30,6 @@ export default function Register() {
 				if (data.exists) {
 					setEmailExists(true);
 				} else {
-
 					const userData = {
 						title,
 						firstName,
@@ -75,7 +74,6 @@ export default function Register() {
 						</p>
 
 						<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-5">
-
 							<div className="sm:col-span-1">
 								<label
 									htmlFor="title"
@@ -151,7 +149,9 @@ export default function Register() {
 								</label>
 								<div className="mt-2">
 									<input
-										className={`${emailExists ? 'is-invalid' : ''} form-control block w-full rounded-md border-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
+										className={`${
+											emailExists ? "is-invalid" : ""
+										} form-control block w-full rounded-md border-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6`}
 										onChange={(e) => setEmail(e.target.value)}
 										autoComplete="email"
 										value={email}
@@ -160,7 +160,11 @@ export default function Register() {
 										id="email"
 										required
 									/>
-                  {emailExists && <div className="invalid-feedback">Email already exists!</div>}
+									{emailExists && (
+										<div className="invalid-feedback">
+											Email already exists!
+										</div>
+									)}
 								</div>
 							</div>
 
@@ -286,7 +290,7 @@ export default function Register() {
 					<button
 						type="button"
 						className="text-sm font-semibold leading-6 text-gray-900"
-            onClick={() => navigate('/')}
+						onClick={() => navigate("/")}
 					>
 						Cancel
 					</button>

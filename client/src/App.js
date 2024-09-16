@@ -8,6 +8,7 @@ import Login from "./components/Account/Login";
 import Admin from "./components/Admin/Admin";
 import Categories from "./components/Home/Categories";
 import ProductList from "./components/Products/ProductList";
+import AddProducts from "./components/Admin/AddProducts";
 
 function App() {
 	return (
@@ -25,6 +26,7 @@ function App() {
               <Route path="/products/:categoryName" element={<ProductList />} />
 
               <Route path="/admin" element={<Admin/>}></Route>
+              <Route path="/admin/add-product" element={<AddProducts/>}></Route>
             </Route>
 					</Routes>
 				</div>

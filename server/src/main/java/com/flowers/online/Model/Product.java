@@ -1,42 +1,64 @@
 package com.flowers.online.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Setter;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "products")
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Setter
     private String name;
-    @Setter
+
     private String category;
-    @Setter
+
     private double price;
-    @Setter
-    private String description;
 
-    // Constructors, Getters, and Setters
-    public Product() {}
+    private String photo; // Store URL or file path for the image
 
-    public Product(String name, String category, double price, String description) {
+    public Product(String name, String price, String category, String photo) {
         this.name = name;
         this.category = category;
-        this.price = price;
-        this.description = description;
+        this.price = Double.parseDouble(String.valueOf(price));
+        this.photo = photo;
     }
 
-    public Long getId() { return id; }
-    public String getName() { return name; }
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
 
-    public String getCategory() { return category; }
+    public String getName() {
+        return name;
+    }
 
-    public double getPrice() { return price; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getDescription() { return description; }
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 }

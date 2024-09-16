@@ -8,6 +8,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -16,21 +20,30 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                // Configure CORS without using deprecated methods
+                .cors(corsConfigurer -> corsConfigurer.configurationSource(request -> {
+                    var cors = new org.springframework.web.cors.CorsConfiguration();
+                    cors.setAllowedOrigins(List.of("http://localhost:3000"));
+                    cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+                    cors.setAllowedHeaders(List.of("*"));
+                    cors.setAllowCredentials(true);
+                    return cors;
+                }))
                 .csrf(csrf -> csrf.disable()) // Disable CSRF protection (if needed)
                 .authorizeHttpRequests(auth -> auth
 
-                        // Public routes
+                                // Public routes
 //                        .requestMatchers("/api/users/check-email", "/api/users/register", "/api/users/login", "/api/users/forgot-password", "/api/users/reset-password").permitAll()
-                        .requestMatchers("/api/users/**", "/home", "/categories", "/products/**").permitAll()
+                                .requestMatchers("/api/users/**", "/home", "/categories", "/products/**").permitAll()
 
-                        // Admin routes
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                                // Admin routes
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
 
-                        // Cart routes should be protected for logged-in users only
-                        .requestMatchers("/cart").authenticated()
+                                // Cart routes should be protected for logged-in users only
+                                .requestMatchers("/cart").authenticated()
 
-                        // Any other request should be authenticated
-                        .anyRequest().authenticated()
+                                // Any other request should be authenticated
+                                .anyRequest().authenticated()
 
                 )
                 .httpBasic(basic -> {})  // Enable HTTP Basic authentication
@@ -43,5 +56,19 @@ public class WebSecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/api/**")
+                        .allowedOrigins("http://localhost:3000")  // Allow your frontend origin
+                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
+            }
+        };
     }
 }
