@@ -1,5 +1,4 @@
 package com.flowers.online.Model;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -11,17 +10,17 @@ public class Product {
     private Long id;
 
     private String name;
-
     private String category;
-
     private double price;
+    private String photo;
 
-    private String photo; // Store URL or file path for the image
+    // Default constructor required by JPA
+    public Product() {}
 
-    public Product(String name, String price, String category, String photo) {
+    public Product(String name, double price, String category, String photo) {
         this.name = name;
+        this.price = price;
         this.category = category;
-        this.price = Double.parseDouble(String.valueOf(price));
         this.photo = photo;
     }
 

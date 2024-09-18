@@ -1,12 +1,14 @@
 package com.flowers.online.controller;
 
 import com.flowers.online.Model.User;
+import com.flowers.online.Security.JwtTokenProvider;
 import com.flowers.online.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;  // Import the correct PasswordEncoder
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -23,6 +25,9 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -51,15 +56,21 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody User loginUser) {
-        logger.info("Login attempt for email: {}", loginUser.getEmail());
+//        logger.info("Login attempt for email: {}", loginUser.getEmail());
 
         Optional<User> user = userService.findByEmail(loginUser.getEmail());
 
         if (user.isPresent()) {
             if (passwordEncoder.matches(loginUser.getPassword(), user.get().getPassword())) {
+                String token = jwtTokenProvider.generateToken(user.get().getEmail(), user.get().getRole());
                 User loggedInUser = user.get();
                 loggedInUser.setPassword(null);  // Don't return the password
-                return ResponseEntity.ok(loggedInUser);
+
+                Map<String, Object> response = new HashMap<>();
+                response.put("token", token);
+                response.put("user", loggedInUser);
+
+                return ResponseEntity.ok(response);
             }
             else {
                 return ResponseEntity.status(401).body("Invalid credentials");

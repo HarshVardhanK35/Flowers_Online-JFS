@@ -7,7 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException; // Use java.io.IOException here
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,7 +23,6 @@ public class ProductController {
 
     private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
 
-    // Create product with file upload (Admin only)
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public Product createProduct(
@@ -36,43 +35,39 @@ public class ProductController {
         String photoFilename = photo.getOriginalFilename();
         try {
             Path path = Paths.get(UPLOAD_DIR + photoFilename);
-            Files.createDirectories(path.getParent()); // Ensure the upload directory exists
+            Files.createDirectories(path.getParent());
             Files.write(path, photo.getBytes());
         } catch (IOException e) {
             throw new RuntimeException("Error saving file", e);
         }
 
-        // Create and save the product
-        Product newProduct = new Product(name, price, category, "/uploads/" + photoFilename);
+        double parsedPrice = Double.parseDouble(price);
+        // Return the full URL to access the image, not just the local file path
+        Product newProduct = new Product(name, parsedPrice, category, "/uploads/" + photoFilename);
         return productService.saveProduct(newProduct);
     }
 
-    // Fetch all products
     @GetMapping
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 
-    // Fetch product details by ID
     @GetMapping("/{id}")
     public Product getProductDetails(@PathVariable Long id) {
         return productService.getProductById(id);
     }
 
-    // Fetch products by category
     @GetMapping("/category/{category}")
     public List<Product> getProductsByCategory(@PathVariable String category) {
         return productService.getProductsByCategory(category);
     }
 
-    // Delete product (Admin only)
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
     }
 
-    // Update product (Admin only)
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public Product updateProduct(@PathVariable Long id, @RequestBody Product updatedProduct) {
@@ -82,7 +77,6 @@ public class ProductController {
             existingProduct.setPrice(updatedProduct.getPrice());
             existingProduct.setPhoto(updatedProduct.getPhoto());
             existingProduct.setCategory(updatedProduct.getCategory());
-
             return productService.saveProduct(existingProduct);
         } else {
             throw new RuntimeException("Product not found");

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../Common/AdminNavbar";
@@ -32,6 +33,9 @@ const AddProducts = () => {
 
 	const handleAddProducts = async (e) => {
 		e.preventDefault();
+
+    const token = localStorage.getItem("token");
+
 		const formData = new FormData();
 		formData.append("name", productName);
 		formData.append("category", category); // Adding category to formData
@@ -43,14 +47,20 @@ const AddProducts = () => {
 			const response = await fetch("http://localhost:8080/api/products", {
 				method: "POST",
 				body: formData,
-				headers: {},
+				headers: {
+          Authorization: `Bearer ${token}`,  // Add the JWT token here
+        },
 			});
+
 			if (response.ok) {
-				navigate("/products-listed");
-			} else {
+				navigate("/products");
+			}
+      else {
 				alert("Error saving product");
 			}
-		} catch (error) {
+		}
+    catch (error) {
+      console.error(error);
 			alert("Error: " + error);
 		}
 	};

@@ -9,7 +9,7 @@ import Admin from "./components/Admin/Admin";
 import Categories from "./components/Home/Categories";
 import ProductList from "./components/Products/ProductList";
 import AddProducts from "./components/Admin/AddProducts";
-
+import ProtectedRoute from "./components/Admin/ProtectedRoute";
 function App() {
 	return (
 		<BrowserRouter>
@@ -23,15 +23,16 @@ function App() {
               <Route path="/reset-password" element={<ResetPassword/>}></Route>
 
               <Route path="/categories" element={<Categories/>}></Route>
-              <Route path="/products/:categoryName" element={<ProductList />} />
+              {/* <Route path="/products/:categoryName" element={<ProductList />} /> */}
+              <Route path="/products" element={<ProductList />} />
 
-              <Route path="/admin" element={<Admin/>}></Route>
-              <Route path="/admin/add-product" element={<AddProducts/>}></Route>
+              <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+              <Route path="/admin/products" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
+              <Route path="/admin/add-product" element={<ProtectedRoute><AddProducts /></ProtectedRoute>} />
             </Route>
 					</Routes>
 				</div>
 		</BrowserRouter>
 	);
 }
-
 export default App;

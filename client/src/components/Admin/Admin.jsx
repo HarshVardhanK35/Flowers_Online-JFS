@@ -29,7 +29,7 @@ const Admin = () => {
 
           <div
 						className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl cursor-pointer transition duration-300"
-						onClick={() => navigate("/admin/add-product")}
+						onClick={() => navigate("/admin/products")}
 					>
 						<h2 className="text-xl font-bold mb-2">Modify Flowers Listed.</h2>
 						<p>Modify flowers that were already present in the inventory.</p>

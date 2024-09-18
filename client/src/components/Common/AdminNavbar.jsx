@@ -15,6 +15,7 @@ import {
 	BellIcon,
 	XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 
 const navigation = [
 	{ name: "Users Registered", href: "/user-profiles", current: false },
@@ -22,6 +23,14 @@ const navigation = [
 ];
 
 const AdminNavbar = () => {
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
 	function classNames(...classes) {
 		return classes.filter(Boolean).join(" ");
 	}
@@ -116,12 +125,12 @@ const AdminNavbar = () => {
 										</a>
 									</MenuItem>
 									<MenuItem>
-										<a
-											href="/logout"
+										<button
+                      onClick={handleLogout}
 											className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
 										>
 											Sign out
-										</a>
+										</button>
 									</MenuItem>
 								</MenuItems>
 							</Menu>

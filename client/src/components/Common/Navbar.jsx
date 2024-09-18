@@ -1,18 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import {
-	Disclosure,
-	DisclosureButton,
-  DisclosurePanel,
-	Menu,
-	MenuButton,
-	MenuItem,
-	MenuItems,
-} from "@headlessui/react";
-import {
-	Bars3Icon,
-	ShoppingBagIcon,
-	XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu,MenuButton, MenuItem, MenuItems} from "@headlessui/react";
+import {Bars3Icon,ShoppingBagIcon,XMarkIcon,} from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 
 const navigation = [
 	{ name: "About", href: "/about", current: false },
@@ -24,21 +14,27 @@ const Navbar = () => {
 		return classes.filter(Boolean).join(" ");
 	}
 
-	const [cartItems, setCartItems] = useState(0);
-
+  const [cartItems, setCartItems] = useState(0);
 	useEffect(() => {
 		const storedCartItems = localStorage.getItem("cartItems");
 		setCartItems(storedCartItems ? JSON.parse(storedCartItems).length : 0);
 	}, []);
 
-	const handleCartClick = (e) => {
+  const handleCartClick = (e) => {
 		if (cartItems === 0) {
 			e.preventDefault(); // Prevent navigation if no items in cart
 			alert("Your cart is empty.");
 		}
 	};
 
-	return (
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
+  return (
 		<Disclosure as="nav" className="bg-gray-800">
 			<div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
 				<div className="relative flex h-16 items-center justify-between">
@@ -132,12 +128,12 @@ const Navbar = () => {
 									</a>
 								</MenuItem>
 								<MenuItem>
-									<a
-										href="/logout"
+									<button
+                    onClick={handleLogout}
 										className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 									>
 										Sign out
-									</a>
+									</button>
 								</MenuItem>
 							</MenuItems>
 						</Menu>

@@ -1,14 +1,15 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
-
     fetch('http://localhost:8080/api/users/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -22,9 +23,16 @@ function Login() {
       }
     })
     .then((data) => {
-      if (data.role === "ROLE_ADMIN") {
+      localStorage.setItem("token", data.token);
+
+      const token = data.token;
+      const user = data.user;
+      const role = user.role;
+
+      if (role === "ROLE_ADMIN") {
         navigate('/admin');
-      } else {
+      }
+      else {
         navigate('/categories');
       }
     })
@@ -117,5 +125,4 @@ function Login() {
     </div>
   );
 }
-
 export default Login;
