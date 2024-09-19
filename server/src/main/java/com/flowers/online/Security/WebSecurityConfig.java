@@ -47,11 +47,15 @@ public class WebSecurityConfig {
                 }))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/uploads/**").permitAll()
-                        .requestMatchers("/home", "/categories").permitAll()
+
                         .requestMatchers("/api/users/login", "/api/users/register", "/api/users/check-email", "/api/users/forgot-password", "/api/users/reset-password").permitAll()
+
+                        .requestMatchers("/categories/**","/cart", "/products/**", "/profile").authenticated()
+                        .requestMatchers("/home", "/categories").permitAll()
+
+                        .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers( "/categories/**","/cart", "/products/**").authenticated()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

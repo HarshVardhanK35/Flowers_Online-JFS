@@ -9,7 +9,7 @@ const navigation = [
   { name: 'Contact', href: '/contact' }
 ]
 
-const Home = () => {
+const UserLanding = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
 	return (
@@ -43,7 +43,7 @@ const Home = () => {
             ))}
           </div>
 					<div className="hidden lg:flex lg:flex-1 lg:justify-end">
-						<a href="/login" className="text-sm font-semibold leading-6 text-gray-900">
+            <a href="/login" className="text-sm font-semibold leading-6 text-gray-900">
 							Log in <span aria-hidden="true">&rarr;</span>
 						</a>
 					</div>
@@ -121,7 +121,7 @@ const Home = () => {
 								href="/categories"
 								className="text-sm font-semibold leading-6 text-gray-900"
 							>
-								Categories we provide <span aria-hidden="true">→</span>
+								Flower categories we provide <span aria-hidden="true">→</span>
 							</a>
 						</div>
 					</div>
@@ -143,4 +143,4 @@ const Home = () => {
 	);
 };
 
-export default Home;
+export default UserLanding;

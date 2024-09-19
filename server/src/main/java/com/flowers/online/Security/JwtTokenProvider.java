@@ -11,8 +11,11 @@ import java.security.Key;
 import java.util.Date;
 @Component
 public class JwtTokenProvider {
+
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+
     private final Logger logger = (Logger) LoggerFactory.getLogger(JwtTokenProvider.class);
+
     public String generateToken(String username, String role) {
         Date now = new Date();
         long jwtExpirationMs = 315360000000L;

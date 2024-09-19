@@ -3,7 +3,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../Common/AdminNavbar";
 
-const Admin = () => {
+const AdminLanding = () => {
 	const navigate = useNavigate();
 
 	return (
@@ -16,7 +16,7 @@ const Admin = () => {
 						onClick={() => navigate("/admin/details")}
 					>
 						<h2 className="text-xl font-bold mb-2">Edit Your Details.</h2>
-						<p>Modify / Edit admin details here.</p>
+						<p>Modify / Edit AdminLanding details here.</p>
 					</div>
 
 					<div
@@ -29,7 +29,7 @@ const Admin = () => {
 
           <div
 						className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl cursor-pointer transition duration-300"
-						onClick={() => navigate("/admin/products")}
+						onClick={() => navigate("/products")}
 					>
 						<h2 className="text-xl font-bold mb-2">Modify Flowers Listed.</h2>
 						<p>Modify flowers that were already present in the inventory.</p>
@@ -49,4 +49,4 @@ const Admin = () => {
 	);
 };
 
-export default Admin;
+export default AdminLanding;

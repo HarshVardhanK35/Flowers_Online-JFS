@@ -10,6 +10,7 @@ function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
+
     fetch('http://localhost:8080/api/users/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -18,18 +19,16 @@ function Login() {
     .then((response) => {
       if (response.status === 200) {
         return response.json();
-      } else {
+      }
+      else {
         throw new Error("Invalid login credentials");
       }
     })
     .then((data) => {
       localStorage.setItem("token", data.token);
+      localStorage.setItem("role", data.user.role);
 
-      const token = data.token;
-      const user = data.user;
-      const role = user.role;
-
-      if (role === "ROLE_ADMIN") {
+      if (data.user.role === "ROLE_ADMIN") {
         navigate('/admin');
       }
       else {

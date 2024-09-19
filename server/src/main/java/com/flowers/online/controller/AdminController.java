@@ -22,6 +22,7 @@ public class AdminController {
     public String addProduct() {
         return "Product added successfully";
     }
+    
     @PostMapping("/add-shop")
     @PreAuthorize("hasRole('ADMIN')")
     public String addShopLocation() {

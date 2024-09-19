@@ -18,8 +18,10 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const navigation = [
-	{ name: "Users Registered", href: "/user-profiles", current: false },
-	{ name: "Products Listed", href: "/products-listed", current: false },
+  { name: "Dashboard", href: "/admin", current: false },
+	{ name: "Categories", href: "/categories", current: false },
+	{ name: "Users", href: "/user-profiles", current: false },
+  { name: "Products", href: "/products-listed", current: false },
 ];
 
 const AdminNavbar = () => {
@@ -27,7 +29,9 @@ const AdminNavbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    alert("Are you sure you want to logout!")
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
     navigate("/login");
   };
 

@@ -3,21 +3,23 @@ import { Route, Routes, BrowserRouter } from "react-router-dom";
 import Register from "./components/Account/Register";
 import ForgotPassword from "./components/Account/ForgotPassword";
 import ResetPassword from "./components/Account/ResetPassword";
-import Home from "./components/Home/Home";
 import Login from "./components/Account/Login";
-import Admin from "./components/Admin/Admin";
 import Categories from "./components/Home/Categories";
 import ProductList from "./components/Products/ProductList";
 import AddProducts from "./components/Admin/AddProducts";
 import ProtectedRoute from "./components/Admin/ProtectedRoute";
 import Error from "./components/Common/Error";
+import UserLanding from "./components/Home/UserLanding";
+import AdminLanding from "./components/Admin/AdminLanding";
+import AddShopLocation from "./components/Admin/AddShopLocation";
+import AdminDetails from "./components/Admin/AdminDetails";
 
 function App() {
 	return (
 		<BrowserRouter>
 			<div className="App">
 				<Routes>
-					<Route path="/" element={<Home />} />
+					<Route path="/" element={<UserLanding />} />
 
 					<Route path="/login" element={<Login />} />
 					<Route path="/register" element={<Register />} />
@@ -25,18 +27,11 @@ function App() {
 					<Route path="/reset-password" element={<ResetPassword />} />
 
 					<Route path="/categories" element={<Categories />} />
+					<Route path="/categories/all" element={<ProductList />} />
+					<Route path="/products" element={<ProductList />} />
 
 					<Route
 						path="/products/:categoryName"
-						element={
-							<ProtectedRoute>
-								{" "}
-								<ProductList />{" "}
-							</ProtectedRoute>
-						}
-					/>
-					<Route
-						path="/categories/all"
 						element={
 							<ProtectedRoute>
 								{" "}
@@ -48,24 +43,35 @@ function App() {
 					<Route
 						path="/admin"
 						element={
-							<ProtectedRoute>
-								<Admin />
+							<ProtectedRoute adminOnly={true}>
+								<AdminLanding />
 							</ProtectedRoute>
 						}
 					/>
-					<Route
-						path="/admin/products"
-						element={
-							<ProtectedRoute>
-								<ProductList />
-							</ProtectedRoute>
-						}
-					/>
-					<Route
+
+          <Route
 						path="/admin/add-product"
 						element={
-							<ProtectedRoute>
+							<ProtectedRoute adminOnly={true}>
 								<AddProducts />
+							</ProtectedRoute>
+						}
+					/>
+
+          <Route
+						path="/admin/add-shop"
+						element={
+							<ProtectedRoute adminOnly={true}>
+                <AddShopLocation />
+							</ProtectedRoute>
+						}
+					/>
+
+          <Route
+						path="/admin/details"
+						element={
+							<ProtectedRoute adminOnly={true}>
+                <AdminDetails />
 							</ProtectedRoute>
 						}
 					/>

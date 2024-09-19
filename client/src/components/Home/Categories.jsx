@@ -1,7 +1,11 @@
+/* eslint-disable no-unused-vars */
 import React from 'react'
 import Navbar from '../Common/Navbar'
+import AdminNavbar from '../Common/AdminNavbar';
 
 const Categories = () => {
+
+  const role = localStorage.getItem('role');
 
   const callouts = [
     {
@@ -43,9 +47,9 @@ const Categories = () => {
     },
   ]
 
-  return (
-    <div>
-    <Navbar />
+return (
+  <div>
+    {role === 'ROLE_ADMIN' ? <AdminNavbar /> : <Navbar />}
     <div className="bg-gray-100">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl py-16 sm:py-24 lg:max-w-none lg:py-10">

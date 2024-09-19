@@ -21,14 +21,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException, java.io.IOException {
+
         String token = getJwtFromRequest(request);
+
         if (token != null && jwtTokenProvider.validateToken(token)) {
             String role = jwtTokenProvider.getRoleFromJWT(token);
             String email = jwtTokenProvider.getUsernameFromJWT(token);
-            logger.info("Token is valid, email: {}");
+
+            logger.info("Token is valid, email:");
+            logger.info(email);
+            logger.info("Token is valid, role:");
+            logger.info(role);
+
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities());
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } else {
             logger.warn("JWT Token is invalid or missing");

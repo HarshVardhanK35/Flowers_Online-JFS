@@ -30,7 +30,11 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    alert("Are you sure you want to logout!")
+
     localStorage.removeItem("token");
+    localStorage.removeItem("role")
+
     navigate("/login");
   };
 

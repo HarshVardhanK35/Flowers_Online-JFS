@@ -4,8 +4,9 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 
 // Higher-order component for protecting routes
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children, adminOnly = false }) => {
 	const token = localStorage.getItem("token");
+  const userRole = localStorage.getItem("role");
 
 	if (!token) {
 		// If no token, redirect to the login page
@@ -22,13 +23,13 @@ const ProtectedRoute = ({ children }) => {
 						</p>
 						<div class="mt-10 flex items-center justify-center gap-x-6">
 							<a
-								href="/register"
+								href="/login"
 								class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 							>
-								Feel free to register!
+								Login Here
 							</a>
-							<a href="/login" class="text-sm font-semibold text-gray-900">
-								Login <span aria-hidden="true">&rarr;</span>
+							<a href="/register" class="text-sm font-semibold text-gray-900">
+								Feel free to register <span aria-hidden="true">&rarr;</span>
 							</a>
 						</div>
 					</div>
@@ -37,7 +38,12 @@ const ProtectedRoute = ({ children }) => {
 		);
 	}
 
-	return children;
+  // If this is an admin-only route, ensure the user has the ROLE_ADMIN
+  if (adminOnly && userRole !== "ROLE_ADMIN") {
+    return <Navigate to="/categories" />;  // Redirect customers to categories page
+  }
+
+  return children;
 };
 
 export default ProtectedRoute;
