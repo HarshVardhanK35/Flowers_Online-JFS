@@ -10,30 +10,24 @@ import {
 	MenuItem,
 	MenuItems,
 } from "@headlessui/react";
-import {
-	Bars3Icon,
-	BellIcon,
-	XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 
 const navigation = [
-  { name: "Dashboard", href: "/admin", current: false },
 	{ name: "Categories", href: "/categories", current: false },
 	{ name: "Users", href: "/user-profiles", current: false },
-  { name: "Products", href: "/products-listed", current: false },
+	{ name: "Products", href: "/products-listed", current: false },
 ];
 
 const AdminNavbar = () => {
+	const navigate = useNavigate();
 
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    alert("Are you sure you want to logout!")
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    navigate("/login");
-  };
+	const handleLogout = () => {
+		alert("Are you sure you want to logout!");
+		localStorage.removeItem("token");
+		localStorage.removeItem("role");
+		navigate("/");
+	};
 
 	function classNames(...classes) {
 		return classes.filter(Boolean).join(" ");
@@ -60,17 +54,15 @@ const AdminNavbar = () => {
 						</div>
 						<div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
 							<div className="flex flex-shrink-0 items-center">
-								<a href="/">
-									<img
-										alt="9Flowers.Online"
-										src="/logo.webp"
-										className="h-8 w-auto rounded-md"
-									/>
-								</a>
+								<img
+									alt="9Flowers.Online"
+									src="/logo.webp"
+									className="h-8 w-auto rounded-md"
+								/>
 							</div>
-							<div className="hidden sm:flex sm:items-center sm:justify-center flex-1">
+							<div className="hidden sm:flex sm:items-center flex-1">
 								<span className="text-white text-xl font-bold text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-1 text-sm font-medium">
-									<a href="/">9Flowers.Online</a>
+									<a href="/admin">Dashboard</a>
 								</span>
 							</div>
 							<div className="hidden sm:ml-1 sm:block">
@@ -94,20 +86,20 @@ const AdminNavbar = () => {
 							</div>
 						</div>
 						<div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-              <a href="/notifications">
-                <button
-                  type="button"
-                  className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                >
-                  <span className="absolute -inset-1.5" />
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon aria-hidden="true" className="h-6 w-6" />
-                </button>
-              </a>
+							<a href="/notifications">
+								<button
+									type="button"
+									className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+								>
+									<span className="absolute -inset-1.5" />
+									<span className="sr-only">View notifications</span>
+									<BellIcon aria-hidden="true" className="h-6 w-6" />
+								</button>
+							</a>
 							<Menu as="div" className="relative ml-3">
 								<div>
 									<MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                  <span className="absolute -inset-1.5" />
+										<span className="absolute -inset-1.5" />
 										<span className="sr-only">Open user menu</span>
 										<img
 											alt="Profile Pic"
@@ -130,7 +122,7 @@ const AdminNavbar = () => {
 									</MenuItem>
 									<MenuItem>
 										<button
-                      onClick={handleLogout}
+											onClick={handleLogout}
 											className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
 										>
 											Sign out

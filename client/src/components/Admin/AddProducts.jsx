@@ -34,7 +34,7 @@ const AddProducts = () => {
 	const handleAddProducts = async (e) => {
 		e.preventDefault();
 
-    const token = localStorage.getItem("token");
+		const token = localStorage.getItem("token");
 
 		const formData = new FormData();
 		formData.append("name", productName);
@@ -48,35 +48,34 @@ const AddProducts = () => {
 				method: "POST",
 				body: formData,
 				headers: {
-          Authorization: `Bearer ${token}`,  // Add the JWT token here
-        },
+					Authorization: `Bearer ${token}`, // Add the JWT token here
+				},
 			});
 
 			if (response.ok) {
 				navigate("/products");
-			}
-      else {
+			} else {
 				alert("Error saving product");
 			}
-		}
-    catch (error) {
-      console.error(error);
+		} catch (error) {
+			console.error(error);
 			alert("Error: " + error);
 		}
 	};
 
 	return (
 		<div>
-			<AdminNavbar />
-			<div className="flex justify-center items-center min-h-screen ">
+			<div>
+				<AdminNavbar />
+			</div>
+			<div className="flex justify-center items-center mt-4">
 				<form
-					className="max-w-3xl w-full p-6 bg-white shadow-lg rounded-lg"
+					className="max-w-3xl w-full p-16 bg-white shadow-lg rounded-lg"
 					onSubmit={handleAddProducts}
 				>
-					<h2 className="mt-0 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+					<h2 className="-mt-11 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
 						Add a new flower
 					</h2>
-
 					<div className="space-y-10">
 						<div className="border-b border-gray-900/10 pb-10">
 							<div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-5">
