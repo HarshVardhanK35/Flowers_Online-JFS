@@ -25,7 +25,10 @@ export default function Register() {
 		}
 
 		fetch(`http://localhost:8080/api/users/check-email?email=${email}`)
-			.then((response) => response.json())
+			.then((response) => {
+        response.json()
+      })
+
 			.then((data) => {
 				if (data.exists) {
 					setEmailExists(true);

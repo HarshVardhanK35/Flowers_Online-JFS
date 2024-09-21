@@ -25,6 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = getJwtFromRequest(request);
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
+
             String role = jwtTokenProvider.getRoleFromJWT(token);
             String email = jwtTokenProvider.getUsernameFromJWT(token);
 
@@ -52,4 +53,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         logger.warn("Authorization header is missing or doesn't start with 'Bearer '");
         return null;
     }
+
 }

@@ -1,18 +1,30 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 "use client";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/16/solid";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const navigation = [
+const adminNavigation = [
+	{ name: "Dashboard", href: "/admin" },
+	{ name: "Users", href: "/users" },
+];
+
+const userNavigation = [
 	{ name: "Categories", href: "/categories" },
 	{ name: "About", href: "/about" },
 	{ name: "Contact", href: "/contact" },
 ];
 
 const UserLanding = () => {
-	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [role, setRole] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const storedRole = localStorage.getItem("role");
+    setRole(storedRole);
+  }, []);
+
+  // const navigation = role === "ROLE_ADMIN" ? adminNavigation : userNavigation;
 
 	return (
 		<div className="bg-white">
@@ -25,7 +37,7 @@ const UserLanding = () => {
 						<img
 							alt="9Flowers.Online Logo"
 							src="/logo.webp"
-							className="h-12 w-auto rounded-md"
+							className= "h-14 w-auto rounded-md"
 						/>
 					</div>
 					<div className="flex lg:hidden">
@@ -39,7 +51,7 @@ const UserLanding = () => {
 						</button>
 					</div>
 					<div className="hidden lg:flex lg:gap-x-12">
-						{navigation.map((item) => (
+						{userNavigation.map((item) => (
 							<a
 								key={item.name}
 								href={item.href}
@@ -49,16 +61,7 @@ const UserLanding = () => {
 							</a>
 						))}
 					</div>
-					{/* <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-						<a
-							href="/login"
-							className="text-sm font-semibold leading-6 text-gray-900"
-						>
-							Log in <span aria-hidden="true">&rarr;</span>
-						</a>
-					</div> */}
 				</nav>
-
 				<Dialog
 					open={mobileMenuOpen}
 					onClose={setMobileMenuOpen}
@@ -68,7 +71,7 @@ const UserLanding = () => {
 					<DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
 						<div className="flex items-center justify-between">
 							<a href="/" className="-m-1.5 p-1.5">
-								<span className="sr-only">Your Company</span>
+								<span className="sr-only">9Flowers.Online</span>
 								<img
 									alt="9Flowers.Online Logo"
 									src="/logo.webp"
@@ -87,7 +90,7 @@ const UserLanding = () => {
 						<div className="mt-6 flow-root">
 							<div className="-my-6 divide-y divide-gray-500/10">
 								<div className="space-y-2 py-6">
-									{navigation.map((item) => (
+									{userNavigation.map((item) => (
 										<a
 											key={item.name}
 											href={item.href}

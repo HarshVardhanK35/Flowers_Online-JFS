@@ -15,8 +15,8 @@ import { useNavigate } from "react-router-dom";
 
 const navigation = [
 	{ name: "Categories", href: "/categories", current: false },
+	{ name: "Products", href: "/products", current: false },
 	{ name: "Users", href: "/user-profiles", current: false },
-	{ name: "Products", href: "/products-listed", current: false },
 ];
 
 const AdminNavbar = () => {
@@ -54,11 +54,13 @@ const AdminNavbar = () => {
 						</div>
 						<div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
 							<div className="flex flex-shrink-0 items-center">
-								<img
-									alt="9Flowers.Online"
-									src="/logo.webp"
-									className="h-8 w-auto rounded-md"
-								/>
+								<a href="/">
+									<img
+										alt="9Flowers.Online"
+										src="/logo.webp"
+										className="h-8 w-auto rounded-md"
+									/>
+								</a>
 							</div>
 							<div className="hidden sm:flex sm:items-center flex-1">
 								<span className="text-white text-xl font-bold text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-1 text-sm font-medium">

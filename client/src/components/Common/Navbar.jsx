@@ -66,7 +66,7 @@ const Navbar = () => {
 								/>
 							</a>
 						</div>
-						<div className="hidden sm:flex sm:items-center sm:justify-center flex-1">
+						<div className="hidden sm:flex sm:items-center flex-1">
 							<span className="text-white text-xl font-bold text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-1 text-sm font-medium">
               <a href="/">9Flowers.Online</a>
 							</span>

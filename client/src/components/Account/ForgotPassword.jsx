@@ -16,7 +16,8 @@ function ForgotPassword() {
 			},
 			body: JSON.stringify({ email }),
 		}).then((response) => {
-			if (response.status === 200) {
+
+      if (response.status === 200) {
 				alert("Email verified. Redirecting to reset password.");
 				navigate("/reset-password");
 			} else {

@@ -1,15 +1,11 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable no-unused-vars */
 import React from "react";
 import { Navigate } from "react-router-dom";
 
-// Higher-order component for protecting routes
 const ProtectedRoute = ({ children, adminOnly = false }) => {
 	const token = localStorage.getItem("token");
   const userRole = localStorage.getItem("role");
 
 	if (!token) {
-		// If no token, redirect to the login page
 		return (
 			<div>
 				<main class="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
@@ -38,12 +34,9 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
 		);
 	}
 
-  // If this is an admin-only route, ensure the user has the ROLE_ADMIN
   if (adminOnly && userRole !== "ROLE_ADMIN") {
-    return <Navigate to="/categories" />;  // Redirect customers to categories page
+    return <Navigate to="/categories" />;
   }
-
   return children;
 };
-
 export default ProtectedRoute;

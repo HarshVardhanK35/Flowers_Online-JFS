@@ -1,12 +1,10 @@
 package com.flowers.online.controller;
-
 import com.flowers.online.Model.Product;
 import com.flowers.online.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,7 +18,6 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
-
     private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
 
     @PostMapping
@@ -29,10 +26,12 @@ public class ProductController {
             @RequestParam("name") String name,
             @RequestParam("category") String category,
             @RequestParam("price") String price,
-            @RequestParam("photo") MultipartFile photo) {
+            @RequestParam("currency") String currency,
+            @RequestParam("photo") MultipartFile photo,
+            @RequestParam("size") String size){
 
-        // Save the file locally
         String photoFilename = photo.getOriginalFilename();
+
         try {
             Path path = Paths.get(UPLOAD_DIR + photoFilename);
             Files.createDirectories(path.getParent());
@@ -42,8 +41,8 @@ public class ProductController {
         }
 
         double parsedPrice = Double.parseDouble(price);
-        // Return the full URL to access the image, not just the local file path
-        Product newProduct = new Product(name, parsedPrice, category, "/uploads/" + photoFilename);
+        Product newProduct = new Product(name, parsedPrice, category, "/uploads/" + photoFilename, size, currency);
+
         return productService.saveProduct(newProduct);
     }
 
@@ -82,4 +81,5 @@ public class ProductController {
             throw new RuntimeException("Product not found");
         }
     }
+
 }
