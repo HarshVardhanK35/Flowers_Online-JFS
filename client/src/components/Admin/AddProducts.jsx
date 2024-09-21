@@ -55,15 +55,14 @@ const AddProducts = () => {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
-			})
+			});
 
 			if (response.ok) {
 				navigate("/products");
 			} else {
 				alert("Error saving product");
 			}
-		}
-    catch (error) {
+		} catch (error) {
 			console.error(error);
 			alert("Error: " + error);
 		}
@@ -72,25 +71,26 @@ const AddProducts = () => {
 	return (
 		<div>
 			<AdminNavbar />
-			<div className="flex justify-center items-center mt-3">
+			<div className="flex justify-center items-center mt-4">
 				<form
-					className="max-w-3xl w-full p-16 bg-white shadow-lg rounded-lg"
+					className="max-w-3xl w-full p-6 bg-white shadow-lg rounded-lg"
 					onSubmit={handleAddProducts}
 				>
-					<h2 className="-mt-11 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+					<h2 className="mt-0 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
 						Add a new flower
 					</h2>
 					<div className="space-y-10">
-						<div className="border-b border-gray-900/10 pb-3">
+						<div className="border-b border-gray-900/10 pb-2">
 							<div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-4">
-								<div className="sm:col-span-3">
+
+                <div className="sm:col-span-2">
 									<label
 										htmlFor="productName"
 										className="pl-1 block text-sm font-medium leading-6 text-gray-900"
 									>
 										Enter Flower Name
 									</label>
-									<div className="mt-2">
+									<div className="mt-1">
 										<input
 											type="text"
 											name="productName"
@@ -98,7 +98,7 @@ const AddProducts = () => {
 											value={productName}
 											onChange={(e) => setProductName(e.target.value)}
 											autoComplete="productName"
-											className="form-control pl-2 block w-full rounded-md border-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+											className="form-control pl-3 py-1.5 block w-full rounded-md border-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 											placeholder="Roses"
 											required
 										/>
@@ -107,18 +107,44 @@ const AddProducts = () => {
 
 								<div className="sm:col-span-2">
 									<label
+										htmlFor="category"
+										className="pl-1 text-sm font-medium leading-6 text-gray-900"
+									>
+										Select Category
+									</label>
+									<div className="mt-1">
+										<select
+											id="category"
+											name="category"
+											value={category}
+											onChange={handleCategoryChange}
+											className="pl-3 py-1.5 block w-full rounded-md border-1 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+											required
+										>
+											<option value="">Select a category</option>
+											<option value="birthdays">Birthday</option>
+											<option value="love">Love</option>
+											<option value="marriages">Marriage</option>
+											<option value="grand-openings">Grand Openings</option>
+											<option value="sympathy">Sympathy</option>
+										</select>
+									</div>
+								</div>
+
+								<div className="sm:col-span-2">
+									<label
 										htmlFor="size"
-										className="pl-1 block text-sm font-medium leading-6 text-gray-900"
+										className="pl-1 text-sm font-medium leading-6 text-gray-900"
 									>
 										Select Size
 									</label>
-									<div className="mt-2">
+									<div className="mt-1">
 										<select
 											id="size"
 											name="size"
 											value={size}
 											onChange={handleSizeChange}
-											className="form-control pl-2 block w-full rounded-md border-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+											className="block w-full rounded-md border-1 pl-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 											required
 										>
 											<option value="">Select a size</option>
@@ -128,15 +154,15 @@ const AddProducts = () => {
 									</div>
 								</div>
 
-								<div className="sm:col-span-2">
+								<div className="sm:col-span-1">
 									<label
 										htmlFor="productPrice"
-										className="pl-1 block text-sm font-medium leading-6 text-gray-900"
+										className="pl-1 text-sm font-medium leading-6 text-gray-900"
 									>
 										Price
 									</label>
-									<div className="relative mt-2 rounded-md shadow-sm">
-										<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+									<div className="relative mt-1 rounded-md shadow-sm">
+										<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 											<span className="text-gray-500 sm:text-sm">
 												{currency === "₹" ? "₹" : "$"}
 											</span>
@@ -160,7 +186,7 @@ const AddProducts = () => {
 												name="currency"
 												value={currency}
 												onChange={handleCurrencyChange}
-												className="form-control h-full rounded-md border-0 bg-transparent py-0 pl-2 pr-7 text-gray-500 sm:text-sm"
+												className="block h-full rounded-md border-0 bg-transparent py-0 pl-2 pr-2 text-gray-500 sm:text-sm"
 											>
 												<option value="$">USD</option>
 												<option value="₹">INR</option>
@@ -169,29 +195,22 @@ const AddProducts = () => {
 									</div>
 								</div>
 
-								<div className="sm:col-span-3">
+								<div className="col-span-full">
 									<label
-										htmlFor="category"
-										className="pl-1 block text-sm font-medium leading-6 text-gray-900"
+										htmlFor="about"
+										className="pl-1 text-sm font-medium leading-6 text-gray-900"
 									>
-										Select Category
+										About
 									</label>
-									<div className="mt-2">
-										<select
-											id="category"
-											name="category"
-											value={category}
-											onChange={handleCategoryChange}
+									<div className="mt-1">
+										<textarea
+											id="about"
+											name="about"
+											rows={2}
+                      placeholder="About flower bouquet."
 											className="form-control pl-2 block w-full rounded-md border-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-											required
-										>
-											<option value="">Select a category</option>
-											<option value="birthdays">Birthday</option>
-											<option value="love">Love</option>
-											<option value="marriages">Marriage</option>
-											<option value="grand-openings">Grand Openings</option>
-											<option value="sympathy">Sympathy</option>
-										</select>
+											defaultValue={""}
+										/>
 									</div>
 								</div>
 
@@ -225,7 +244,7 @@ const AddProducts = () => {
 						<div className="mt-3 flex items-center justify-end gap-x-6">
 							<button
 								type="button"
-								onClick={() => navigate("/admin")}
+								onClick={() => navigate(-1)}
 								className="text-sm font-semibold leading-6 text-gray-900"
 							>
 								Cancel

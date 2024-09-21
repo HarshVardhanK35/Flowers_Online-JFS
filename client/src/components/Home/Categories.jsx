@@ -55,10 +55,10 @@ const Categories = () => {
 			{role === "ROLE_ADMIN" ? <AdminNavbar /> : <Navbar />}
 			<div className="bg-gray-100">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-					<div className="mx-auto max-w-2xl py-16 sm:py-24 lg:max-w-none lg:py-2">
-						<h2 className="text-2xl font-bold text-gray-900">Categories</h2>
+					<div className="mx-auto max-w-2xl py-6 sm:py-24 lg:max-w-none lg:py-2">
+						<h2 className="text-2xl font-bold text-gray-900">Categories Available</h2>
 
-						<div className="mt-3 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0.5">
+						<div className="mt-2 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0.5">
 							{callouts.map((callout) => (
 								<div key={callout.name} className="group relative">
 									<div className="relative h-60 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-60">
@@ -82,7 +82,14 @@ const Categories = () => {
 						</div>
 						<div className="mt-1 lg:flex lg:flex-1 lg:justify-end">
 							<button
-								onClick={() => {navigate(-1)}}
+								onClick={() => {
+                  if(role === 'ROLE_ADMIN') {
+                    navigate('/admin')
+                  }
+                  else{
+                    navigate('/')
+                  }
+                }}
 								className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 							>
 								Back

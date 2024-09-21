@@ -10,12 +10,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
-
     @Autowired
     private ProductService productService;
     private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
@@ -29,9 +27,7 @@ public class ProductController {
             @RequestParam("currency") String currency,
             @RequestParam("photo") MultipartFile photo,
             @RequestParam("size") String size){
-
         String photoFilename = photo.getOriginalFilename();
-
         try {
             Path path = Paths.get(UPLOAD_DIR + photoFilename);
             Files.createDirectories(path.getParent());
@@ -39,10 +35,8 @@ public class ProductController {
         } catch (IOException e) {
             throw new RuntimeException("Error saving file", e);
         }
-
         double parsedPrice = Double.parseDouble(price);
         Product newProduct = new Product(name, parsedPrice, category, "/uploads/" + photoFilename, size, currency);
-
         return productService.saveProduct(newProduct);
     }
 
@@ -67,19 +61,39 @@ public class ProductController {
         productService.deleteProduct(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/edit/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public Product updateProduct(@PathVariable Long id, @RequestBody Product updatedProduct) {
+    public Product editProduct(@PathVariable Long id,
+                               @RequestParam("name") String name,
+                               @RequestParam("category") String category,
+                               @RequestParam("price") String price,
+                               @RequestParam("currency") String currency,
+                               @RequestParam("size") String size,
+                               @RequestParam(value = "photo", required = false) MultipartFile photo) {
         Product existingProduct = productService.getProductById(id);
-        if (existingProduct != null) {
-            existingProduct.setName(updatedProduct.getName());
-            existingProduct.setPrice(updatedProduct.getPrice());
-            existingProduct.setPhoto(updatedProduct.getPhoto());
-            existingProduct.setCategory(updatedProduct.getCategory());
-            return productService.saveProduct(existingProduct);
-        } else {
+        if (existingProduct == null) {
             throw new RuntimeException("Product not found");
         }
+
+        if (photo != null && !photo.isEmpty()) {
+            String photoFilename = photo.getOriginalFilename();
+            try {
+                Path path = Paths.get(UPLOAD_DIR + photoFilename);
+                Files.createDirectories(path.getParent());
+                Files.write(path, photo.getBytes());
+                existingProduct.setPhoto("/uploads/" + photoFilename);
+            } catch (IOException e) {
+                throw new RuntimeException("Error saving file", e);
+            }
+        }
+
+        existingProduct.setName(name);
+        existingProduct.setCategory(category);
+        existingProduct.setPrice(Double.parseDouble(price));
+        existingProduct.setCurrency(currency);
+        existingProduct.setSize(size);
+
+        return productService.saveProduct(existingProduct);
     }
 
 }
