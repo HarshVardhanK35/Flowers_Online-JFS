@@ -44,7 +44,7 @@ function Login() {
 				<a href="/" className="-m-1.5 p-1.5">
 					<img
 						alt="9Flowers.Online"
-						src="/logo.webp"
+						src="/logo.jpeg"
 						className="mx-auto h-12 w-auto"
 					/>
 				</a>

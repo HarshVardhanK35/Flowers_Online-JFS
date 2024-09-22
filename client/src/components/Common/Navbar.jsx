@@ -61,7 +61,7 @@ const Navbar = () => {
 							<a href="/">
 								<img
 									alt="9Flowers.Online"
-									src="/logo.webp"
+									src="/logo.jpeg"
 									className="h-8 w-auto rounded-md"
 								/>
 							</a>
