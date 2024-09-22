@@ -62,21 +62,17 @@ const ProductList = () => {
 			}
 		}
 	};
-
 	return (
 		<div>
 			{role === "ROLE_ADMIN" ? <AdminNavbar /> : <Navbar />}
-
 			<div className="bg-white">
 				<div className="mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
 					<h2 className="text-2xl font-bold tracking-tight text-gray-900">
 						{products.length === 0 ? `No Products` : "Products Available..."}
 					</h2>
-
 					<div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
 						{products.map((product) => (
 							<div key={product.id} className="group relative">
-
 								<div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-60">
 									<a href={`/admin/add-product`}>
 										<img
@@ -86,20 +82,21 @@ const ProductList = () => {
 										/>
 									</a>
 								</div>
-
 								<div className="mt-1 flex justify-between">
 									<div>
 										<h3 className="text-sm text-gray-700">
 											<p className="text-sm font-medium text-gray-900">
-												{`${product.name.trim()} Bouquet`}<span className="px-4 text-sm text-gray-500">Size: {product.size}</span>
+												{`${product.name.trim()} Bouquet`}
 											</p>
 										</h3>
-										<p className="text-sm font-medium text-gray-900">{`${product.price} ${product.currency}`}</p>
+										<span className="text-sm text-gray-500">
+											{product.size} Size
+										</span>
+										<span className="px-4 text-sm font-medium text-gray-900">{`${product.price} ${product.currency}`}</span>
 									</div>
-
 									<div>
 										{role === "ROLE_ADMIN" && (
-											<div className="mt-2 flex space-x-3 justify-end">
+											<div className="mt-2 space-x-3 flex justify-center">
 												<FontAwesomeIcon
 													icon={faEdit}
 													onClick={() =>

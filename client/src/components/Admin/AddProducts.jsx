@@ -4,35 +4,26 @@ import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../Common/AdminNavbar";
 
 const AddProducts = () => {
-	const [currency, setCurrency] = useState("$");
 	const [productName, setProductName] = useState("");
+	const [size, setSize] = useState("");
 	const [category, setCategory] = useState("");
-	const [size, setSize] = useState(""); // New state for size
+	const [about, setAbout] = useState("");
 	const [price, setPrice] = useState("");
+	const [currency, setCurrency] = useState("$");
 	const [file, setFile] = useState(null);
 	const [filePreview, setFilePreview] = useState(null);
 
 	const navigate = useNavigate();
 
-	const handleCurrencyChange = (e) => {
-		setCurrency(e.target.value);
-	};
-
 	const handleFileChange = (e) => {
 		const selectedFile = e.target.files[0];
+
 		setFile(selectedFile);
+
 		if (selectedFile) {
 			const fileUrl = URL.createObjectURL(selectedFile);
 			setFilePreview(fileUrl);
 		}
-	};
-
-	const handleCategoryChange = (e) => {
-		setCategory(e.target.value);
-	};
-
-	const handleSizeChange = (e) => {
-		setSize(e.target.value);
 	};
 
 	const handleAddProducts = async (e) => {
@@ -44,6 +35,7 @@ const AddProducts = () => {
 		formData.append("name", productName);
 		formData.append("category", category);
 		formData.append("size", size);
+		formData.append("about", about);
 		formData.append("price", price);
 		formData.append("currency", currency);
 		formData.append("photo", file);
@@ -82,8 +74,7 @@ const AddProducts = () => {
 					<div className="space-y-10">
 						<div className="border-b border-gray-900/10 pb-2">
 							<div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-4">
-
-                <div className="sm:col-span-2">
+								<div className="sm:col-span-2">
 									<label
 										htmlFor="productName"
 										className="pl-1 block text-sm font-medium leading-6 text-gray-900"
@@ -98,6 +89,7 @@ const AddProducts = () => {
 											value={productName}
 											onChange={(e) => setProductName(e.target.value)}
 											autoComplete="productName"
+											maxLength={25}
 											className="form-control pl-3 py-1.5 block w-full rounded-md border-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 											placeholder="Roses"
 											required
@@ -117,8 +109,10 @@ const AddProducts = () => {
 											id="category"
 											name="category"
 											value={category}
-											onChange={handleCategoryChange}
-											className="pl-3 py-1.5 block w-full rounded-md border-1 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+											onChange={(e) => {
+												setCategory(e.target.value);
+											}}
+											className="pl-3 py-2 block w-full rounded-md border-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 											required
 										>
 											<option value="">Select a category</option>
@@ -143,7 +137,9 @@ const AddProducts = () => {
 											id="size"
 											name="size"
 											value={size}
-											onChange={handleSizeChange}
+											onChange={(e) => {
+												setSize(e.target.value);
+											}}
 											className="block w-full rounded-md border-1 pl-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 											required
 										>
@@ -185,7 +181,9 @@ const AddProducts = () => {
 												id="currency"
 												name="currency"
 												value={currency}
-												onChange={handleCurrencyChange}
+												onChange={(e) => {
+													setCurrency(e.target.value);
+												}}
 												className="block h-full rounded-md border-0 bg-transparent py-0 pl-2 pr-2 text-gray-500 sm:text-sm"
 											>
 												<option value="$">USD</option>
@@ -207,15 +205,18 @@ const AddProducts = () => {
 											id="about"
 											name="about"
 											rows={2}
-                      placeholder="About flower bouquet."
+											onChange={(e) => {
+												setAbout(e.target.value);
+											}}
+											placeholder="About flower bouquet."
 											className="form-control pl-2 block w-full rounded-md border-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-											defaultValue={""}
+                      required
 										/>
 									</div>
 								</div>
 
 								<div className="col-span-3">
-									<div className="mt-2 flex items-center">
+									<div className="flex items-center">
 										<label className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-1 hover:text-indigo-500">
 											Upload an image for flower!{" "}
 											<span aria-hidden="true">→</span>
@@ -228,8 +229,9 @@ const AddProducts = () => {
 												required
 											/>
 										</label>
+
 										{filePreview && (
-											<div className=" absolute relative -mt-5">
+											<div className=" absolute relative">
 												<img
 													src={filePreview}
 													alt="Selected file preview"

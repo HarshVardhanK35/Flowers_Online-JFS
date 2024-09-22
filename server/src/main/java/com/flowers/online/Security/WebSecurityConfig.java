@@ -54,7 +54,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/home", "/categories").permitAll()
 
                         .requestMatchers("/uploads/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**", "/api/products/edit/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )

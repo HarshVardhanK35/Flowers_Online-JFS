@@ -12,15 +12,17 @@ public class Product {
     private String photo;
     private String size;
     private String currency;
+    private String about;
 
     public Product() {}
-    public Product(String name, double price, String category, String photo,  String size, String currency) {
+    public Product(String name, double price, String category, String photo,  String size, String currency, String about) {
         this.name = name;
         this.price = price;
         this.category = category;
         this.photo = photo;
         this.size = size;
         this.currency = currency;
+        this.about = about;
     }
     public Long getId() {
         return id;
@@ -57,4 +59,6 @@ public class Product {
     public void setCurrency(String currency) {
         this.currency = currency;
     }
+    public String getAbout() { return about; }
+    public void setAbout(String about) { this.about = about; }
 }
