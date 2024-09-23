@@ -16,6 +16,7 @@ import AddProducts from "./components/Admin/AddProducts";
 import AdminDetails from "./components/Admin/AdminDetails";
 import AddShopLocation from "./components/Admin/AddShopLocation";
 import EditProduct from './components/Admin/EditProduct.jsx'
+import ProductDetails from "./components/Products/ProductDetails.jsx";
 
 function App() {
 	return (
@@ -31,6 +32,7 @@ function App() {
 				<Route path="/products" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
 				<Route path="/categories/all" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
 				<Route path="/products/:categoryName" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
+				<Route path="/product/:productId" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
 
 				<Route path="/admin" element={<ProtectedRoute adminOnly={true}><AdminLanding /></ProtectedRoute>} />
         <Route path="/admin/add-product" element={<ProtectedRoute adminOnly={true}><AddProducts /></ProtectedRoute>} />

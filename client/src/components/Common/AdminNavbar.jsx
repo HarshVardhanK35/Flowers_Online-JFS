@@ -1,6 +1,8 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
+import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
 	Disclosure,
 	DisclosureButton,
@@ -10,23 +12,22 @@ import {
 	MenuItem,
 	MenuItems,
 } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useNavigate } from "react-router-dom";
-
-const navigation = [
-	{ name: "Categories", href: "/categories", current: false },
-	{ name: "Products", href: "/products", current: false },
-	{ name: "Users", href: "/user-profiles", current: false },
-];
 
 const AdminNavbar = () => {
 	const navigate = useNavigate();
 
+	const navigation = [
+		{ name: "Categories", href: "/categories", current: false },
+		{ name: "Products", href: "/products", current: false },
+		{ name: "Users", href: "/user-profiles", current: false },
+	];
+
 	const handleLogout = () => {
-		alert("Are you sure you want to logout!");
-		localStorage.removeItem("token");
-		localStorage.removeItem("role");
-		navigate("/");
+		if (window.confirm("Are you sure you want to logout!")) {
+			localStorage.removeItem("token");
+			localStorage.removeItem("role");
+			navigate("/");
+		}
 	};
 
 	function classNames(...classes) {
@@ -52,25 +53,39 @@ const AdminNavbar = () => {
 								/>
 							</DisclosureButton>
 						</div>
+
 						<div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
 							<div className="flex flex-shrink-0 items-center">
 								<a href="/">
-									<img
-										alt="9Flowers.Online"
-										src="/logo.jpeg"
-										className="h-8 w-auto rounded-md"
-									/>
+									<motion.div // Wrap the image in motion.div
+										initial={{ opacity: 0, scale: 0.8 }} // Start slightly smaller and transparent
+										whileHover={{ scale: 1.05 }}
+										transition={{ duration: 0.2 }}
+										animate={{ opacity: 1, scale: 1 }} // Animate to full size and opacity // Smooth animation
+									>
+										<img
+											alt="9Flowers.Online"
+											src="/logo.jpeg"
+											className="h-8 w-auto rounded-md"
+										/>
+									</motion.div>
 								</a>
 							</div>
+
 							<div className="hidden sm:flex sm:items-center flex-1">
-								<span className="text-white text-xl font-bold text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-1 text-sm font-medium">
+								<motion.span // Wrap the Dashboard link
+									whileHover={{ scale: 1.05 }} // Scale up slightly on hover
+									transition={{ duration: 0.2 }}
+									className="text-white text-xl font-bold text-gray-300 hover:text-white rounded-md px-3 py-1 text-sm font-medium"
+								>
 									<a href="/admin">Dashboard</a>
-								</span>
+								</motion.span>
 							</div>
+
 							<div className="hidden sm:ml-1 sm:block">
-								<div className="flex space-x-4">
+								<div className="flex space-x-3">
 									{navigation.map((item) => (
-										<a
+										<motion.a
 											key={item.name}
 											href={item.href}
 											aria-current={item.current ? "page" : undefined}
@@ -80,25 +95,31 @@ const AdminNavbar = () => {
 													: "text-gray-300 hover:bg-gray-700 hover:text-white",
 												"rounded-md px-3 py-2 text-sm font-medium"
 											)}
+											whileHover={{ scale: 1.05 }}
+											transition={{ duration: 0.2 }}
 										>
 											{item.name}
-										</a>
+										</motion.a>
 									))}
 								</div>
 							</div>
 						</div>
+
 						<div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 							<a href="/notifications">
-								<button
+								<motion.button
 									type="button"
 									className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+									whileHover={{ scale: 1.1 }} // Scale up slightly on hover
+									transition={{ duration: 0.2 }}
 								>
 									<span className="absolute -inset-1.5" />
 									<span className="sr-only">View notifications</span>
 									<BellIcon aria-hidden="true" className="h-6 w-6" />
-								</button>
+								</motion.button>
 							</a>
-							<Menu as="div" className="relative ml-3">
+
+							<Menu as="div" className="relative ml-2">
 								<div>
 									<MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
 										<span className="absolute -inset-1.5" />
@@ -111,8 +132,11 @@ const AdminNavbar = () => {
 									</MenuButton>
 								</div>
 								<MenuItems
-									transition
 									className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+									initial={{ opacity: 0, scale: 0.9 }} // Start smaller and transparent
+									animate={{ opacity: 1, scale: 1 }} // Animate to full size and opacity
+									exit={{ opacity: 0, scale: 0.9 }} // Animate back out when closing
+									transition={{ duration: 0.2, ease: "easeInOut" }}
 								>
 									<MenuItem>
 										<a
@@ -123,12 +147,12 @@ const AdminNavbar = () => {
 										</a>
 									</MenuItem>
 									<MenuItem>
-										<button
+										<a
 											onClick={handleLogout}
 											className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
 										>
 											Sign out
-										</button>
+										</a>
 									</MenuItem>
 								</MenuItems>
 							</Menu>
@@ -136,7 +160,13 @@ const AdminNavbar = () => {
 					</div>
 				</div>
 
-				<DisclosurePanel className="sm:hidden">
+				<DisclosurePanel
+					className="sm:hidden"
+					initial={{ opacity: 0, y: -20 }} // Start off-screen and transparent
+					animate={{ opacity: 1, y: 0 }} // Slide in and become visible
+					exit={{ opacity: 0, y: -20 }} // Slide out when closing
+					transition={{ duration: 0.3, ease: "easeInOut" }}
+				>
 					<div className="space-y-1 px-2 pb-3 pt-2">
 						{navigation.map((item) => (
 							<DisclosureButton

@@ -65,7 +65,7 @@ const Categories = () => {
 							Categories Available
 						</motion.h2>
 
-						<div className="mt-1 space-y-10 lg:grid lg:grid-cols-3 lg:gap-x-5 lg:space-y-0">
+						<div className="mt- space-y-5 lg:grid lg:grid-cols-3 lg:gap-x-5 lg:space-y-0">
 
               {callouts.map((callout) => (
 								<motion.div // Animate each category card
@@ -98,7 +98,7 @@ const Categories = () => {
 							))}
 						</div>
 
-						<div className="lg:flex lg:flex-1 lg:justify-end">
+						<div className="mt-2 lg:flex lg:flex-1 lg:justify-end">
 							{/* Animated back button */}
 							<motion.button
 								onClick={() => {

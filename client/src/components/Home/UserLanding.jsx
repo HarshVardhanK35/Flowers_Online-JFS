@@ -9,10 +9,12 @@ const UserLanding = () => {
 	const navigate = useNavigate();
 
 	const handleLogout = () => {
-		alert("Are you sure you want to logout!");
-		localStorage.removeItem("token");
-		localStorage.removeItem("role");
-		navigate("/");
+		const bool = window.confirm("Are you sure you want to logout!");
+		if (bool) {
+			localStorage.removeItem("token");
+			localStorage.removeItem("role");
+			navigate("/");
+		}
 	};
 
 	const adminNavigation = [
@@ -26,9 +28,10 @@ const UserLanding = () => {
 		{ name: "Contact", href: "/contact" },
 	];
 
+	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
 	const [role, setRole] = useState(null);
 	const [token, setToken] = useState(null);
-	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
 	useEffect(() => {
 		const storedRole = localStorage.getItem("role");
@@ -85,7 +88,7 @@ const UserLanding = () => {
 								key={item.name}
 								href={item.href}
 								className="text-sm font-semibold leading-6 text-gray-900 px-2"
-								whileHover={{ scale: 1.05, color: "#f0f4f8"}}
+								whileHover={{ scale: 1.25, color: "#f0f4f8" }}
 								whileTap={{ scale: 0.95 }}
 							>
 								{item.name}
@@ -96,7 +99,7 @@ const UserLanding = () => {
 								href="/"
 								onClick={handleLogout}
 								className="text-sm font-semibold leading-6 text-gray-900 px-2 cursor-pointer"
-								whileHover={{ scale: 1.05, color: "#f0f4f8"}}
+								whileHover={{ scale: 1.25, color: "#f0f4f8" }}
 								whileTap={{ scale: 0.95 }}
 							>
 								Logout
@@ -131,7 +134,6 @@ const UserLanding = () => {
 										className="m-2.5 rounded-md p-2.5 text-gray-700"
 									>
 										<span className="sr-only">Close menu</span>
-
 										<XMarkIcon aria-hidden="true" className="h-6 w-6" />
 									</button>
 								</div>
@@ -142,7 +144,11 @@ const UserLanding = () => {
 												<motion.a
 													key={item.name}
 													href={item.href}
-													whileHover={{ scale: 1.05, backgroundColor: "#808080", color: "#f0f4f8" }}
+													whileHover={{
+														scale: 1.05,
+														backgroundColor: "#808080",
+														color: "#f0f4f8",
+													}}
 													whileTap={{ scale: 0.95 }}
 													className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900"
 												>
@@ -154,7 +160,11 @@ const UserLanding = () => {
 													href="/"
 													onClick={handleLogout}
 													className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900"
-													whileHover={{ scale: 1.05, backgroundColor: "#808080", color: "#f0f4f8" }}
+													whileHover={{
+														scale: 1.05,
+														backgroundColor: "#808080",
+														color: "#f0f4f8",
+													}}
 													whileTap={{ scale: 0.95 }}
 												>
 													Logout
@@ -168,7 +178,6 @@ const UserLanding = () => {
 					)}
 				</AnimatePresence>
 			</header>
-
 			<motion.div
 				aria-hidden="true"
 				className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -188,8 +197,12 @@ const UserLanding = () => {
 					<h1 className="text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl">
 						9Flowers.Online
 					</h1>
-        <p className="mt-4 text-xl leading-8 text-gray-100">Explore beautiful floral arrangements, personalized flower bouquets</p>
-					<p className="leading-8 text-gray-200">Find the perfect flower bouquets for every occasion at 9Flower.Online.</p>
+					<p className="mt-4 text-xl leading-8 text-gray-100">
+						Explore beautiful floral arrangements, personalized flower bouquets.
+					</p>
+					<p className="leading-8 text-gray-200">
+						Find the perfect flower bouquets for every occasion here.
+					</p>
 				</motion.div>
 				{!token && (
 					<div className="mt-10 flex items-center justify-center gap-x-4">

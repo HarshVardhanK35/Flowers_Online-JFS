@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../Common/AdminNavbar";
+import { motion } from "framer-motion";
 
 const AddProducts = () => {
 	const [productName, setProductName] = useState("");
@@ -64,13 +65,21 @@ const AddProducts = () => {
 		<div>
 			<AdminNavbar />
 			<div className="flex justify-center items-center mt-4">
-				<form
+				<motion.form
 					className="max-w-3xl w-full p-6 bg-white shadow-lg rounded-lg"
 					onSubmit={handleAddProducts}
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.5, ease: "easeOut" }}
 				>
-					<h2 className="mt-0 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+					<motion.h2
+						className="mt-0 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
+						initial={{ opacity: 0, scale: 0.9 }}
+						animate={{ opacity: 1, scale: 1 }}
+						transition={{ duration: 0.3, delay: 0.2 }}
+					>
 						Add a new flower
-					</h2>
+					</motion.h2>
 					<div className="space-y-10">
 						<div className="border-b border-gray-900/10 pb-2">
 							<div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-4">
@@ -82,15 +91,19 @@ const AddProducts = () => {
 										Enter Flower Name
 									</label>
 									<div className="mt-1">
-										<input
+										<motion.input
 											type="text"
 											name="productName"
-											id="productName"
 											value={productName}
 											onChange={(e) => setProductName(e.target.value)}
 											autoComplete="productName"
 											maxLength={25}
 											className="form-control pl-3 py-1.5 block w-full rounded-md border-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+											whileFocus={{
+												scale: 1.02,
+												boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.1)",
+											}}
+											transition={{ duration: 0.2 }}
 											placeholder="Roses"
 											required
 										/>
@@ -105,14 +118,18 @@ const AddProducts = () => {
 										Select Category
 									</label>
 									<div className="mt-1">
-										<select
-											id="category"
+										<motion.select
 											name="category"
 											value={category}
 											onChange={(e) => {
 												setCategory(e.target.value);
 											}}
 											className="pl-3 py-2 block w-full rounded-md border-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+											whileFocus={{
+												scale: 1.02,
+												boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.1)",
+											}}
+											transition={{ duration: 0.2 }}
 											required
 										>
 											<option value="">Select a category</option>
@@ -121,7 +138,7 @@ const AddProducts = () => {
 											<option value="marriages">Marriage</option>
 											<option value="grand-openings">Grand Openings</option>
 											<option value="sympathy">Sympathy</option>
-										</select>
+										</motion.select>
 									</div>
 								</div>
 
@@ -133,7 +150,7 @@ const AddProducts = () => {
 										Select Size
 									</label>
 									<div className="mt-1">
-										<select
+										<motion.select
 											id="size"
 											name="size"
 											value={size}
@@ -141,12 +158,17 @@ const AddProducts = () => {
 												setSize(e.target.value);
 											}}
 											className="block w-full rounded-md border-1 pl-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+											whileFocus={{
+												scale: 1.02,
+												boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.1)",
+											}}
+											transition={{ duration: 0.2 }}
 											required
 										>
 											<option value="">Select a size</option>
 											<option value="small">Small</option>
 											<option value="large">Large</option>
-										</select>
+										</motion.select>
 									</div>
 								</div>
 
@@ -163,7 +185,7 @@ const AddProducts = () => {
 												{currency === "₹" ? "₹" : "$"}
 											</span>
 										</div>
-										<input
+										<motion.input
 											id="productPrice"
 											name="productPrice"
 											type="text"
@@ -171,6 +193,11 @@ const AddProducts = () => {
 											onChange={(e) => setPrice(e.target.value)}
 											placeholder="0.00"
 											className="form-control block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+											whileFocus={{
+												scale: 1.02,
+												boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.1)",
+											}}
+											transition={{ duration: 0.2 }}
 											required
 										/>
 										<div className="absolute inset-y-0 right-0 flex items-center">
@@ -201,16 +228,21 @@ const AddProducts = () => {
 										About
 									</label>
 									<div className="mt-1">
-										<textarea
+										<motion.textarea
 											id="about"
 											name="about"
 											rows={2}
 											onChange={(e) => {
 												setAbout(e.target.value);
 											}}
+											whileFocus={{
+												scale: 1.02,
+												boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.1)",
+											}}
+											transition={{ duration: 0.2 }}
 											placeholder="About flower bouquet."
 											className="form-control pl-2 block w-full rounded-md border-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      required
+											required
 										/>
 									</div>
 								</div>
@@ -231,35 +263,46 @@ const AddProducts = () => {
 										</label>
 
 										{filePreview && (
-											<div className=" absolute relative">
-												<img
+											<motion.div
+												className=" absolute relative"
+												initial={{ opacity: 0 }}
+												animate={{ opacity: 1 }}
+												transition={{ duration: 0.3 }}
+											>
+												<motion.img
 													src={filePreview}
 													alt="Selected file preview"
 													className="p-3 h-40 w-40 object-cover rounded-md"
 												/>
-											</div>
+											</motion.div>
 										)}
 									</div>
 								</div>
 							</div>
 						</div>
 						<div className="mt-3 flex items-center justify-end gap-x-6">
-							<button
+							<motion.button
 								type="button"
 								onClick={() => navigate(-1)}
 								className="text-sm font-semibold leading-6 text-gray-900"
+								whileHover={{ scale: 1.05 }}
+								whileTap={{ scale: 0.95 }}
+								transition={{ duration: 0.2 }}
 							>
 								Cancel
-							</button>
-							<button
+							</motion.button>
+							<motion.button
 								type="submit"
 								className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+								whileHover={{ scale: 1.05 }}
+								whileTap={{ scale: 0.95 }}
+								transition={{ duration: 0.2 }}
 							>
 								Save
-							</button>
+							</motion.button>
 						</div>
 					</div>
-				</form>
+				</motion.form>
 			</div>
 		</div>
 	);

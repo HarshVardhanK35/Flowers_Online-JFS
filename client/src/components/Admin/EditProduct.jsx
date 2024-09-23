@@ -283,5 +283,4 @@ const EditProduct = () => {
 		<p>Loading...</p>
 	);
 };
-
 export default EditProduct;

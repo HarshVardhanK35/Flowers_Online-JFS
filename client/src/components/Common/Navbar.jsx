@@ -1,44 +1,68 @@
 /* eslint-disable no-unused-vars */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu,MenuButton, MenuItem, MenuItems} from "@headlessui/react";
-import {Bars3Icon,ShoppingBagIcon,XMarkIcon,} from "@heroicons/react/24/outline";
+import {
+	Disclosure,
+	DisclosureButton,
+	DisclosurePanel,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuItems,
+} from "@headlessui/react";
+import {
+	Bars3Icon,
+	ShoppingBagIcon,
+	XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
-
-const navigation = [
-	{ name: "About", href: "/about", current: false },
-	{ name: "Contact", href: "/contact", current: false },
-];
+import { motion } from "framer-motion";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Navbar = () => {
+	const navigate = useNavigate();
+
+	const [token, setToken] = useState(null);
+
+	useEffect(() => {
+		const storedToken = localStorage.getItem("token");
+
+		setToken(storedToken);
+	}, []);
+
+	const navigation = [
+		{ name: "About", href: "/about", current: false },
+		{ name: "Contact", href: "/contact", current: false },
+	];
+
 	function classNames(...classes) {
 		return classes.filter(Boolean).join(" ");
 	}
 
-  const [cartItems, setCartItems] = useState(0);
+	const [cartItems, setCartItems] = useState(0);
 	useEffect(() => {
 		const storedCartItems = localStorage.getItem("cartItems");
 		setCartItems(storedCartItems ? JSON.parse(storedCartItems).length : 0);
 	}, []);
 
-  const handleCartClick = (e) => {
+	const handleCartClick = (e) => {
 		if (cartItems === 0) {
 			e.preventDefault(); // Prevent navigation if no items in cart
 			alert("Your cart is empty.");
 		}
 	};
 
-  const navigate = useNavigate();
+	const handleLogout = () => {
+		const bool = window.confirm("Are you sure you want to logout!");
+		if (bool) {
+			localStorage.removeItem("token");
+			localStorage.removeItem("role");
+			navigate("/");
+		}
+	};
 
-  const handleLogout = () => {
-    alert("Are you sure you want to logout!")
-
-    localStorage.removeItem("token");
-    localStorage.removeItem("role")
-
-    navigate("/");
-  };
-
-  return (
+	return (
 		<Disclosure as="nav" className="bg-gray-800">
 			<div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
 				<div className="relative flex h-16 items-center justify-between">
@@ -58,90 +82,116 @@ const Navbar = () => {
 					</div>
 					<div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
 						<div className="flex flex-shrink-0 items-center">
-							<a href="/">
-								<img
-									alt="9Flowers.Online"
-									src="/logo.jpeg"
-									className="h-8 w-auto rounded-md"
-								/>
+							<a>
+								<motion.div // Wrap logo in motion.div
+									whileHover={{ scale: 1.05 }} // Subtle scale on hover
+									transition={{ duration: 0.2 }}
+								>
+									<img
+										alt="9Flowers.Online"
+										src="/logo.jpeg"
+										className="h-10 w-auto rounded-md cursor-pointer" // Slightly increase logo size
+									/>
+								</motion.div>
 							</a>
 						</div>
 						<div className="hidden sm:flex sm:items-center flex-1">
-							<span className="text-white text-xl font-bold text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-1 text-sm font-medium">
-              <a href="/">9Flowers.Online</a>
-							</span>
+							<motion.span
+								className="text-white text-xl font-bold text-gray-300 hover:text-white rounded-md px-3 py-1 text-sm font-medium transition duration-300 ease-in-out"
+								whileHover={{ scale: 1.05 }} // Subtle scale on hover
+								transition={{ duration: 0.2 }}
+							>
+								<a href="/">9Flowers.Online</a>
+							</motion.span>
 						</div>
 						<div className="hidden sm:ml-6 sm:block">
 							<div className="flex space-x-4">
 								{navigation.map((item) => (
-									<a
+									<motion.a
 										key={item.name}
 										href={item.href}
 										aria-current={item.current ? "page" : undefined}
 										className={classNames(
 											item.current
-												? "bg-gray-900 text-white"
+												? "bg-indigo-600 text-white"
 												: "text-gray-300 hover:bg-gray-700 hover:text-white",
-											"rounded-md px-3 py-2 text-sm font-medium"
+											"rounded-md px-3 py-2 text-sm font-medium transition duration-300 ease-in-out"
 										)}
+										whileHover={{
+											scale: 1.05,
+											backgroundColor: item.current
+												? "bg-indigo-500"
+												: "bg-gray-600",
+										}}
 									>
 										{item.name}
-									</a>
+									</motion.a>
 								))}
 							</div>
 						</div>
 					</div>
-					<div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-						<a
-							href="/cart"
-							onClick={handleCartClick}
-							className={`relative rounded-full p-1 ${
-								cartItems > 0 ? "bg-green-600" : "bg-gray-800"
-							} text-gray-400 hover:text-white`}
-						>
-							<ShoppingBagIcon aria-hidden="true" className="h-6 w-6" />
-							{cartItems > 0 && (
-								<span className="absolute top-0 right-0 inline-block w-3 h-3 bg-red-600 rounded-full"></span>
-							)}
-							<span className="sr-only">Cart</span>
-						</a>
-
-						{/* Profile dropdown */}
-						<Menu as="div" className="relative ml-3">
-							<div>
-								<MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-									<span className="absolute -inset-1.5" />
-									<span className="sr-only">Open user menu</span>
-									<img
-										alt=""
-										src="/profile.jpg"
-										className="h-8 w-8 rounded-full"
-									/>
-								</MenuButton>
-							</div>
-							<MenuItems
-								transition
-								className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+					{token && (
+						<div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+							<motion.a
+								href="/cart"
+								onClick={handleCartClick}
+								className={`relative rounded-full p-1 ${
+									cartItems > 0 ? "bg-green-600" : "bg-gray-800"
+								} text-gray-400 hover:text-white`}
 							>
-								<MenuItem>
-									<a
-										href="/profile"
-										className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
-									>
-										Your Profile
-									</a>
-								</MenuItem>
-								<MenuItem>
-									<button
-                    onClick={handleLogout}
-										className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-									>
-										Sign out
-									</button>
-								</MenuItem>
-							</MenuItems>
-						</Menu>
-					</div>
+								<FontAwesomeIcon icon={faShoppingCart} className="h-6 w-6" />{" "}
+								{cartItems > 0 && (
+									<motion.span
+										className="absolute top-0 right-0 inline-block w-3 h-3 bg-red-600 rounded-full"
+										animate={{ scale: [1, 1.2, 1] }}
+										transition={{
+											duration: 0.5,
+											repeat: Infinity,
+											ease: "easeInOut",
+										}}
+									/>
+								)}
+								<span className="sr-only">Cart</span>
+							</motion.a>
+
+							{/* Profile dropdown1 */}
+							<Menu as="div" className="relative ml-3">
+								<div>
+									<MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 overflow-hidden">
+										<span className="absolute -inset-1.5" />
+										<span className="sr-only">Open user menu</span>
+										<motion.img
+											alt=""
+											src="/profile.jpg"
+											className="h-8 w-8 rounded-full transition duration-300 ease-in-out"
+											whileHover={{ scale: 1.1 }}
+										/>
+									</MenuButton>
+								</div>
+								<MenuItems
+									transition
+									className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+								>
+									<MenuItem>
+										<a
+											href="/profile"
+											className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+										>
+											Your Profile
+										</a>
+									</MenuItem>
+									<MenuItem>
+										<a
+											onClick={handleLogout}
+											className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+										>
+											Sign out
+										</a>
+									</MenuItem>
+								</MenuItems>
+							</Menu>
+						</div>
+					)}
 				</div>
 			</div>
 
