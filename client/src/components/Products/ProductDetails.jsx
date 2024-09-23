@@ -9,6 +9,7 @@ const ProductDetails = () => {
 	const { productId } = useParams();
 	const [product, setProduct] = useState(null); // Initialize as null
 	const [error, setError] = useState(null);
+	const [selectedQuantity, setSelectedQuantity] = useState(1);
 	const [token] = useState(localStorage.getItem("token"));
 	const [role] = useState(localStorage.getItem("role"));
 
@@ -56,6 +57,15 @@ const ProductDetails = () => {
 		],
 	};
 
+	const handleQuantityChange = (e) => {
+		const value = parseInt(e.target.value);
+		if (value <= product.quantityAvailable && value <= 3) {
+			setSelectedQuantity(value);
+		}
+	};
+
+	console.log(product);
+
 	return (
 		<div className="bg-white">
 			{role === "ROLE_ADMIN" ? <AdminNavbar /> : <Navbar />}
@@ -69,19 +79,18 @@ const ProductDetails = () => {
 						/>
 					</div>
 					<div className=" lg:col-span-2 lg:mt-0">
-
 						<h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
 							{product.name}
 						</h1>
+						<div className="mt-3">
+							<h3 className="sr-only">Description</h3>
 
-            <div className="mt-3">
-              <h3 className="sr-only">Description</h3>
-
-              <div>
-                <p className="text-base text-gray-900">{productDetails.description}</p>
-              </div>
-            </div>
-
+							<div>
+								<p className="text-base text-gray-900">
+									{productDetails.description}
+								</p>
+							</div>
+						</div>
 						<div className="mt-4">
 							<h3 className="text-sm font-medium text-gray-900">Highlights</h3>
 							<div className="mt-1">
@@ -102,11 +111,31 @@ const ProductDetails = () => {
 							</div>
 						</div>
 
-						<p className="text-3xl tracking-tight text-gray-900 mt-6">
-							{`${product.price} ${product.currency}`}
+						<p className="text-3xl tracking-tight text-gray-900 mt-4 flex items-center justify-between">
+							{/* Price Section */}
+							<span>{`${product.price} ${product.currency}`}</span>
+						</p>
+						<p>
+							{/* Quantity Selection */}
+							<div className="mt-2">
+								<h3 className="text-sm font-medium text-gray-900">
+									Select Quantity
+								</h3>
+								<div className="">
+									<input
+										type="number"
+										value={selectedQuantity}
+										onChange={handleQuantityChange}
+										className="pl-8 block w-20 rounded-md border-1 text-gray-900 shadow-sm"
+										min="1"
+										max={Math.min(product.quantityAvailable, 3)} // Set the maximum to available quantity or 3
+									/>
+									<p className="text-sm text-gray-500">{`Available: ${product.quantityAvailable}`}</p>
+								</div>
+							</div>
 						</p>
 
-						<div className="mt-4">
+						<div className="mt-3">
 							<h3 className="text-sm font-medium text-gray-900">Select Size</h3>
 							<div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-2">
 								{["small", "large"].includes(product.size.toLowerCase()) && (
@@ -117,14 +146,12 @@ const ProductDetails = () => {
 								)}
 							</div>
 						</div>
-
 						<button
 							type="submit"
-							className="mt-4 w-full flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+							className="mt-3 w-full flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
 						>
-							Add to bag
+							Add {selectedQuantity} to bag
 						</button>
-
 					</div>
 				</div>
 			</div>

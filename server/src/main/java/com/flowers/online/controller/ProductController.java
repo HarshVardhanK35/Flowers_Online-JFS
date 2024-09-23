@@ -33,7 +33,9 @@ public class ProductController {
             @RequestParam("currency") String currency,
             @RequestParam("photo") MultipartFile photo,
             @RequestParam("size") String size,
-            @RequestParam("about") String about){
+            @RequestParam("about") String about,
+            @RequestParam("quantityAvailable") int quantityAvailable
+    ){
         String photoFilename = photo.getOriginalFilename();
         try {
             Path path = Paths.get(UPLOAD_DIR + photoFilename);
@@ -43,7 +45,7 @@ public class ProductController {
             throw new RuntimeException("Error saving file", e);
         }
         double parsedPrice = Double.parseDouble(price);
-        Product newProduct = new Product(name, parsedPrice, category, "/uploads/" + photoFilename, size, currency, about);
+        Product newProduct = new Product(name, parsedPrice, category, "/uploads/" + photoFilename, size, currency, about, quantityAvailable);
         return productService.saveProduct(newProduct);
     }
 
@@ -86,7 +88,9 @@ public class ProductController {
                                @RequestParam("currency") String currency,
                                @RequestParam("size") String size,
                                @RequestParam(value = "photo", required = false) MultipartFile photo,
-                               @RequestParam("about") String about) {
+                               @RequestParam("about") String about,
+                               @RequestParam("quantityAvailable") int quantityAvailable
+                               ) {
         Product existingProduct = productService.getProductById(id);
         if (existingProduct == null) {
             throw new RuntimeException("Product not found");
@@ -110,6 +114,7 @@ public class ProductController {
         existingProduct.setCurrency(currency);
         existingProduct.setSize(size);
         existingProduct.setAbout(about);
+        existingProduct.setQuantityAvailable(quantityAvailable);
 
         return productService.saveProduct(existingProduct);
     }

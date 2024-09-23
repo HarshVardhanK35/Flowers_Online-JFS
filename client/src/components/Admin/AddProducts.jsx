@@ -13,6 +13,7 @@ const AddProducts = () => {
 	const [currency, setCurrency] = useState("$");
 	const [file, setFile] = useState(null);
 	const [filePreview, setFilePreview] = useState(null);
+	const [quantityAvailable, setQuantityAvailable] = useState(1);
 
 	const navigate = useNavigate();
 
@@ -40,6 +41,7 @@ const AddProducts = () => {
 		formData.append("price", price);
 		formData.append("currency", currency);
 		formData.append("photo", file);
+		formData.append("quantityAvailable", quantityAvailable);
 
 		try {
 			const response = await fetch("http://localhost:8080/api/products", {
@@ -157,7 +159,7 @@ const AddProducts = () => {
 											onChange={(e) => {
 												setSize(e.target.value);
 											}}
-											className="block w-full rounded-md border-1 pl-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+											className="block w-full rounded-md border-1 pl-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 											whileFocus={{
 												scale: 1.02,
 												boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.1)",
@@ -211,12 +213,33 @@ const AddProducts = () => {
 												onChange={(e) => {
 													setCurrency(e.target.value);
 												}}
-												className="block h-full rounded-md border-0 bg-transparent py-0 pl-2 pr-2 text-gray-500 sm:text-sm"
+												className="block h-full rounded-md border-0 bg-transparent py-1.5 pl-2 pr-2 text-gray-500 sm:text-sm"
 											>
 												<option value="$">USD</option>
 												<option value="₹">INR</option>
 											</select>
 										</div>
+									</div>
+								</div>
+
+								<div className="sm:col-span-1">
+									<label
+										htmlFor="quantityAvailable"
+										className="pl-1 text-sm font-medium leading-6 text-gray-900"
+									>
+										Available Quantity
+									</label>
+									<div className="mt-1">
+										<motion.input
+											type="number"
+											name="quantityAvailable"
+											value={quantityAvailable}
+											onChange={(e) => setQuantityAvailable(e.target.value)}
+											className="pl-3 py-1 block w-full rounded-md border-1 text-gray-900 shadow-sm"
+											min="1"
+                      max="3"
+											required
+										/>
 									</div>
 								</div>
 

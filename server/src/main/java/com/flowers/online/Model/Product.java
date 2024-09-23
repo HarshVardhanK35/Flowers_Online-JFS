@@ -1,8 +1,11 @@
 package com.flowers.online.Model;
+
 import jakarta.persistence.*;
+
 @Entity
 @Table(name = "products")
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -13,9 +16,10 @@ public class Product {
     private String size;
     private String currency;
     private String about;
+    private int quantityAvailable;
 
     public Product() {}
-    public Product(String name, double price, String category, String photo,  String size, String currency, String about) {
+    public Product(String name, double price, String category, String photo,  String size, String currency, String about, int quantityAvailable) {
         this.name = name;
         this.price = price;
         this.category = category;
@@ -23,6 +27,7 @@ public class Product {
         this.size = size;
         this.currency = currency;
         this.about = about;
+        this.quantityAvailable = quantityAvailable;
     }
     public Long getId() {
         return id;
@@ -61,4 +66,10 @@ public class Product {
     }
     public String getAbout() { return about; }
     public void setAbout(String about) { this.about = about; }
+    public int getQuantityAvailable() {
+        return quantityAvailable;
+    }
+    public void setQuantityAvailable(int quantityAvailable) {
+        this.quantityAvailable = quantityAvailable;
+    }
 }
