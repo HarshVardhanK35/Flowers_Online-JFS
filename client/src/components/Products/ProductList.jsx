@@ -71,22 +71,25 @@ const ProductList = () => {
 	};
 
 	const formatProductName = (productName) => {
-		const words = productName.trim().toLowerCase().split(" and ");
-		const formattedWords = words.map((word, index) => {
-			if (words.length === 1 && word.endsWith("s")) {
-				return word.slice(0, -1);
-			} else if (index === 0 || index === 1) {
-				return (
-					word.charAt(0).toUpperCase() +
-					word.slice(1) +
-					(word.endsWith("s") ? "" : "s")
-				);
-			} else {
-				return word;
+		let words = productName.trim().toLowerCase().split(" ");
+		if (words.length > 1 && words[words.length - 2] !== "and") {
+			words.splice(words.length - 1, 0, "and");
+		}
+		const formattedWords = words.map((word, index, array) => {
+			if (
+				index !== array.length - 2 &&
+				index !== array.length - 1 &&
+				!word.endsWith("s")
+			) {
+				word += "s";
 			}
+			return word.charAt(0).toUpperCase() + word.slice(1);
 		});
-
-		return formattedWords.join(" and ") + " Bouquet";
+		if (formattedWords.length > 3) {
+			const lastTwoWords = formattedWords.splice(-2);
+			return `${formattedWords.join(", ")} ${lastTwoWords.join(" ")} Bouquet`;
+		}
+		return formattedWords.join(" ") + " Bouquet";
 	};
 
 	return (
@@ -124,7 +127,6 @@ const ProductList = () => {
 								</div>
 
 								<div className="ml-4 flex flex-col justify-between w-1/2">
-
 									<div>
 										<motion.a href={`/admin/add-product`}>
 											<h3 className="text-gray-700">
@@ -134,15 +136,23 @@ const ProductList = () => {
 											</h3>
 										</motion.a>
 
-										<span className="mt-2 text-lg font-medium text-gray-900 block ">
+										<span className="mt-1 text-lg font-medium text-gray-900 block ">
 											<span className="text-base font-light text-gray-500">
 												Price:{" "}
 											</span>
-											{`${product.price} ${product.currency}`}
+											<span className="text-sm">{`${product.currency}`}</span>
+											{`${product.price} `}
+										</span>
+
+										<span className="mt-2 text-base font-normal text-gray-900 block ">
+											<span className="text-base font-light text-gray-500">
+												Available Quantity:{" "}
+											</span>
+											{product.quantityAvailable}
 										</span>
 
 										<span className="text-base font-normal text-gray-900 block ">
-											<span className="text-base font-extralight text-gray-500">
+											<span className="text-base font-light text-gray-500">
 												Size:{" "}
 											</span>
 											{product.size.charAt(0).toUpperCase() +
@@ -153,7 +163,7 @@ const ProductList = () => {
 											{product.about === null ? "" : product.about}
 										</span>
 									</div>
-                  
+
 									{role === "ROLE_ADMIN" && (
 										<motion.div className="mt-9 space-x-3 flex">
 											<motion.button

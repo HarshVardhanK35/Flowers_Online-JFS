@@ -12,47 +12,37 @@ import {
 } from "@headlessui/react";
 import {
 	Bars3Icon,
-	ShoppingBagIcon,
 	XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 const Navbar = () => {
 	const navigate = useNavigate();
-
 	const [token, setToken] = useState(null);
-
 	useEffect(() => {
 		const storedToken = localStorage.getItem("token");
-
 		setToken(storedToken);
 	}, []);
-
 	const navigation = [
 		{ name: "About", href: "/about", current: false },
 		{ name: "Contact", href: "/contact", current: false },
 	];
-
 	function classNames(...classes) {
 		return classes.filter(Boolean).join(" ");
 	}
-
 	const [cartItems, setCartItems] = useState(0);
 	useEffect(() => {
 		const storedCartItems = localStorage.getItem("cartItems");
 		setCartItems(storedCartItems ? JSON.parse(storedCartItems).length : 0);
 	}, []);
-
 	const handleCartClick = (e) => {
 		if (cartItems === 0) {
-			e.preventDefault(); // Prevent navigation if no items in cart
+			e.preventDefault();
 			alert("Your cart is empty.");
 		}
 	};
-
 	const handleLogout = () => {
 		const bool = window.confirm("Are you sure you want to logout!");
 		if (bool) {
@@ -61,7 +51,6 @@ const Navbar = () => {
 			navigate("/");
 		}
 	};
-
 	return (
 		<Disclosure as="nav" className="bg-gray-800">
 			<div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -83,14 +72,14 @@ const Navbar = () => {
 					<div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
 						<div className="flex flex-shrink-0 items-center">
 							<a>
-								<motion.div // Wrap logo in motion.div
-									whileHover={{ scale: 1.05 }} // Subtle scale on hover
+								<motion.div
+									whileHover={{ scale: 1.05 }}
 									transition={{ duration: 0.2 }}
 								>
 									<img
 										alt="9Flowers.Online"
 										src="/logo.jpeg"
-										className="h-10 w-auto rounded-md cursor-pointer" // Slightly increase logo size
+										className="h-10 w-auto rounded-md cursor-pointer"
 									/>
 								</motion.div>
 							</a>
@@ -98,7 +87,7 @@ const Navbar = () => {
 						<div className="hidden sm:flex sm:items-center flex-1">
 							<motion.span
 								className="text-white text-xl font-bold text-gray-300 hover:text-white rounded-md px-3 py-1 text-sm font-medium transition duration-300 ease-in-out"
-								whileHover={{ scale: 1.05 }} // Subtle scale on hover
+								whileHover={{ scale: 1.05 }}
 								transition={{ duration: 0.2 }}
 							>
 								<a href="/">9Flowers.Online</a>
@@ -153,8 +142,6 @@ const Navbar = () => {
 								)}
 								<span className="sr-only">Cart</span>
 							</motion.a>
-
-							{/* Profile dropdown1 */}
 							<Menu as="div" className="relative ml-3">
 								<div>
 									<MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 overflow-hidden">
@@ -183,7 +170,7 @@ const Navbar = () => {
 									<MenuItem>
 										<a
 											onClick={handleLogout}
-											className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+											className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 cursor-pointer"
 										>
 											Sign out
 										</a>
@@ -194,7 +181,6 @@ const Navbar = () => {
 					)}
 				</div>
 			</div>
-
 			<DisclosurePanel className="sm:hidden">
 				<div className="space-y-1 px-2 pb-3 pt-2">
 					{navigation.map((item) => (

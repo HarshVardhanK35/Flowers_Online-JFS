@@ -17,28 +17,32 @@ import AdminDetails from "./components/Admin/AdminDetails";
 import AddShopLocation from "./components/Admin/AddShopLocation";
 import EditProduct from './components/Admin/EditProduct.jsx'
 import ProductDetails from "./components/Products/ProductDetails.jsx";
+import Cart from "./components/Products/Cart.jsx";
 
 function App() {
 	return (
 		<div className="App">
 			<Routes>
+				<Route path="/register" element={<Register />} />
 				<Route path="/" element={<UserLanding />} />
 				<Route path="/login" element={<Login />} />
-				<Route path="/register" element={<Register />} />
 				<Route path="/forgot-password" element={<ForgotPassword />} />
 				<Route path="/reset-password" element={<ResetPassword />} />
 				<Route path="/categories" element={<Categories />} />
 
-				<Route path="/products" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
-				<Route path="/categories/all" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
-				<Route path="/products/:categoryName" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
 				<Route path="/product/:productId" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
 
-				<Route path="/admin" element={<ProtectedRoute adminOnly={true}><AdminLanding /></ProtectedRoute>} />
-        <Route path="/admin/add-product" element={<ProtectedRoute adminOnly={true}><AddProducts /></ProtectedRoute>} />
+        <Route path="/products/:categoryName" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
+				<Route path="/categories/all" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
+				<Route path="/products" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
+
+				<Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+
         <Route path="/admin/edit-product/:productId" element={<ProtectedRoute adminOnly={true}><EditProduct /></ProtectedRoute>}/>
 				<Route path="/admin/add-shop" element={<ProtectedRoute adminOnly={true}><AddShopLocation /></ProtectedRoute>} />
+        <Route path="/admin/add-product" element={<ProtectedRoute adminOnly={true}><AddProducts /></ProtectedRoute>} />
 				<Route path="/admin/details" element={<ProtectedRoute adminOnly={true}><AdminDetails /></ProtectedRoute>} />
+				<Route path="/admin" element={<ProtectedRoute adminOnly={true}><AdminLanding /></ProtectedRoute>} />
 
         <Route path="*" element={<Error />} />
 

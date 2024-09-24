@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children, adminOnly = false }) => {
 	const token = localStorage.getItem("token");
-  const userRole = localStorage.getItem("role");
+	const userRole = localStorage.getItem("role");
 
 	if (!token) {
 		return (
@@ -34,9 +34,10 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
 		);
 	}
 
-  if (adminOnly && userRole !== "ROLE_ADMIN") {
-    return <Navigate to="/categories" />;
-  }
-  return children;
+	if (adminOnly && userRole !== "ROLE_ADMIN") {
+		return <Navigate to="/categories" />;
+	}
+	return children;
 };
+
 export default ProtectedRoute;

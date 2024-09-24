@@ -149,7 +149,7 @@ const AdminNavbar = () => {
 									<MenuItem>
 										<a
 											onClick={handleLogout}
-											className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+											className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 cursor-pointer"
 										>
 											Sign out
 										</a>
@@ -162,9 +162,9 @@ const AdminNavbar = () => {
 
 				<DisclosurePanel
 					className="sm:hidden"
-					initial={{ opacity: 0, y: -20 }} // Start off-screen and transparent
-					animate={{ opacity: 1, y: 0 }} // Slide in and become visible
-					exit={{ opacity: 0, y: -20 }} // Slide out when closing
+					initial={{ opacity: 0, y: -20 }}
+					animate={{ opacity: 1, y: 0 }}
+					exit={{ opacity: 0, y: -20 }}
 					transition={{ duration: 0.3, ease: "easeInOut" }}
 				>
 					<div className="space-y-1 px-2 pb-3 pt-2">
