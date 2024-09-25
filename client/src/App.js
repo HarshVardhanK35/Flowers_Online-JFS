@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-vars */
 import React from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
-
+import { Route, Routes } from "react-router-dom";
 import UserLanding from "./components/Home/UserLanding";
 import Register from "./components/Account/Register";
 import Login from "./components/Account/Login";
@@ -18,37 +16,46 @@ import AddShopLocation from "./components/Admin/AddShopLocation";
 import EditProduct from './components/Admin/EditProduct.jsx'
 import ProductDetails from "./components/Products/ProductDetails.jsx";
 import Cart from "./components/Products/Cart.jsx";
+import ErrorBoundary from "./components/Common/ErrorBoundary.js";
 
 function App() {
-	return (
-		<div className="App">
-			<Routes>
-				<Route path="/register" element={<Register />} />
-				<Route path="/" element={<UserLanding />} />
-				<Route path="/login" element={<Login />} />
-				<Route path="/forgot-password" element={<ForgotPassword />} />
-				<Route path="/reset-password" element={<ResetPassword />} />
-				<Route path="/categories" element={<Categories />} />
-
-				<Route path="/product/:productId" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
-
+  return (
+    <div className="App">
+      <Routes>
+        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<UserLanding />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/categories" element={<Categories />} />
         <Route path="/products/:categoryName" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
-				<Route path="/categories/all" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
-				<Route path="/products" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
+        <Route path="/categories/all" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
+        <Route path="/products" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
 
-				<Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
-
-        <Route path="/admin/edit-product/:productId" element={<ProtectedRoute adminOnly={true}><EditProduct /></ProtectedRoute>}/>
-				<Route path="/admin/add-shop" element={<ProtectedRoute adminOnly={true}><AddShopLocation /></ProtectedRoute>} />
+        {/* Wrap the component within ErrorBoundary for individual routes */}
+        <Route
+          path="/cart"
+          element={
+            <ErrorBoundary>
+              <Cart />
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path="/product/:id"
+          element={
+              <ProductDetails />
+          }
+        />
+        <Route path="/admin/edit-product/:productId" element={<ProtectedRoute adminOnly={true}><EditProduct /></ProtectedRoute>} />
+        <Route path="/admin/add-shop" element={<ProtectedRoute adminOnly={true}><AddShopLocation /></ProtectedRoute>} />
         <Route path="/admin/add-product" element={<ProtectedRoute adminOnly={true}><AddProducts /></ProtectedRoute>} />
-				<Route path="/admin/details" element={<ProtectedRoute adminOnly={true}><AdminDetails /></ProtectedRoute>} />
-				<Route path="/admin" element={<ProtectedRoute adminOnly={true}><AdminLanding /></ProtectedRoute>} />
-
+        <Route path="/admin/details" element={<ProtectedRoute adminOnly={true}><AdminDetails /></ProtectedRoute>} />
+        <Route path="/admin" element={<ProtectedRoute adminOnly={true}><AdminLanding /></ProtectedRoute>} />
         <Route path="*" element={<Error />} />
-
-			</Routes>
-		</div>
-	);
+      </Routes>
+    </div>
+  );
 }
 
 export default App;

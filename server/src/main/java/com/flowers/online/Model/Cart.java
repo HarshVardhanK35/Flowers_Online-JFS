@@ -12,11 +12,10 @@ public class Cart {
     @OneToOne
     private User user;
     @Setter
-    @ManyToMany
-    private List<Product> products = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.MERGE) // or PERSIST
+    private List<CartItem> cartItems = new ArrayList<>();
     @Setter
     private double totalPrice;
-    // Constructors
     public Cart() {}
     public Cart(User user) {
         this.user = user;
@@ -28,8 +27,8 @@ public class Cart {
     public User getUser() {
         return user;
     }
-    public List<Product> getProducts() {
-        return products;
+    public List<CartItem> getCartItems() {
+        return cartItems;
     }
     public double getTotalPrice() {
         return totalPrice;

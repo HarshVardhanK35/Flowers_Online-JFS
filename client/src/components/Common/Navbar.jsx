@@ -10,39 +10,46 @@ import {
 	MenuItem,
 	MenuItems,
 } from "@headlessui/react";
-import {
-	Bars3Icon,
-	XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 const Navbar = () => {
 	const navigate = useNavigate();
 	const [token, setToken] = useState(null);
+
 	useEffect(() => {
 		const storedToken = localStorage.getItem("token");
 		setToken(storedToken);
 	}, []);
+
 	const navigation = [
 		{ name: "About", href: "/about", current: false },
 		{ name: "Contact", href: "/contact", current: false },
 	];
+
 	function classNames(...classes) {
 		return classes.filter(Boolean).join(" ");
 	}
+
 	const [cartItems, setCartItems] = useState(0);
+
 	useEffect(() => {
-		const storedCartItems = localStorage.getItem("cartItems");
-		setCartItems(storedCartItems ? JSON.parse(storedCartItems).length : 0);
+		const storedCart = JSON.parse(localStorage.getItem("cart"));
+		setCartItems(storedCart ? storedCart.length : 0);
 	}, []);
+
 	const handleCartClick = (e) => {
 		if (cartItems === 0) {
 			e.preventDefault();
 			alert("Your cart is empty.");
+		} else {
+			navigate("/cart");
 		}
 	};
+
 	const handleLogout = () => {
 		const bool = window.confirm("Are you sure you want to logout!");
 		if (bool) {
@@ -51,6 +58,7 @@ const Navbar = () => {
 			navigate("/");
 		}
 	};
+
 	return (
 		<Disclosure as="nav" className="bg-gray-800">
 			<div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">

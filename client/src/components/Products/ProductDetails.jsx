@@ -5,12 +5,13 @@ import AdminNavbar from "../Common/AdminNavbar";
 import Navbar from "../Common/Navbar";
 
 const ProductDetails = () => {
-	const { productId } = useParams();
+
+  const { id } = useParams(); // change productId to id
+
 	const [product, setProduct] = useState(null);
 	const [error, setError] = useState(null);
 	const [selectedSize, setSelectedSize] = useState("");
 	const [selectedQuantity, setSelectedQuantity] = useState(1);
-
 	const [token] = useState(localStorage.getItem("token"));
 	const [role] = useState(localStorage.getItem("role"));
 
@@ -18,7 +19,7 @@ const ProductDetails = () => {
 		const fetchProduct = async () => {
 			try {
 				const response = await fetch(
-					`http://localhost:8080/api/products/${productId}`,
+					`http://localhost:8080/api/products/${id}`,
 					{
 						headers: {
 							Authorization: `Bearer ${token}`,
@@ -29,13 +30,14 @@ const ProductDetails = () => {
 					throw new Error(`Error fetching product: ${response.statusText}`);
 				}
 				const data = await response.json();
-				setProduct(data);
+        setProduct(data);
+
 			} catch (err) {
 				setError(err.message);
 			}
 		};
 		fetchProduct();
-	}, [productId, token]);
+	}, [id, token]);
 
 	const handleQuantityChange = (e) => {
 		const value = parseInt(e.target.value);
@@ -51,6 +53,13 @@ const ProductDetails = () => {
 	};
 
 	const handleAddToCart = async () => {
+		const userId = localStorage.getItem("userId");
+
+		if (!userId) {
+			alert("User is not authenticated. Please log in.");
+			return;
+		}
+
 		if (!selectedSize) {
 			alert("Please select a size!");
 			return;
@@ -64,22 +73,29 @@ const ProductDetails = () => {
 
 		try {
 			const response = await fetch(
-				`http://localhost:8080/api/cart/${localStorage.getItem("userId")}/add`,
+				`http://localhost:8080/api/cart/${userId}/add`,
 				{
 					method: "POST",
 					headers: {
-						Authorization: `Bearer ${token}`,
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
 						"Content-Type": "application/json",
 					},
 					body: JSON.stringify(cartItem),
 				}
 			);
+
 			if (response.ok) {
-				const updatedProduct = await response.json();
-				setProduct(updatedProduct);
-				alert(`Added ${selectedQuantity} products of size ${selectedSize} to cart.`);
-			}
-      else {
+				const updatedCart = await response.json();
+				setProduct(updatedCart);
+
+				const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+				storedCart.push(cartItem);
+				localStorage.setItem("cart", JSON.stringify(storedCart));
+
+				alert(
+					`Added ${selectedQuantity} product(s) of size ${selectedSize} to cart.`
+				);
+			} else {
 				alert("Error adding product to cart");
 			}
 		} catch (error) {
@@ -104,7 +120,6 @@ const ProductDetails = () => {
 			"emphasizes the freshness and careful selection of flowers, highlighting the artistry involved.",
 		],
 	};
-
 	return (
 		<div className="bg-white">
 			{role === "ROLE_ADMIN" ? <AdminNavbar /> : <Navbar />}
@@ -169,6 +184,7 @@ const ProductDetails = () => {
 									className="pl-8 block w-20 rounded-md border-1 text-gray-900 shadow-sm"
 									min="1"
 									max={Math.min(product.quantityAvailable, 3)}
+									disabled={product.quantityAvailable === 0}
 								/>
 							</div>
 						</div>
@@ -201,20 +217,20 @@ const ProductDetails = () => {
 								</button>
 							</div>
 						</div>
-
 						<button
 							type="button"
 							onClick={handleAddToCart}
 							className="mt-3 w-full flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+							disabled={!selectedSize || product.quantityAvailable === 0}
 						>
-							Add {selectedQuantity} to cart
+							{product.quantityAvailable > 0
+								? `Add ${selectedQuantity} to cart`
+								: "Out of Stock"}
 						</button>
-
 					</div>
 				</div>
 			</div>
 		</div>
 	);
 };
-
 export default ProductDetails;

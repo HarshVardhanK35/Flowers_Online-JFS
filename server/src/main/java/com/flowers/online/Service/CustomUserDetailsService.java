@@ -2,6 +2,7 @@ package com.flowers.online.Service;
 
 import com.flowers.online.Model.User;
 import com.flowers.online.Repository.UserRepository;
+import com.flowers.online.Security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,10 +23,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getEmail())
-                .password(user.getPassword())
-                .authorities(Collections.singletonList(new SimpleGrantedAuthority(user.getRole())))
-                .build();
+        // Return CustomUserDetails, not org.springframework.security.core.userdetails.User
+        return new CustomUserDetails(user.getId(), user.getEmail(), user.getPassword(),
+                Collections.singletonList(new org.springframework.security.core.authority.SimpleGrantedAuthority(user.getRole())),
+                user);
     }
 }

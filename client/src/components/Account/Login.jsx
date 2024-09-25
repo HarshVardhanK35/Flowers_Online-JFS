@@ -23,9 +23,9 @@ function Login() {
 				}
 			})
 			.then((data) => {
-
 				localStorage.setItem("token", data.token);
 				localStorage.setItem("role", data.user.role);
+				localStorage.setItem("userId", data.user.id);
 
 				if (data.user.role === "ROLE_ADMIN") {
 					navigate("/admin");

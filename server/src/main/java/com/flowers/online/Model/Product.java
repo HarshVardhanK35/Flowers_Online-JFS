@@ -1,11 +1,16 @@
 package com.flowers.online.Model;
 import jakarta.persistence.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
 @Entity
 @Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private String category;
     private double price;
@@ -17,8 +22,13 @@ public class Product {
     @Column(nullable = true)
     private Integer quantityAvailable = 0;
 
+    @ElementCollection
+    @CollectionTable(name = "product_stock_by_size", joinColumns = @JoinColumn(name = "product_id"))
+    @MapKeyColumn(name = "size")
+    @Column(name = "stock")
+    private Map<String, Integer> stockBySize = new HashMap<>();
+
     public Product() {
-        this.quantityAvailable = 0;
     }
 
     public Product(String name, double price, String category, String photo,  String size, String currency, String about, Integer quantityAvailable) {
@@ -73,5 +83,22 @@ public class Product {
     }
     public void setQuantityAvailable(int quantityAvailable) {
         this.quantityAvailable = quantityAvailable;
+    }
+
+    public void setStockForSize(String size, int stock) {
+        stockBySize.put(size, stock);
+    }
+
+    // Add getter and setter for stockBySize
+    public Map<String, Integer> getStockBySize() {
+        return stockBySize;
+    }
+
+    public void setStockBySize(String size, int stock) {
+        this.stockBySize.put(size, stock);
+    }
+
+    public int getStockForSize(String size) {
+        return stockBySize.getOrDefault(size, 0);
     }
 }
