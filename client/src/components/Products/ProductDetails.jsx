@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-no-duplicate-props */
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -26,7 +28,11 @@ const ProductDetails = () => {
 						},
 					}
 				);
-				if (!response.ok) {
+				console.log(response);
+
+        if (!response.ok) {
+          const errorResponse = await response.text();
+          console.error("Error fetching product:", errorResponse);
 					throw new Error(`Error fetching product: ${response.statusText}`);
 				}
 				const data = await response.json();
@@ -40,68 +46,57 @@ const ProductDetails = () => {
 	}, [id, token]);
 
 	const handleQuantityChange = (e) => {
-		const value = parseInt(e.target.value);
+    const value = parseInt(e.target.value);
 		if (value <= product.quantityAvailable && value <= 3) {
-			setSelectedQuantity(value);
+      setSelectedQuantity(value);
 		}
 	};
 
 	const handleSizeChange = (size) => {
-		if (size === "small" || size === "large") {
-			setSelectedSize(size);
+    if (size === "small" || size === "large") {
+      setSelectedSize(size);
 		}
 	};
 
-	const handleAddToCart = async () => {
-		const userId = localStorage.getItem("userId");
+  const handleAddToCart = async () => {
+    const userId = localStorage.getItem("userId");
 
-		if (!userId) {
-			alert("User is not authenticated. Please log in.");
-			return;
-		}
+    if (!userId) {
+      alert("User is not authenticated. Please log in.");
+      return;
+    }
 
-		if (!selectedSize) {
-			alert("Please select a size!");
-			return;
-		}
+    if (!selectedSize) {
+      alert("Please select a size!");
+      return;
+    }
 
-		const cartItem = {
-			productId: product.id,
-			size: selectedSize,
-			quantity: selectedQuantity,
-		};
+    const cartItem = {
+      productId: product.id,
+      size: selectedSize,
+      quantity: selectedQuantity,
+    };
 
-		try {
-			const response = await fetch(
-				`http://localhost:8080/api/cart/${userId}/add`,
-				{
-					method: "POST",
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(cartItem),
-				}
-			);
+    try {
+      const response = await fetch(`http://localhost:8080/api/cart/${userId}/add`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cartItem),
+      });
 
-			if (response.ok) {
-				const updatedCart = await response.json();
-				setProduct(updatedCart);
-
-				const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
-				storedCart.push(cartItem);
-				localStorage.setItem("cart", JSON.stringify(storedCart));
-
-				alert(
-					`Added ${selectedQuantity} product(s) of size ${selectedSize} to cart.`
-				);
-			} else {
-				alert("Error adding product to cart");
-			}
-		} catch (error) {
-			console.error("Error adding product to cart:", error);
-		}
-	};
+      if (response.ok) {
+        const updatedCart = await response.json();
+        alert(`Added ${selectedQuantity} product(s) of size ${selectedSize} to cart.`);
+      } else {
+        alert("Error adding product to cart");
+      }
+    } catch (error) {
+      console.error("Error adding product to cart:", error);
+    }
+  };
 
 	if (error) {
 		return <div>Error fetching product: {error}</div>;
@@ -179,16 +174,15 @@ const ProductDetails = () => {
 							<div className="px-2">
 								<input
 									type="number"
+                  max={product.stock || 0}
 									value={selectedQuantity}
 									onChange={handleQuantityChange}
 									className="pl-8 block w-20 rounded-md border-1 text-gray-900 shadow-sm"
 									min="1"
-									max={Math.min(product.quantityAvailable, 3)}
 									disabled={product.quantityAvailable === 0}
 								/>
 							</div>
 						</div>
-						<p className="text-sm text-gray-500">{`Available: ${product.quantityAvailable}`}</p>
 
 						<div className="mt-3">
 							<h3 className="text-sm font-medium text-gray-900">Select Size</h3>

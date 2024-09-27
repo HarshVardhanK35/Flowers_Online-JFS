@@ -15,8 +15,6 @@ import AdminDetails from "./components/Admin/AdminDetails";
 import AddShopLocation from "./components/Admin/AddShopLocation";
 import EditProduct from './components/Admin/EditProduct.jsx'
 import ProductDetails from "./components/Products/ProductDetails.jsx";
-import Cart from "./components/Products/Cart.jsx";
-import ErrorBoundary from "./components/Common/ErrorBoundary.js";
 
 function App() {
   return (
@@ -32,15 +30,7 @@ function App() {
         <Route path="/categories/all" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
         <Route path="/products" element={<ProtectedRoute><ProductList /></ProtectedRoute>} />
 
-        {/* Wrap the component within ErrorBoundary for individual routes */}
-        <Route
-          path="/cart"
-          element={
-            <ErrorBoundary>
-              <Cart />
-            </ErrorBoundary>
-          }
-        />
+
         <Route
           path="/product/:id"
           element={

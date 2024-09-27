@@ -1,84 +1,66 @@
 package com.flowers.online.Service;
-import com.flowers.online.Exceptions.InsufficientStockException;
 import com.flowers.online.Model.Cart;
 import com.flowers.online.Model.CartItem;
 import com.flowers.online.Model.Product;
 import com.flowers.online.Model.User;
+import com.flowers.online.Repository.CartItemRepository;
 import com.flowers.online.Repository.CartRepository;
+import com.flowers.online.Repository.ProductRepository;
 import com.flowers.online.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.List;
 @Service
 public class CartService {
-
     @Autowired
     private CartRepository cartRepository;
-
+    @Autowired
+    private CartItemRepository cartItemRepository;
+    @Autowired
+    private ProductRepository productRepository;
     @Autowired
     private UserRepository userRepository;
-
-    public Cart getCartByUserId(Long userId) {
-        Cart cart = cartRepository.findByUserId(userId);
-        if (cart == null) {
-            User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-            cart = new Cart(user);
-            cartRepository.save(cart);
-        }
-        return cart;
+    public Cart getCartByUser(User user) {
+        return cartRepository.findByUser(user).orElseGet(() -> createCart(user));
     }
+    private Cart createCart(User user) {
+        Cart cart = new Cart(user);
+        return cartRepository.save(cart);
+    }
+    public Cart addToCart(User user, Long productId, String size, int quantity) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
 
-    public Cart addProductToCart(Cart cart, CartItem cartItem) {
-        boolean productExists = false;
-        Map<String, CartItem> cartItemsMap = new HashMap<>();
-        for (CartItem item : cart.getCartItems()) {
-            String key = item.getProduct().getId() + "_" + item.getSize();
-            cartItemsMap.put(key, item);
-            if (item.getProduct().getId().equals(cartItem.getProduct().getId())
-                    && item.getSize().equals(cartItem.getSize())) {
-                item.setQuantity(item.getQuantity() + cartItem.getQuantity());
-                cart.setTotalPrice(cart.getTotalPrice() + (cartItem.getProduct().getPrice() * cartItem.getQuantity()));
-                productExists = true;
-                break;
-            }
-        }
-        if (!productExists) {
-            cart.getCartItems().add(cartItem);
-            cart.setTotalPrice(cart.getTotalPrice() + (cartItem.getProduct().getPrice() * cartItem.getQuantity()));
-        }
+        // Decrease stock based on the size
+        product.decreaseStock(quantity, size);
+        productRepository.save(product);
+
+        CartItem cartItem = new CartItem();
+        cartItem.setProduct(product);
+        cartItem.setSize(size);
+        cartItem.setQuantity(quantity);
+        cartItemRepository.save(cartItem);
+
+        Cart cart = getCartByUser(user);
+        cart.getItems().add(cartItem);
         return cartRepository.save(cart);
     }
 
-    public Cart removeProductFromCart(Cart cart, CartItem cartItem) {
-        cart.getCartItems().removeIf(item ->
-                item.getProduct().getId().equals(cartItem.getProduct().getId()) && item.getSize().equals(cartItem.getSize())
-        );
-        cart.setTotalPrice(cart.getTotalPrice() - (cartItem.getProduct().getPrice() * cartItem.getQuantity()));
-        return cartRepository.save(cart);
+    public void removeFromCart(User user, Long productId, String size) {
+        Cart cart = getCartByUser(user);
+        Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
+
+        CartItem cartItem = cartItemRepository.findByCartAndProductAndSize(cart, product, size)
+                .orElseThrow(() -> new RuntimeException("Product not found in cart"));
+
+        // Increase stock based on the size
+        product.increaseStock(cartItem.getQuantity(), size);
+        productRepository.save(product);
+
+        cartItemRepository.delete(cartItem);
     }
 
-    public void clearCart(Cart cart) {
-        cart.getCartItems().clear();
-        cart.setTotalPrice(0.0);
-        cartRepository.save(cart);
-    }
-
-    public double calculateTotalPrice(Cart cart) {
-        double totalPrice = 0.0;
-        for (CartItem item : cart.getCartItems()) {
-            totalPrice += item.getProduct().getPrice() * item.getQuantity();
-        }
-        return totalPrice;
-    }
-
-    public void validateStock(CartItem cartItem) {
-        Product product = cartItem.getProduct();
-        int availableStock = product.getStockForSize(cartItem.getSize());
-        if (cartItem.getQuantity() > availableStock) {
-            throw new InsufficientStockException("Not enough stock available for this product and size.");
-        }
+    public List<CartItem> getUserCart(User user) {
+        Cart cart = getCartByUser(user);
+        return cart.getItems();
     }
 }

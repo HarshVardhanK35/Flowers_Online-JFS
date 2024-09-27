@@ -1,16 +1,17 @@
 package com.flowers.online.Model;
-import jakarta.persistence.*;
 
+import jakarta.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 
 @Entity
 @Table(name = "products")
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
+    private Long id;
     private String name;
     private String category;
     private double price;
@@ -41,6 +42,7 @@ public class Product {
         this.about = about;
         this.quantityAvailable = quantityAvailable != null ? quantityAvailable : 0;
     }
+
     public Long getId() {
         return id;
     }
@@ -76,29 +78,21 @@ public class Product {
     public void setCurrency(String currency) {
         this.currency = currency;
     }
-    public String getAbout() { return about; }
-    public void setAbout(String about) { this.about = about; }
-    public int getQuantityAvailable() {
-        return quantityAvailable;
+    public void setAbout(String about) {
+        this.about = about;
+    }
+    public String getAbout() {
+        return about;
     }
     public void setQuantityAvailable(int quantityAvailable) {
         this.quantityAvailable = quantityAvailable;
     }
-
-    public void setStockForSize(String size, int stock) {
-        stockBySize.put(size, stock);
+    public void increaseStock(int amount, String size) {
+        int currentStock = this.stockBySize.getOrDefault(size, 0);
+        this.stockBySize.put(size, currentStock + amount);
     }
-
-    // Add getter and setter for stockBySize
-    public Map<String, Integer> getStockBySize() {
-        return stockBySize;
-    }
-
-    public void setStockBySize(String size, int stock) {
-        this.stockBySize.put(size, stock);
-    }
-
-    public int getStockForSize(String size) {
-        return stockBySize.getOrDefault(size, 0);
+    public void decreaseStock(int amount, String size) {
+        int currentStock = this.stockBySize.getOrDefault(size, 0);
+        this.stockBySize.put(size, Math.max(currentStock - amount, 0));
     }
 }

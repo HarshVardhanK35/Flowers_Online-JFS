@@ -5,7 +5,6 @@ public class CartItemDTO {
     private String size;
     private int quantity;
 
-    // Getters and Setters
     public Long getProductId() {
         return productId;
     }

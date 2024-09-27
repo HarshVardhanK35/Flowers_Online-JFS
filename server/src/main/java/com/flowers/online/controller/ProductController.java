@@ -30,10 +30,7 @@ public class ProductController {
             @RequestParam("size") String size,
             @RequestParam("about") String about,
             @RequestParam(value = "quantityAvailable", defaultValue = "0") Integer quantityAvailable
-    ){
-        if (quantityAvailable == null) {
-            quantityAvailable = 0;
-        }
+    ) {
         String photoFilename = photo.getOriginalFilename();
         try {
             Path path = Paths.get(UPLOAD_DIR + photoFilename);
@@ -54,7 +51,8 @@ public class ProductController {
     public ResponseEntity<Product> getProductDetails(@PathVariable Long id) {
         Product product = productService.getProductById(id);
         if (product == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);  // Ensure no HTML response is returned
         }
         return ResponseEntity.ok(product);
     }
@@ -69,16 +67,17 @@ public class ProductController {
     }
     @PutMapping("/edit/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public Product editProduct(@PathVariable Long id,
-                               @RequestParam("name") String name,
-                               @RequestParam("category") String category,
-                               @RequestParam("price") String price,
-                               @RequestParam("currency") String currency,
-                               @RequestParam("size") String size,
-                               @RequestParam(value = "photo", required = false) MultipartFile photo,
-                               @RequestParam("about") String about,
-                               @RequestParam(value = "quantityAvailable", defaultValue = "0") Integer quantityAvailable
-                               ) {
+    public Product editProduct(
+            @PathVariable Long id,
+            @RequestParam("name") String name,
+            @RequestParam("category") String category,
+            @RequestParam("price") String price,
+            @RequestParam("currency") String currency,
+            @RequestParam("size") String size,
+            @RequestParam(value = "photo", required = false) MultipartFile photo,
+            @RequestParam("about") String about,
+            @RequestParam(value = "quantityAvailable", defaultValue = "0") Integer quantityAvailable
+    ) {
         Product existingProduct = productService.getProductById(id);
         if (existingProduct == null) {
             throw new RuntimeException("Product not found");
