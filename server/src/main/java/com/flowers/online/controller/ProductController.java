@@ -12,6 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/products")
@@ -45,7 +47,9 @@ public class ProductController {
     }
     @GetMapping
     public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+        return productService.getAllProducts().stream()
+                .filter(product -> product.getAvailableQuantity() > 0)
+                .collect(Collectors.toList());
     }
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductDetails(@PathVariable Long id) {
@@ -99,7 +103,7 @@ public class ProductController {
         existingProduct.setCurrency(currency);
         existingProduct.setSize(size);
         existingProduct.setAbout(about);
-        existingProduct.setQuantityAvailable(quantityAvailable);
+        existingProduct.setAvailableQuantity(quantityAvailable);
         return productService.saveProduct(existingProduct);
     }
 }

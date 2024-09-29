@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Navbar from "../Common/Navbar";
 import AdminNavbar from "../Common/AdminNavbar";
 import { useNavigate } from "react-router-dom";
@@ -11,34 +12,49 @@ const ProductList = () => {
 	const navigate = useNavigate();
 
 	const [products, setProducts] = useState([]);
+	const [isDeleting, setIsDeleting] = useState(false);
+	const [loading, setLoading] = useState(true);
 
 	const token = localStorage.getItem("token");
 	const role = localStorage.getItem("role");
 
-	useEffect(() => {
-		const fetchProducts = async () => {
-			try {
-				const response = await fetch("http://localhost:8080/api/products", {
-					method: "GET",
-					headers: {
-						Authorization: `Bearer ${token}`,
-						"Content-Type": "application/json",
-					},
-				});
+	const fetchProducts = useCallback(async () => {
+		try {
+			const response = await fetch("http://localhost:8080/api/products", {
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-Type": "application/json",
+				},
+			});
 
-				if (!response.ok) {
-					throw new Error(`HTTP error! status: ${response.status}`);
-				}
-
-				const data = await response.json();
-				setProducts(data);
-			} catch (error) {
-				console.error("Error fetching products:", error);
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
 			}
+
+			const data = await response.json();
+			setProducts(data);
+		} catch (error) {
+			console.error("Error fetching products:", error);
+			alert("Failed to fetch products. Please try again later.");
+		}
+	}, [token]);
+
+	useEffect(() => {
+		fetchProducts();
+	}, [fetchProducts]);
+
+	useEffect(() => {
+		const handleCartUpdate = () => {
+			fetchProducts();
 		};
 
-		fetchProducts();
-	}, [token]);
+		window.addEventListener("cartUpdated", handleCartUpdate);
+
+		return () => {
+			window.removeEventListener("cartUpdated", handleCartUpdate);
+		};
+	}, [fetchProducts]);
 
 	console.log(products);
 
@@ -48,6 +64,7 @@ const ProductList = () => {
 		);
 
 		if (confirmDelete) {
+			setIsDeleting(true);
 			try {
 				const response = await fetch(
 					`http://localhost:8080/api/products/${productId}`,
@@ -66,6 +83,9 @@ const ProductList = () => {
 				}
 			} catch (error) {
 				console.error("Error deleting product:", error);
+				alert("Error deleting product. Please try again.");
+			} finally {
+				setIsDeleting(false);
 			}
 		}
 	};
@@ -92,6 +112,14 @@ const ProductList = () => {
 		return formattedWords.join(" ") + " Bouquet";
 	};
 
+	useEffect(() => {
+		fetchProducts().finally(() => setLoading(false));
+	}, [fetchProducts]);
+
+	if (loading) {
+		return <p>Loading products...</p>; // You can add a loader/spinner here
+	}
+
 	return (
 		<div>
 			{role === "ROLE_ADMIN" ? <AdminNavbar /> : <Navbar />}
@@ -101,6 +129,7 @@ const ProductList = () => {
 					<h2 className="text-2xl font-bold tracking-tight text-gray-900">
 						{products.length === 0 ? `No Products` : "Products Available..."}
 					</h2>
+
 					<div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
 						{products.map((product) => (
 							<motion.div
@@ -148,7 +177,9 @@ const ProductList = () => {
 											<span className="text-base font-light text-gray-500">
 												Available Quantity:{" "}
 											</span>
-											{product.quantityAvailable}
+											{product.availableQuantity > 0
+												? `${product.availableQuantity}`
+												: "Out of Stock"}
 										</span>
 
 										<span className="text-base font-normal text-gray-900 block ">
@@ -252,5 +283,4 @@ const ProductList = () => {
 		</div>
 	);
 };
-
 export default ProductList;

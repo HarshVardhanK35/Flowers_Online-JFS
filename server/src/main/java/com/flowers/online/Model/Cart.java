@@ -4,6 +4,7 @@ import org.eclipse.angus.mail.imap.protocol.Item;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Entity
 @Table(name = "carts")
 public class Cart {
@@ -16,15 +17,7 @@ public class Cart {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    private String size;
-
-    private Integer quantity;
-
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<CartItem> items = new ArrayList<>();
 
     public Cart() {
@@ -48,12 +41,6 @@ public class Cart {
         return items;
     }
 
-    public void addItem(Item item) {
-        if (items == null) {
-            items = new ArrayList<>();
-        }
-        items.add((CartItem) item);
-    }
     public void setItems(List<CartItem> items) {
         this.items = items;
     }

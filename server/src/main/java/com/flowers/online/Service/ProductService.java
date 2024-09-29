@@ -9,8 +9,10 @@ import java.util.List;
 
 @Service
 public class ProductService {
+
     @Autowired
     private ProductRepository productRepository;
+
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
@@ -25,5 +27,20 @@ public class ProductService {
     }
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
+    }
+    public void decreaseAvailableQuantity(Long productId, int amount) {
+        Product product = getProductById(productId);
+        if (product != null) {
+            int newQuantity = Math.max(product.getAvailableQuantity() - amount, 0);
+            product.setAvailableQuantity(newQuantity);
+            productRepository.save(product);
+        }
+    }
+    public void increaseAvailableQuantity(Long productId, int amount) {
+        Product product = getProductById(productId);
+        if (product != null) {
+            product.setAvailableQuantity(product.getAvailableQuantity() + amount);
+            productRepository.save(product);
+        }
     }
 }

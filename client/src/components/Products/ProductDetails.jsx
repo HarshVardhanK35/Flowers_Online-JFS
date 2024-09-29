@@ -7,8 +7,7 @@ import AdminNavbar from "../Common/AdminNavbar";
 import Navbar from "../Common/Navbar";
 
 const ProductDetails = () => {
-
-  const { id } = useParams(); // change productId to id
+	const { id } = useParams();
 
 	const [product, setProduct] = useState(null);
 	const [error, setError] = useState(null);
@@ -18,93 +17,98 @@ const ProductDetails = () => {
 	const [role] = useState(localStorage.getItem("role"));
 
 	useEffect(() => {
-		const fetchProduct = async () => {
-			try {
-				const response = await fetch(
-					`http://localhost:8080/api/products/${id}`,
-					{
-						headers: {
-							Authorization: `Bearer ${token}`,
-						},
-					}
-				);
-				console.log(response);
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/products/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!response.ok) {
           const errorResponse = await response.text();
-          console.error("Error fetching product:", errorResponse);
-					throw new Error(`Error fetching product: ${response.statusText}`);
-				}
-				const data = await response.json();
-        setProduct(data);
+          console.error(`Error fetching product: ${response.status} - ${errorResponse}`);
+          throw new Error(`Error fetching product: ${response.status}`);
+        }
 
-			} catch (err) {
-				setError(err.message);
-			}
-		};
-		fetchProduct();
-	}, [id, token]);
+        const data = await response.json();
+        setProduct(data);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    fetchProduct();
+  }, [id, token]);
+
 
 	const handleQuantityChange = (e) => {
-    const value = parseInt(e.target.value);
-		if (value <= product.quantityAvailable && value <= 3) {
-      setSelectedQuantity(value);
+		const value = parseInt(e.target.value);
+		if (value <= product.availableQuantity) {
+			setSelectedQuantity(value);
 		}
 	};
 
 	const handleSizeChange = (size) => {
-    if (size === "small" || size === "large") {
-      setSelectedSize(size);
+		if (size === "small" || size === "large") {
+			setSelectedSize(size);
 		}
 	};
 
-  const handleAddToCart = async () => {
-    const userId = localStorage.getItem("userId");
+	const handleAddToCart = async () => {
+		const userId = localStorage.getItem("userId");
 
-    if (!userId) {
-      alert("User is not authenticated. Please log in.");
-      return;
-    }
+		if (!userId) {
+			alert("User is not authenticated. Please log in.");
+			return;
+		}
 
-    if (!selectedSize) {
-      alert("Please select a size!");
-      return;
-    }
+		if (!selectedSize) {
+			alert("Please select a size!");
+			return;
+		}
 
-    const cartItem = {
-      productId: product.id,
-      size: selectedSize,
-      quantity: selectedQuantity,
-    };
+		const cartItem = {
+			productId: product.id,
+			size: selectedSize,
+			quantity: selectedQuantity,
+		};
 
-    try {
-      const response = await fetch(`http://localhost:8080/api/cart/${userId}/add`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(cartItem),
-      });
+		try {
+			const response = await fetch(
+				`http://localhost:8080/api/cart/${userId}/add`,
+				{
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(cartItem),
+				}
+			);
 
-      if (response.ok) {
-        const updatedCart = await response.json();
-        alert(`Added ${selectedQuantity} product(s) of size ${selectedSize} to cart.`);
-      } else {
-        alert("Error adding product to cart");
-      }
-    } catch (error) {
-      console.error("Error adding product to cart:", error);
-    }
-  };
+			if (response.ok) {
+				alert(
+					`Added ${selectedQuantity} product(s) of size ${selectedSize} to cart.`
+				);
+			} else {
+				alert("Error adding product to cart");
+			}
+		} catch (error) {
+			console.error("Error adding product to cart:", error);
+		}
+	};
 
 	if (error) {
-		return <div>Error fetching product: {error}</div>;
-	}
+    return <div className="text-red-500">Error fetching product: {error}</div>;
+  }
 
-	if (!product) {
-		return <div>Loading...</div>;
-	}
+  if (!product) {
+    return <div>Loading product details...</div>;
+  }
 
 	const productDetails = {
 		description:
@@ -127,10 +131,12 @@ const ProductDetails = () => {
 							className="h-full w-full object-cover object-center"
 						/>
 					</div>
+
 					<div className=" lg:col-span-2 lg:mt-0">
 						<h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
 							{product.name}
 						</h1>
+
 						<div className="mt-3">
 							<h3 className="sr-only">Description</h3>
 							<div>
@@ -139,6 +145,7 @@ const ProductDetails = () => {
 								</p>
 							</div>
 						</div>
+
 						<div className="mt-3">
 							<h3 className="text-sm font-medium text-gray-900">Highlights</h3>
 							<div className="mt-1">
@@ -151,6 +158,7 @@ const ProductDetails = () => {
 								</ul>
 							</div>
 						</div>
+
 						<div className="mt-3">
 							<h3 className="text-sm font-medium text-gray-900">Details</h3>
 							<div className="mt-1 space-y-1">
@@ -162,62 +170,55 @@ const ProductDetails = () => {
 						</div>
 						<div className="text-2xl tracking-tight font-bold text-gray-900 mt-4 flex items-center justify-between sm:text-3xl">
 							<span>
-								<span className="text-lg font-normal">{`${product.currency}`}</span>
-								{`${product.price}`}
+								<span className="text-lg font-normal">{product.currency}</span>
+								{product.price}
 							</span>
 						</div>
 
-						<div className="mt-3 flex items-center justify-content">
+						<div className="mt-3 flex items-center">
 							<h3 className="text-sm font-medium text-gray-900">
 								Select Quantity:
 							</h3>
 							<div className="px-2">
 								<input
 									type="number"
-                  max={product.stock || 0}
+									max={product.availableQuantity || 0}
 									value={selectedQuantity}
 									onChange={handleQuantityChange}
 									className="pl-8 block w-20 rounded-md border-1 text-gray-900 shadow-sm"
 									min="1"
-									disabled={product.quantityAvailable === 0}
+									disabled={product.availableQuantity === 0}
 								/>
 							</div>
 						</div>
 
 						<div className="mt-3">
 							<h3 className="text-sm font-medium text-gray-900">Select Size</h3>
-							<div className="mt-1 grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-2">
-								<button
-									className={`cursor-pointer bg-white text-gray-900 shadow-sm group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase ${
-										product.size === "small"
-											? ""
-											: "opacity-50 cursor-not-allowed"
-									}`}
-									disabled={product.size !== "small"}
-									onClick={() => handleSizeChange("small")}
-								>
-									Small
-								</button>
-								<button
-									className={`cursor-pointer bg-white text-gray-900 shadow-sm group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase ${
-										product.size === "large"
-											? ""
-											: "opacity-50 cursor-not-allowed"
-									}`}
-									disabled={product.size !== "large"}
-									onClick={() => handleSizeChange("large")}
-								>
-									Large
-								</button>
+							<div className="mt-1 grid grid-cols-2 gap-4">
+								{["small", "large"].map((size) => (
+									<button
+										key={size}
+										className={`cursor-pointer bg-white text-gray-900 shadow-sm group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase ${
+											product.size.includes(size)
+												? ""
+												: "opacity-50 cursor-not-allowed"
+										}`}
+										disabled={!product.size.includes(size)}
+										onClick={() => handleSizeChange(size)}
+									>
+										{size.charAt(0).toUpperCase() + size.slice(1)}
+									</button>
+								))}
 							</div>
 						</div>
+
 						<button
 							type="button"
 							onClick={handleAddToCart}
-							className="mt-3 w-full flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-							disabled={!selectedSize || product.quantityAvailable === 0}
+							className="mt-3 w-full flex items-center justify-center rounded-md bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700"
+							disabled={!selectedSize || product.availableQuantity === 0}
 						>
-							{product.quantityAvailable > 0
+							{product.availableQuantity > 0
 								? `Add ${selectedQuantity} to cart`
 								: "Out of Stock"}
 						</button>
