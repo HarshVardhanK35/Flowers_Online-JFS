@@ -11,43 +11,43 @@ const Categories = () => {
 	const navigate = useNavigate();
 
 	const callouts = [
-		{
-			name: "All Categories",
-			description: "All categories of flowers are available here",
-			imageSrc: "/categories/all.jpg",
-			href: "/products",
-		},
-		{
-			name: "Birthdays",
-			description: "Flowers for birthdays",
-			imageSrc: "/categories/birthdays.jpg",
-			href: "/products/birthdays",
-		},
-		{
-			name: "Love",
-			description: "Flowers for love occasions",
-			imageSrc: "/categories/love.jpg",
-			href: "/products/love",
-		},
-		{
-			name: "Marriages",
-			description: "Flowers for marriages",
-			imageSrc: "/categories/marriages.jpg",
-			href: "/products/marriages",
-		},
-		{
-			name: "Grand Openings",
-			description: "Flowers for grand openings",
-			imageSrc: "/categories/grandopenings.jpg",
-			href: "/products/grand-openings",
-		},
-		{
-			name: "Sympathy",
-			description: "Flowers for sympathy",
-			imageSrc: "/categories/sympathy.jpg",
-			href: "/products/sympathy",
-		},
-	];
+    {
+      name: "All Category",
+      description: "All categories of flowers are available here",
+      imageSrc: "/categories/all.jpg",
+      href: "/products/all", // Use 'all' for showing all products
+    },
+    {
+      name: "Birthday",
+      description: "Flowers for birthdays",
+      imageSrc: "/categories/birthdays.jpg",
+      href: "/products/birthdays",
+    },
+    {
+      name: "Love",
+      description: "Flowers for love occasions",
+      imageSrc: "/categories/love.jpg",
+      href: "/products/love",
+    },
+    {
+      name: "Marriage",
+      description: "Flowers for marriages",
+      imageSrc: "/categories/marriages.jpg",
+      href: "/products/marriages",
+    },
+    {
+      name: "Grand Opening",
+      description: "Flowers for grand openings",
+      imageSrc: "/categories/grandopenings.jpg",
+      href: "/products/grand-openings",
+    },
+    {
+      name: "Sympathy",
+      description: "Flowers for sympathy",
+      imageSrc: "/categories/sympathy.jpg",
+      href: "/products/sympathy",
+    },
+  ];
 
 	return (
 		<div>

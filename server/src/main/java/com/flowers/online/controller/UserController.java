@@ -40,7 +40,7 @@ public class UserController {
         }
 
         if (user.getRole() == null || user.getRole().isEmpty()) {
-            user.setRole("ROLE_CUSTOMER");
+            user.setRole("ROLE_USER");
         }
         else if (!user.getRole().startsWith("ROLE_")) {
             user.setRole("ROLE_" + user.getRole().toUpperCase());

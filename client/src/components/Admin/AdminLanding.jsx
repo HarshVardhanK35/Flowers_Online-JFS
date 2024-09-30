@@ -35,7 +35,7 @@ const AdminLanding = () => {
 
 					<div
 						className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl cursor-pointer transition duration-300"
-						onClick={() => navigate("/products")}
+						onClick={() => navigate("/admin/products")}
 					>
 						<h2 className="text-xl font-bold mb-2">
               Modify Flowers Listed <span aria-hidden="true" className="mt-1 text-sm text-gray-500">&rarr;</span>

@@ -3,8 +3,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
-	const [cartItems, setCartItems] = useState([]);
+  const navigate = useNavigate()
+  const [cartItems, setCartItems] = useState([]);
 	const [cartTotal, setCartTotal] = useState(0);
+  const token = localStorage.getItem("token");
 	const userId = localStorage.getItem("userId");
 
 	useEffect(() => {
@@ -38,32 +40,43 @@ const CartPage = () => {
 	}, [userId]);
 
 	const handleRemoveFromCart = async (productId, size) => {
-		const response = await fetch(`/api/cart/${userId}/remove`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${localStorage.getItem("token")}`,
-			},
-			body: JSON.stringify({ productId, size }),
-		});
+    if (!token) {
+      alert("You must be logged in to perform this action.");
+      return;
+    }
 
-		if (response.ok) {
-			setCartItems((prevItems) =>
-				prevItems.filter(
-					(item) => item.product.id !== productId || item.size !== size
-				)
-			);
-			setCartTotal(
-				(prevTotal) =>
-					prevTotal -
-					cartItems.find(
-						(item) => item.product.id === productId && item.size === size
-					).product.price
-			);
-		} else {
-			alert("Failed to remove item from cart.");
-		}
-	};
+    try {
+      const response = await fetch(`http://localhost:8080/api/cart/${userId}/remove`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ productId, size }),
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        console.error("Error removing item:", errorMessage);
+        throw new Error(`Failed to remove item: ${response.statusText}`);
+      }
+
+      const removedItem = cartItems.find(
+        (item) => item.product.id === productId && item.size === size
+      );
+
+      setCartItems((prevItems) =>
+        prevItems.filter((item) => item.product.id !== productId || item.size !== size)
+      );
+
+      setCartTotal((prevTotal) => prevTotal - removedItem.product.price * removedItem.quantity);
+      navigate('/cart')
+
+    } catch (error) {
+      console.error("Error during remove item from cart:", error);
+      alert("Failed to remove item from cart.");
+    }
+  };
 
 	return (
 		<div className="container mx-auto p-4">

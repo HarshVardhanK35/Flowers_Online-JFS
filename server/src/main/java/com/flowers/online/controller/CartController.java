@@ -36,13 +36,14 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER')") // Ensure this applies only to authorized users
     @PostMapping("/{userId}/remove")
     public ResponseEntity<?> removeFromCart(@PathVariable Long userId, @RequestBody CartItemDTO cartItemDTO) {
         User user = userService.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         cartService.removeFromCart(user, cartItemDTO.getProductId(), cartItemDTO.getSize());
         return ResponseEntity.ok("Removed successfully");
     }
+
 
     @GetMapping("/{userId}")
     public List<CartItem> getUserCart(@PathVariable Long userId) {

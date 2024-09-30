@@ -23,12 +23,8 @@ export default function Register() {
 			alert("Passwords do not match!");
 			return;
 		}
-
 		fetch(`http://localhost:8080/api/users/check-email?email=${email}`)
-			.then((response) => {
-        response.json()
-      })
-
+			.then((response) => response.json())
 			.then((data) => {
 				if (data.exists) {
 					setEmailExists(true);
@@ -42,6 +38,7 @@ export default function Register() {
 						phone,
 						city,
 					};
+
 					fetch("http://localhost:8080/api/users/register", {
 						method: "POST",
 						headers: {
@@ -55,6 +52,9 @@ export default function Register() {
 							navigate("/login");
 						});
 				}
+			})
+			.catch((error) => {
+				console.error("Error checking email:", error); 
 			});
 	};
 

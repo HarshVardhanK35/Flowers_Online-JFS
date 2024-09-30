@@ -21,6 +21,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
     private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
+
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public Product createProduct(
@@ -62,8 +63,9 @@ public class ProductController {
     }
     @GetMapping("/category/{category}")
     public List<Product> getProductsByCategory(@PathVariable String category) {
-        return productService.getProductsByCategory(category);
+        return productService.getProductsByCategory(category.toLowerCase());
     }
+    
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteProduct(@PathVariable Long id) {

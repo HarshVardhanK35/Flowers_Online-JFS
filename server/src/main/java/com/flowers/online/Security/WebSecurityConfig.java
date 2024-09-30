@@ -42,7 +42,9 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/users/login", "/api/users/register", "/api/users/check-email", "/api/users/forgot-password", "/api/users/reset-password").permitAll()
                         .requestMatchers("/categories/**", "/products/**", "/profile").authenticated()
                         .requestMatchers("/home", "/categories").permitAll()
+                        .requestMatchers("/api/products/**").permitAll() // Allow all users to access product-related endpoints
                         .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers("/api/cart/**").hasRole("USER")
                         .requestMatchers("/admin/**", "/api/products/edit/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

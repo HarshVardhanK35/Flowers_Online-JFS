@@ -62,9 +62,14 @@ public class CartService {
     public void removeFromCart(User user, Long productId, String size) {
         Cart cart = getCartByUser(user);
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
-        CartItem cartItem = cartItemRepository.findByCartAndProductAndSize(cart, product, size)
-                .orElseThrow(() -> new RuntimeException("Product not found in cart"));
 
+        List<CartItem> cartItems = cartItemRepository.findByCartAndProductAndSize(cart, product, size);
+
+        if (cartItems.isEmpty()) {
+            throw new RuntimeException("Product not found in cart");
+        }
+
+        CartItem cartItem = cartItems.get(0); // Taking the first result
         productService.increaseAvailableQuantity(productId, cartItem.getQuantity());
 
         cartItemRepository.delete(cartItem);

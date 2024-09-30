@@ -53,7 +53,7 @@ const AddProducts = () => {
 			});
 
 			if (response.ok) {
-				navigate("/products");
+				navigate("/admin/products");
 			} else {
 				alert("Error saving product");
 			}
@@ -66,7 +66,7 @@ const AddProducts = () => {
 	return (
 		<div>
 			<AdminNavbar />
-			<div className="flex justify-center items-center mt-4">
+			<div className="flex justify-center items-center mt-2">
 				<motion.form
 					className="max-w-3xl w-full p-6 bg-white shadow-lg rounded-lg"
 					onSubmit={handleAddProducts}
@@ -75,16 +75,17 @@ const AddProducts = () => {
 					transition={{ duration: 0.5, ease: "easeOut" }}
 				>
 					<motion.h2
-						className="mt-0 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
+						className="-mt-4 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
 						initial={{ opacity: 0, scale: 0.9 }}
 						animate={{ opacity: 1, scale: 1 }}
 						transition={{ duration: 0.3, delay: 0.2 }}
 					>
 						Add a new flower
 					</motion.h2>
-					<div className="space-y-10">
-						<div className="border-b border-gray-900/10 pb-2">
-							<div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-4">
+
+					<div className="space-y-1">
+						<div className="border-b border-gray-900/10 pb-1">
+							<div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-4">
 								<div className="sm:col-span-2">
 									<label
 										htmlFor="productName"
@@ -92,7 +93,8 @@ const AddProducts = () => {
 									>
 										Enter Flower Name
 									</label>
-									<div className="mt-1">
+
+                  <div className="mt-1">
 										<motion.input
 											type="text"
 											name="productName"
@@ -202,7 +204,7 @@ const AddProducts = () => {
 											transition={{ duration: 0.2 }}
 											required
 										/>
-										<div className="absolute inset-y-0 right-0 flex items-center">
+										<div className="absolute inset-y-0 right-0 ">
 											<label htmlFor="currency" className="sr-only">
 												Currency
 											</label>
@@ -255,6 +257,7 @@ const AddProducts = () => {
 											id="about"
 											name="about"
 											rows={2}
+                      maxLength={25}
 											onChange={(e) => {
 												setAbout(e.target.value);
 											}}
@@ -295,7 +298,7 @@ const AddProducts = () => {
 												<motion.img
 													src={filePreview}
 													alt="Selected file preview"
-													className="p-3 h-40 w-40 object-cover rounded-md"
+													className="p-4 h-40 w-40 object-cover rounded-md"
 												/>
 											</motion.div>
 										)}
@@ -303,7 +306,7 @@ const AddProducts = () => {
 								</div>
 							</div>
 						</div>
-						<div className="mt-3 flex items-center justify-end gap-x-6">
+						<div className="mt-2 flex items-center justify-end gap-x-6">
 							<motion.button
 								type="button"
 								onClick={() => navigate(-1)}
