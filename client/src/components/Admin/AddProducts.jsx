@@ -304,6 +304,7 @@ const AddProducts = () => {
 										)}
 									</div>
 								</div>
+                
 							</div>
 						</div>
 						<div className="mt-2 flex items-center justify-end gap-x-6">
