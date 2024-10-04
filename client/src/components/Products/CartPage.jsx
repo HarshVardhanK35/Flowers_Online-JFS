@@ -188,10 +188,9 @@ const CartPage = () => {
 	useEffect(() => {
 		if (cartItems.length > 0) {
 			cartItems.forEach((item) => {
+				console.log(item);
 
-        console.log(item)
-
-        if (item.product && item.availableQuantity !== undefined) {
+				if (item.product && item.availableQuantity !== undefined) {
 					// Use the initial available quantity when the cart item is first loaded
 					const initialAvailableQuantity =
 						item.initialAvailableQuantity || item.availableQuantity;
@@ -331,48 +330,40 @@ const CartPage = () => {
 					</div>
 				)}
 			</div>
-			<div className="flex justify-center">
-				<div className="w-full md:w-2/4 bg-gray-100 p-4 rounded-lg flex items justify-between">
-					<div>
-						<h3 className="text-lg font-bold">Order Summary</h3>
-						<p className="text-gray-700">Total: ${cartTotal.toFixed(2)}</p>
-						<button
-							onClick={() => navigate("#")}
-							className="mt-2 bg-blue-500 text-white rounded-md px-4 py-2"
-						>
-							Proceed to Checkout
-						</button>
-					</div>
+			{cartItems.length !== 0 ? (
+				<div className="flex justify-center">
+					<div className="w-full md:w-1/3 bg-gray-100 p-4 rounded-lg flex items justify-between">
+						<div>
+							<h3 className="text-lg font-bold">Order Summary</h3>
+							<p className="text-gray-700">Total: ${cartTotal.toFixed(2)}</p>
+							<button
+								onClick={() => navigate("#")}
+								className="mt-2 bg-blue-500 text-white rounded-md px-4 py-2"
+							>
+								Proceed to Checkout
+							</button>
+						</div>
 
-					<div className="mt-2">
-						<motion.button
-							type="button"
-							className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-							onClick={() => {
-								navigate(-1);
-							}}
-							whileHover={{ scale: 1.05 }}
-							whileTap={{ scale: 0.95 }}
-							transition={{ duration: 0.2 }}
-						>
-							Back
-						</motion.button>
-						<motion.a
-							href="/products/all"
-							className="text-sm font-semibold leading-6 text-black rounded-md px-2 py-1"
-							whileHover={{
-								scale: 1.1,
-								boxShadow: "0px 4px 8px rgba(38, 38, 38, 0.2)",
-								backgroundColor: "#f0f4f8",
-								color: "#000000",
-							}}
-							transition={{ duration: 0.2, ease: "easeInOut" }}
-						>
-							or Continue Shopping <span aria-hidden="true">→</span>
-						</motion.a>
+						<div className="mt-2">
+							<motion.a
+								href="/products/all"
+								className="text-sm font-semibold leading-6 text-black rounded-md px-2 py-1"
+								whileHover={{
+									scale: 1.1,
+									boxShadow: "0px 4px 8px rgba(38, 38, 38, 0.2)",
+									backgroundColor: "#f0f4f8",
+									color: "#000000",
+								}}
+								transition={{ duration: 0.2, ease: "easeInOut" }}
+							>
+								or Continue Shopping <span aria-hidden="true">→</span>
+							</motion.a>
+						</div>
 					</div>
 				</div>
-			</div>
+			) : (
+				""
+			)}
 		</>
 	);
 };

@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import AdminNavbar from "../Common/AdminNavbar";
 import Navbar from "../Common/Navbar";
+import { motion, AnimatePresence } from "framer-motion";
 
 const ProductDetails = () => {
 	const { id } = useParams();
@@ -17,33 +18,34 @@ const ProductDetails = () => {
 	const [role] = useState(localStorage.getItem("role"));
 
 	useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8080/api/products/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+		const fetchProduct = async () => {
+			try {
+				const response = await fetch(
+					`http://localhost:8080/api/products/${id}`,
+					{
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					}
+				);
 
-        if (!response.ok) {
-          const errorResponse = await response.text();
-          console.error(`Error fetching product: ${response.status} - ${errorResponse}`);
-          throw new Error(`Error fetching product: ${response.status}`);
-        }
+				if (!response.ok) {
+					const errorResponse = await response.text();
+					console.error(
+						`Error fetching product: ${response.status} - ${errorResponse}`
+					);
+					throw new Error(`Error fetching product: ${response.status}`);
+				}
 
-        const data = await response.json();
-        setProduct(data);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
+				const data = await response.json();
+				setProduct(data);
+			} catch (err) {
+				setError(err.message);
+			}
+		};
 
-    fetchProduct();
-  }, [id, token]);
-
+		fetchProduct();
+	}, [id, token]);
 
 	const handleQuantityChange = (e) => {
 		const value = parseInt(e.target.value);
@@ -103,14 +105,14 @@ const ProductDetails = () => {
 	};
 
 	if (error) {
-    return <div className="text-red-500">Error fetching product: {error}</div>;
-  }
+		return <div className="text-red-500">Error fetching product: {error}</div>;
+	}
 
-  if (!product) {
-    return <div>Loading product details...</div>;
-  }
+	if (!product) {
+		return <div>Loading product details...</div>;
+	}
 
-  console.log(product)
+	console.log(product);
 
 	const productDetails = {
 		description:
@@ -179,7 +181,7 @@ const ProductDetails = () => {
 
 						<div className="mt-3 flex items-center">
 							<h3 className="text-sm font-medium text-gray-900">
-								Select Quantity:
+              {role === "ROLE_ADMIN" ? "Available in Quantity" : "Select Quantity"}
 							</h3>
 							<div className="px-2">
 								<input
@@ -195,7 +197,10 @@ const ProductDetails = () => {
 						</div>
 
 						<div className="mt-3">
-							<h3 className="text-sm font-medium text-gray-900">Select Size</h3>
+							<h3 className="text-sm font-medium text-gray-900">
+              {role === "ROLE_ADMIN" ? "Available in sizes" : "Select Size"}
+							</h3>
+
 							<div className="mt-1 grid grid-cols-2 gap-4">
 								{["small", "large"].map((size) => (
 									<button
@@ -206,24 +211,51 @@ const ProductDetails = () => {
 												: "opacity-50 cursor-not-allowed"
 										}`}
 										disabled={!product.size.includes(size)}
-										onClick={() => handleSizeChange(size)}
-									>
+                    onClick={() => handleSizeChange(size)}
+                  >
 										{size.charAt(0).toUpperCase() + size.slice(1)}
 									</button>
+
 								))}
 							</div>
 						</div>
 
-						<button
-							type="button"
-							onClick={handleAddToCart}
-							className="mt-3 w-full flex items-center justify-center rounded-md bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700"
-							disabled={!selectedSize || product.availableQuantity === 0}
-						>
-							{product.availableQuantity > 0
-								? `Add ${selectedQuantity} to cart`
-								: "Out of Stock"}
-						</button>
+						{role === "ROLE_ADMIN" ? (
+							<div className="mt-3 gap-x-4">
+              <motion.a
+                href='#'
+                className="rounded-md bg-indigo-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Admin cannot add products into cart
+              </motion.a>
+              <motion.a
+                href="/admin/products"
+                className="text-sm font-semibold leading-6 text-black rounded-md px-2 py-1"
+                whileHover={{
+                  scale: 1.1,
+                  boxShadow: "0px 4px 8px black",
+                  backgroundColor: "#f0f4f8",
+                  color: "#000000",
+                }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
+              >
+                Back to products list page <span aria-hidden="true">→</span>
+              </motion.a>
+            </div>
+						) : (
+							<button
+								type="button"
+								onClick={handleAddToCart}
+								className="mt-3 w-full flex items-center justify-center rounded-md bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700"
+								disabled={!selectedSize || product.availableQuantity === 0}
+							>
+								{product.availableQuantity > 0
+									? `Add ${selectedQuantity} to cart`
+									: "Out of Stock"}
+							</button>
+						)}
 					</div>
 				</div>
 			</div>

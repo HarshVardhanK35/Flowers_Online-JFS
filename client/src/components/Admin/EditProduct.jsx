@@ -20,7 +20,6 @@ const EditProduct = () => {
 	const [filePreview, setFilePreview] = useState(null);
 	const [quantityAvailable, setQuantityAvailable] = useState(1);
 
-
 	const token = localStorage.getItem("token");
 	const role = localStorage.getItem("role");
 
@@ -55,12 +54,12 @@ const EditProduct = () => {
 				setPrice(data.price);
 				setCurrency(data.currency);
 				setSize(data.size);
-        setQuantityAvailable(data.quantityAvailable)
+				setQuantityAvailable(data.quantityAvailable);
 				setFilePreview(`http://localhost:8080${data.photo}`);
 			})
-      .catch((error) => {
-        console.error(error)
-      })
+			.catch((error) => {
+				console.error(error);
+			});
 	}, [navigate, productId]);
 
 	const handleFileChange = (e) => {
@@ -83,7 +82,7 @@ const EditProduct = () => {
 		formData.append("price", price);
 		formData.append("size", size);
 		formData.append("currency", currency);
-    formData.append("quantityAvailable", quantityAvailable);
+		formData.append("quantityAvailable", quantityAvailable);
 		if (file) {
 			formData.append("photo", file);
 		}
@@ -99,7 +98,7 @@ const EditProduct = () => {
 			.then((response) => {
 				if (response.ok) {
 					// console.log(response);
-					navigate("/products");
+					navigate("/admin/products");
 				} else {
 					console.log(response);
 					alert("Failed to update product");
@@ -222,7 +221,7 @@ const EditProduct = () => {
 									</div>
 								</div>
 
-                <div className="sm:col-span-1">
+								<div className="sm:col-span-1">
 									<label
 										htmlFor="quantityAvailable"
 										className="pl-1 text-sm font-medium leading-6 text-gray-900"
@@ -234,11 +233,11 @@ const EditProduct = () => {
 											type="number"
 											id="quantityAvailable"
 											name="quantityAvailable"
-											value={quantityAvailable}
+											value={quantityAvailable ?? ""} // Ensure a fallback value
 											onChange={(e) => setQuantityAvailable(e.target.value)}
 											className="pl-3 py-1 block w-full rounded-md border-1 text-gray-900 shadow-sm"
 											min="1"
-                      max="3"
+											max="3"
 											required
 										/>
 									</div>

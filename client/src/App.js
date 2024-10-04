@@ -45,7 +45,7 @@ function App() {
 
         <Route path="/admin/add-shop" element={<ProtectedRoute adminOnly={true}><AddShopLocation /></ProtectedRoute>} />
         <Route path="/admin/details" element={<ProtectedRoute adminOnly={true}><AdminDetails /></ProtectedRoute>} />
-
+        
         {/* Fallback error page */}
         <Route path="*" element={<Error />} />
       </Routes>

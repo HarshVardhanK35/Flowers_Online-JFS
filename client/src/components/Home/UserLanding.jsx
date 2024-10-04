@@ -206,28 +206,28 @@ const UserLanding = () => {
 				</motion.div>
 				{!token && (
 					<div className="mt-10 flex items-center justify-center gap-x-4">
-						<motion.a
-							href="/register"
-							className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-							whileHover={{ scale: 1.05 }}
-							whileTap={{ scale: 0.95 }}
-						>
-							Register Here
-						</motion.a>
-						<motion.a
-							href="/login"
-							className="text-sm font-semibold leading-6 text-white rounded-md px-2 py-1"
-							whileHover={{
-								scale: 1.1,
-								boxShadow: "0px 4px 8px rgba(38, 38, 38, 0.2)",
-								backgroundColor: "#000000",
-								color: "#f0f4f8",
-							}}
-							transition={{ duration: 0.2, ease: "easeInOut" }}
-						>
-							Already a user? Login here <span aria-hidden="true">→</span>
-						</motion.a>
-					</div>
+          <motion.a
+            href="/register"
+            className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Register Here
+          </motion.a>
+          <motion.a
+            href="/login"
+            className="text-sm font-semibold leading-6 text-white rounded-md px-2 py-1"
+            whileHover={{
+              scale: 1.1,
+              boxShadow: "0px 4px 8px rgba(38, 38, 38, 0.2)",
+              backgroundColor: "#000000",
+              color: "#f0f4f8",
+            }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+          >
+            Already a user? Login here <span aria-hidden="true">→</span>
+          </motion.a>
+        </div>
 				)}
 			</div>
 			<motion.div

@@ -39,26 +39,28 @@ public class WebSecurityConfig {
                 }))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/login", "/api/users/register", "/api/users/check-email", "/api/users/forgot-password", "/api/users/reset-password").permitAll()
-                        .requestMatchers("/categories/**", "/products/**", "/profile").authenticated()
-                        .requestMatchers("/home", "/categories", "/manifest.json", "/favicon.ico", "/static/**").permitAll()
-                        .requestMatchers("/api/products/**", "/uploads/**").permitAll() // Allow all users to access product-related endpoints
-                        .requestMatchers("/admin/**", "/api/products/edit/**").hasRole("ADMIN")
-                        .requestMatchers("/api/cart/**").hasRole("USER")
-                        .anyRequest().authenticated()
+                        .requestMatchers("/api/users/login", "/api/users/register", "/api/users/check-email", "/api/users/forgot-password", "/api/users/reset-password").permitAll() // Public routes
+                        .requestMatchers("/categories/**", "/products/**", "/profile").authenticated() // Restricted to authenticated users
+                        .requestMatchers("/home", "/categories", "/manifest.json", "/favicon.ico", "/static/**").permitAll() // Static/public resources
+                        .requestMatchers("/api/products/**", "/uploads/**").permitAll() // Public product-related routes
+                        .requestMatchers("/admin/**", "/api/products/edit/**").hasRole("ADMIN") // Admin-only routes
+                        .requestMatchers("/api/products/**").permitAll()
+                        .requestMatchers("/api/cart/**").hasRole("USER") // User role for cart-related routes
+                        .anyRequest().authenticated() // Any other request must be authenticated
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                )
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
@@ -77,7 +79,6 @@ public class WebSecurityConfig {
             }
         };
     }
-
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {

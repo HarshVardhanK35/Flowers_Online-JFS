@@ -55,7 +55,7 @@ const AdminProductList = () => {
 		};
 	}, [fetchProducts]);
 
-	console.log(products);
+	// console.log(products);
 
 	const handleEdit = (id) => {
 		navigate(`/admin/edit-product/${id}`);
@@ -158,9 +158,9 @@ const AdminProductList = () => {
 									</a>
 								</div>
 
-								<div className="ml-4 flex flex-col justify-between w-1/2">
+								<div className="ml-5 flex flex-col justify-between w-1/2">
 									<div>
-										<motion.a href={`/admin/add-product`}>
+										<motion.a href={`/admin/products`}>
 											<h3 className="text-gray-700">
 												<p className="text-2xl font-semibold text-gray-900">
 													{formatProductName(product.name)}
@@ -272,10 +272,14 @@ const AdminProductList = () => {
 						{role === "ROLE_ADMIN" && (
 							<motion.button
 								onClick={() => navigate(-1)}
-								className="text-sm font-semibold rounded-md bg-white-600 px-3 py-2 shadow hover:bg-indigo-600 hover:text-white"
-								whileHover={{ scale: 1.05 }}
-								whileTap={{ scale: 0.95 }}
-								transition={{ duration: 0.2 }}
+								className="text-sm font-semibold leading-6 text-black rounded-md px-2 py-1"
+								whileHover={{
+									scale: 1.1,
+									boxShadow: "0px 4px 8px black",
+									backgroundColor: "#f0f4f8",
+									color: "#000000",
+								}}
+								transition={{ duration: 0.2, ease: "easeInOut" }}
 							>
 								Back
 							</motion.button>
