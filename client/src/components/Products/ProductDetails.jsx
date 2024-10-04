@@ -110,6 +110,8 @@ const ProductDetails = () => {
     return <div>Loading product details...</div>;
   }
 
+  console.log(product)
+
 	const productDetails = {
 		description:
 			"Express your sentiments with our exquisite flower bouquets. Whether you're celebrating a birthday, expressing love and affection, commemorating a wedding, offering condolences, or marking a grand opening, our blooms speak volumes. Each bouquet is a unique arrangement of fresh, vibrant flowers, carefully selected to convey your message.",

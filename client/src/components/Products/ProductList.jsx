@@ -28,7 +28,7 @@ const ProductList = () => {
 				if (!response.ok) throw new Error("Error fetching products");
 
 				const data = await response.json();
-				console.log(data);
+				// console.log(data);
 				setProducts(data);
 			} catch (error) {
 				console.error(error);
@@ -74,7 +74,9 @@ const ProductList = () => {
 					<h2 className="text-2xl font-bold tracking-tight text-gray-900">
 						{categoryName === "all"
 							? "All Products"
-							: `${categoryName.charAt(0).toUpperCase() + categoryName.slice(1)} Products`}
+							: `${
+									categoryName.charAt(0).toUpperCase() + categoryName.slice(1)
+							  } Products`}
 					</h2>
 
 					<div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
@@ -113,16 +115,16 @@ const ProductList = () => {
 												</h3>
 											</motion.a>
 
-											<span className="mt-1 text-lg font-medium text-gray-900 block ">
-												<span className="text-base font-light text-gray-500">
+											<span className="-mt-1 text-lg font-medium text-gray-900 block ">
+												<span className="text-sm font-light text-gray-500">
 													Price:{" "}
 												</span>
-												<span className="text-sm">{`${product.currency}`}</span>
+												<span>{`${product.currency}`}</span>
 												{`${product.price} `}
 											</span>
 
-											<span className="-mt-1 text-lg font-medium text-gray-900 block ">
-												<span className="text-base font-light text-gray-500">
+											<span className="mt-3 text-base font-normal text-gray-900 block ">
+												<span className="text-sm font-light text-gray-500">
 													Available Quantity:{" "}
 												</span>
 												{product.availableQuantity > 0
@@ -130,7 +132,15 @@ const ProductList = () => {
 													: "Out of Stock"}
 											</span>
 
-											<span className="mt-3 text-base font-normal text-gray-900 block ">
+											<span className="-mt-1 text-base font-normal text-gray-900 block ">
+												<span className="text-sm font-light text-gray-500">
+													Available in sizes:{" "}
+												</span>
+												{product.size.charAt(0).toUpperCase() +
+													product.size.slice(1)}
+											</span>
+
+											<span className="mt-2 text-base font-normal text-gray-900 block ">
 												<span className="text-sm font-light text-gray-500">
 													Category:{" "}
 												</span>
@@ -138,15 +148,7 @@ const ProductList = () => {
 													product.category.slice(1)}
 											</span>
 
-											<span className="-mt-1 text-base font-normal text-gray-900 block ">
-												<span className="text-sm font-light text-gray-500">
-													Size:{" "}
-												</span>
-												{product.size.charAt(0).toUpperCase() +
-													product.size.slice(1)}
-											</span>
-
-											<span className="mt-3 text-xs font-normal text-gray-900 block">
+											<span className="mt-2 text-xs font-normal text-gray-900 block">
 												{product.about === null ? "" : product.about}
 											</span>
 										</div>

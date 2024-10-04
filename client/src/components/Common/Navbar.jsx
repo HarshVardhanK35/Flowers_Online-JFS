@@ -23,7 +23,8 @@ const Navbar = () => {
 	const [cartItemCount, setCartItemCount] = useState(0);
 
 	const navigation = [
-		{ name: "About", href: "/about", current: false },
+		{ name: "Categories", href: "/categories", current: false },
+    { name: "About", href: "/about", current: false },
 		{ name: "Contact", href: "/contact", current: false },
 	];
 

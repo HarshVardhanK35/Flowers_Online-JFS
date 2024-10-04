@@ -41,11 +41,10 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/users/login", "/api/users/register", "/api/users/check-email", "/api/users/forgot-password", "/api/users/reset-password").permitAll()
                         .requestMatchers("/categories/**", "/products/**", "/profile").authenticated()
-                        .requestMatchers("/home", "/categories").permitAll()
-                        .requestMatchers("/api/products/**").permitAll() // Allow all users to access product-related endpoints
-                        .requestMatchers("/uploads/**").permitAll()
-                        .requestMatchers("/api/cart/**").hasRole("USER")
+                        .requestMatchers("/home", "/categories", "/manifest.json", "/favicon.ico", "/static/**").permitAll()
+                        .requestMatchers("/api/products/**", "/uploads/**").permitAll() // Allow all users to access product-related endpoints
                         .requestMatchers("/admin/**", "/api/products/edit/**").hasRole("ADMIN")
+                        .requestMatchers("/api/cart/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

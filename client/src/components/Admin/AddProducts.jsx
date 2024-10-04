@@ -10,7 +10,7 @@ const AddProducts = () => {
 	const [category, setCategory] = useState("");
 	const [about, setAbout] = useState("");
 	const [price, setPrice] = useState("");
-	const [currency, setCurrency] = useState("$");
+	const [currency, setCurrency] = useState("₹");
 	const [file, setFile] = useState(null);
 	const [filePreview, setFilePreview] = useState(null);
 	const [quantityAvailable, setQuantityAvailable] = useState(1);
@@ -186,7 +186,8 @@ const AddProducts = () => {
 									<div className="relative mt-1 rounded-md shadow-sm">
 										<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 											<span className="text-gray-500 sm:text-sm">
-												{currency === "₹" ? "₹" : "$"}
+												{/* {currency === "₹" ? "₹" : "$"} */}
+                        ₹
 											</span>
 										</div>
 										<motion.input
@@ -217,7 +218,7 @@ const AddProducts = () => {
 												}}
 												className="block h-full rounded-md border-0 bg-transparent py-1.5 pl-2 pr-2 text-gray-500 sm:text-sm"
 											>
-												<option value="$">USD</option>
+												{/* <option value="$">USD</option> */}
 												<option value="₹">INR</option>
 											</select>
 										</div>
@@ -304,7 +305,7 @@ const AddProducts = () => {
 										)}
 									</div>
 								</div>
-                
+
 							</div>
 						</div>
 						<div className="mt-2 flex items-center justify-end gap-x-6">

@@ -32,19 +32,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
 
-            String role = jwtTokenProvider.getRoleFromJWT(token);
             String email = jwtTokenProvider.getUsernameFromJWT(token);
-
-            logger.info("Token is valid, email:");
-            logger.info(email);
-            logger.info("Token is valid, role:");
-            logger.info(role);
 
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities());
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            logger.info("User authenticated: " + email);
         } else {
             logger.warn("JWT Token is invalid or missing");
         }

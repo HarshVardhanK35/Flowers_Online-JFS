@@ -77,6 +77,28 @@ public class CartService {
         cartRepository.save(cart);
     }
 
+    public CartItem updateCartQuantity(User user, Long productId, int newQuantity) {
+        Cart cart = getCartByUser(user);
+        CartItem cartItem = cartItemRepository.findByCartAndProductIdAndSize(cart, productId, null)
+                .orElseThrow(() -> new RuntimeException("Cart item not found"));
+
+        int availableQuantity = cartItem.getProduct().getAvailableQuantity();
+        int currentQuantity = cartItem.getQuantity();
+        int quantityDifference = newQuantity - currentQuantity;
+
+        if (availableQuantity < quantityDifference) {
+            throw new RuntimeException("Not enough stock available");
+        }
+
+        productService.decreaseAvailableQuantity(productId, quantityDifference);
+
+        cartItem.setQuantity(newQuantity);
+        cartItemRepository.save(cartItem);
+
+        return cartItem;
+    }
+
+
     public List<CartItem> getUserCart(User user) {
         Cart cart = getCartByUser(user);
         System.out.println("Items in cart: " + cart.getItems());

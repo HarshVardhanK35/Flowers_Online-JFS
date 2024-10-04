@@ -19,7 +19,7 @@ public class Product {
     private String photo;
     private String currency;
     private String about;
-    
+
     @Column(nullable = true)
     private int availableQuantity;
 
@@ -44,7 +44,7 @@ public class Product {
         this.about = about;
         this.availableQuantity = availableQuantity;
     }
-    
+
     public Long getId() {
         return id;
     }
