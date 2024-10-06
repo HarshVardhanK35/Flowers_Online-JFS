@@ -2,15 +2,17 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Navbar from "../Common/Navbar";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Navbar from "../Common/Navbar";
 import AdminNavbar from "../Common/AdminNavbar";
+import ProductFilter from "../Common/ProductFilter";
 
 const ProductList = () => {
 	const { categoryName } = useParams(); // Get category from URL
 	const [products, setProducts] = useState([]);
+	const [filteredProducts, setFilteredProducts] = useState([]);
 	const [loading, setLoading] = useState(true);
 
 	const token = localStorage.getItem("token");
@@ -46,6 +48,7 @@ const ProductList = () => {
 
 			const data = await response.json();
 			setProducts(data);
+			setFilteredProducts(data);
 		} catch (error) {
 			console.error(error.message);
 			alert(error.message);
@@ -63,31 +66,54 @@ const ProductList = () => {
 		}
 	}, [categoryName, token]);
 
+	const handleSearch = (searchTerm) => {
+		const filtered = products.filter((product) =>
+			product.name.toLowerCase().startsWith(searchTerm.toLowerCase())
+		);
+		setFilteredProducts(filtered);
+	};
+
+	const handleSort = (sortOption) => {
+		let sortedProducts = [...filteredProducts];
+		if (sortOption === "lowToHigh") {
+			sortedProducts.sort((a, b) => a.availableQuantity - b.availableQuantity);
+		} else if (sortOption === "highToLow") {
+			sortedProducts.sort((a, b) => b.availableQuantity - a.availableQuantity);
+		}
+		setFilteredProducts(sortedProducts);
+	};
+
+	const handleSizeFilter = (sizeOption) => {
+		const filtered = products.filter(
+			(product) => product.size.toLowerCase() === sizeOption.toLowerCase()
+		);
+		setFilteredProducts(filtered);
+	};
+
 	if (loading) {
 		return <div>Loading...</div>;
 	}
 
-	const formatProductName = (productName) => {
-		let words = productName.trim().toLowerCase().split(" ");
-		if (words.length > 1 && words[words.length - 2] !== "and") {
-			words.splice(words.length - 1, 0, "and");
-		}
-		const formattedWords = words.map((word, index, array) => {
-			if (
-				index !== array.length - 2 &&
-				index !== array.length - 1 &&
-				!word.endsWith("s")
-			) {
-				word += "s";
-			}
-			return word.charAt(0).toUpperCase() + word.slice(1);
-		});
-		if (formattedWords.length > 3) {
-			const lastTwoWords = formattedWords.splice(-2);
-			return `${formattedWords.join(", ")} ${lastTwoWords.join(" ")} Bouquet`;
-		}
-		return formattedWords.join(" ") + " Bouquet";
-	};
+	// const formatProductName = (productName) => {
+	// 	let words = productName.trim().toLowerCase().split(" ");
+	// 	if (words.length > 1 && words[words.length - 2] !== "and") {
+	// 		words.splice(words.length - 1, 0, "and");
+	// 	}
+	// 	const formattedWords = words.map((word, index, array) => {
+	// 		if (
+	// 			index !== array.length - 2 &&
+	// 			index !== array.length - 1 && !word.endsWith("s")
+	// 		) {
+	// 			word += "s";
+	// 		}
+	// 		return word.charAt(0).toUpperCase() + word.slice(1);
+	// 	});
+	// 	if (formattedWords.length > 3) {
+	// 		const lastTwoWords = formattedWords.splice(-2);
+	// 		return `${formattedWords.join(", ")} ${lastTwoWords.join(" ")} Bouquet`;
+	// 	}
+	// 	return formattedWords.join(" ") + " Bouquet";
+	// };
 
 	return (
 		<div>
@@ -104,9 +130,15 @@ const ProductList = () => {
 							: "Category Not Found"}
 					</h2>
 
+					<ProductFilter
+						onSearch={handleSearch}
+						onSort={handleSort}
+						onSizeFilter={handleSizeFilter}
+					/>
+
 					<div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
-						{products.length > 0 ? (
-							products.map((product) => (
+						{filteredProducts.length > 0 ? (
+							filteredProducts.map((product) => (
 								<motion.div
 									key={product.id}
 									className="group relative flex flex-row"
@@ -135,7 +167,7 @@ const ProductList = () => {
 											<motion.a href={`/product/${product.id}`}>
 												<h3 className="text-gray-700">
 													<p className="text-2xl font-semibold text-gray-900">
-														{formatProductName(product.name)}
+														{product.name}
 													</p>
 												</h3>
 											</motion.a>
@@ -185,7 +217,7 @@ const ProductList = () => {
 								</motion.div>
 							))
 						) : (
-							<p>No products available in this category.</p>
+							<p>No products available in this category or Out of stock</p>
 						)}
 					</div>
 				</div>

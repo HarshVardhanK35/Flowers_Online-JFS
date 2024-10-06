@@ -94,7 +94,7 @@ const AddProducts = () => {
 										Enter Flower Name
 									</label>
 
-                  <div className="mt-1">
+									<div className="mt-1">
 										<motion.input
 											type="text"
 											name="productName"
@@ -186,8 +186,7 @@ const AddProducts = () => {
 									<div className="relative mt-1 rounded-md shadow-sm">
 										<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
 											<span className="text-gray-500 sm:text-sm">
-												{/* {currency === "₹" ? "₹" : "$"} */}
-                        ₹
+												{/* {currency === "₹" ? "₹" : "$"} */}₹
 											</span>
 										</div>
 										<motion.input
@@ -240,7 +239,7 @@ const AddProducts = () => {
 											onChange={(e) => setQuantityAvailable(e.target.value)}
 											className="pl-3 py-1 block w-full rounded-md border-1 text-gray-900 shadow-sm"
 											min="1"
-                      max="3"
+											max="3"
 											required
 										/>
 									</div>
@@ -258,7 +257,7 @@ const AddProducts = () => {
 											id="about"
 											name="about"
 											rows={2}
-                      maxLength={25}
+											maxLength={25}
 											onChange={(e) => {
 												setAbout(e.target.value);
 											}}
@@ -274,10 +273,10 @@ const AddProducts = () => {
 									</div>
 								</div>
 
-								<div className="col-span-3">
+								<div className="-mt-2 col-span-3">
 									<div className="flex items-center">
 										<label className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-1 hover:text-indigo-500">
-											Upload an image for flower!{" "}
+											Upload an image!{" "}
 											<span aria-hidden="true">→</span>
 											<input
 												id="file-upload"
@@ -299,15 +298,20 @@ const AddProducts = () => {
 												<motion.img
 													src={filePreview}
 													alt="Selected file preview"
-													className="p-4 h-40 w-40 object-cover rounded-md"
+													className="p-2 h-40 w-40 object-cover rounded-md"
 												/>
 											</motion.div>
 										)}
 									</div>
+									{file && (
+										<div className="-mt-1 text-sm text-gray-600">
+											{file.name}
+										</div>
+									)}
 								</div>
-
 							</div>
 						</div>
+
 						<div className="mt-2 flex items-center justify-end gap-x-6">
 							<motion.button
 								type="button"
