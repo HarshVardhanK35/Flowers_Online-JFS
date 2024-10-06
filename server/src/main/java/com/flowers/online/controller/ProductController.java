@@ -1,4 +1,6 @@
 package com.flowers.online.controller;
+import com.flowers.online.Model.User;
+import com.flowers.online.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,8 +21,13 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
+
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private UserService userService;
+
     private static final String UPLOAD_DIR = System.getProperty("user.dir") + "/uploads/";
 
     @PostMapping
@@ -47,10 +55,19 @@ public class ProductController {
         return productService.saveProduct(newProduct);
     }
     @GetMapping
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts().stream()
-                .filter(product -> product.getAvailableQuantity() > 0)
-                .collect(Collectors.toList());
+    public ResponseEntity<List<Product>> getAllProducts(Principal principal) {
+        User user = userService.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Check if the user is an admin
+        if (user.getRole().equals("ROLE_ADMIN")) {
+            // Admins can see all products
+            List<Product> products = productService.getAllProducts();
+            return ResponseEntity.ok(products);
+        } else {
+            // Regular users can only see products with available stock
+            List<Product> productsWithStock = productService.getProductsWithStock();
+            return ResponseEntity.ok(productsWithStock);
+        }
     }
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductDetails(@PathVariable Long id) {

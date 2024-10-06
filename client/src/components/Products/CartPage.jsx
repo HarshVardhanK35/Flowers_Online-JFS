@@ -319,9 +319,9 @@ const CartPage = () => {
 											onClick={() =>
 												handleRemoveFromCart(item.product.id, item.size)
 											}
-											className="text-red-600"
+											className="text-red-600 text-lg"
 										>
-											Remove
+											×
 										</button>
 									</div>
 								</div>

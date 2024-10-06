@@ -93,9 +93,11 @@ const ProductDetails = () => {
 			);
 
 			if (response.ok) {
+
 				alert(
 					`Added ${selectedQuantity} product(s) of size ${selectedSize} to cart.`
 				);
+        window.location.reload();
 			} else {
 				alert("Error adding product to cart");
 			}
@@ -112,7 +114,7 @@ const ProductDetails = () => {
 		return <div>Loading product details...</div>;
 	}
 
-	console.log(product);
+	// console.log(product);
 
 	const productDetails = {
 		description:
@@ -181,24 +183,30 @@ const ProductDetails = () => {
 
 						<div className="mt-3 flex items-center">
 							<h3 className="text-sm font-medium text-gray-900">
-              {role === "ROLE_ADMIN" ? "Available in Quantity" : "Select Quantity"}
+								{role === "ROLE_ADMIN"
+									? "Available in Quantity "
+									: "Select Quantity "}
 							</h3>
 							<div className="px-2">
-								<input
-									type="number"
-									max={product.availableQuantity || 0}
-									value={selectedQuantity}
-									onChange={handleQuantityChange}
-									className="pl-8 block w-20 rounded-md border-1 text-gray-900 shadow-sm"
-									min="1"
-									disabled={product.availableQuantity === 0}
-								/>
+								{product.availableQuantity === 0 ? (
+									<h2>0</h2>
+								) : (
+									<input
+										type="number"
+										max={product.availableQuantity || 0}
+										value={selectedQuantity}
+										onChange={handleQuantityChange}
+										className="pl-8 block w-20 rounded-md border-1 text-gray-900 shadow-sm"
+										min="0"
+										disabled={product.availableQuantity === 0}
+									/>
+								)}
 							</div>
 						</div>
 
 						<div className="mt-3">
 							<h3 className="text-sm font-medium text-gray-900">
-              {role === "ROLE_ADMIN" ? "Available in sizes" : "Select Size"}
+								{role === "ROLE_ADMIN" ? "Available in sizes" : "Select Size"}
 							</h3>
 
 							<div className="mt-1 grid grid-cols-2 gap-4">
@@ -211,39 +219,38 @@ const ProductDetails = () => {
 												: "opacity-50 cursor-not-allowed"
 										}`}
 										disabled={!product.size.includes(size)}
-                    onClick={() => handleSizeChange(size)}
-                  >
+										onClick={() => handleSizeChange(size)}
+									>
 										{size.charAt(0).toUpperCase() + size.slice(1)}
 									</button>
-
 								))}
 							</div>
 						</div>
 
 						{role === "ROLE_ADMIN" ? (
 							<div className="mt-3 gap-x-4">
-              <motion.a
-                href='#'
-                className="rounded-md bg-indigo-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Admin cannot add products into cart
-              </motion.a>
-              <motion.a
-                href="/admin/products"
-                className="text-sm font-semibold leading-6 text-black rounded-md px-2 py-1"
-                whileHover={{
-                  scale: 1.1,
-                  boxShadow: "0px 4px 8px black",
-                  backgroundColor: "#f0f4f8",
-                  color: "#000000",
-                }}
-                transition={{ duration: 0.2, ease: "easeInOut" }}
-              >
-                Back to products list page <span aria-hidden="true">→</span>
-              </motion.a>
-            </div>
+								<motion.a
+									href="#"
+									className="rounded-md bg-indigo-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+									whileHover={{ scale: 1.05 }}
+									whileTap={{ scale: 0.95 }}
+								>
+									Admin cannot add products into cart
+								</motion.a>
+								<motion.a
+									href="/admin/products"
+									className="text-sm font-semibold leading-6 text-black rounded-md px-2 py-1"
+									whileHover={{
+										scale: 1.1,
+										boxShadow: "0px 4px 8px black",
+										backgroundColor: "#f0f4f8",
+										color: "#000000",
+									}}
+									transition={{ duration: 0.2, ease: "easeInOut" }}
+								>
+									Back to products list page <span aria-hidden="true">→</span>
+								</motion.a>
+							</div>
 						) : (
 							<button
 								type="button"

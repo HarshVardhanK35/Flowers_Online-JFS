@@ -18,7 +18,7 @@ const AdminNavbar = () => {
 
 	const navigation = [
 		{ name: "Categories", href: "/categories", current: false },
-		{ name: "Products", href: "/admin/products", current: false },
+		{ name: "Edit Products", href: "/admin/products", current: false },
 		{ name: "Users", href: "/user-profiles", current: false },
 	];
 

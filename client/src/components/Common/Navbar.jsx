@@ -24,6 +24,7 @@ const Navbar = () => {
 
 	const navigation = [
 		{ name: "Categories", href: "/categories", current: false },
+		{ name: "All products", href: "/products/all", current: false },
     { name: "About", href: "/about", current: false },
 		{ name: "Contact", href: "/contact", current: false },
 	];

@@ -180,11 +180,13 @@ const AdminProductList = () => {
 											<span className="text-base font-light text-gray-500">
 												Available Quantity:{" "}
 											</span>
-											{product.availableQuantity > 0
-												? `${product.availableQuantity}`
-												: "Out of Stock"}
+											{product.availableQuantity > 0 ? (
+												`${product.availableQuantity}`
+											) : (
+												<span className="text-red-500">Out of Stock</span>
+											)}
 										</span>
-
+                    
 										<span className="text-base font-normal text-gray-900 block ">
 											<span className="text-base font-light text-gray-500">
 												Size:{" "}

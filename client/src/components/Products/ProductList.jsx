@@ -9,13 +9,14 @@ import { motion } from "framer-motion";
 import AdminNavbar from "../Common/AdminNavbar";
 
 const ProductList = () => {
-  const { categoryName } = useParams(); // Get category from URL
+	const { categoryName } = useParams(); // Get category from URL
 	const [products, setProducts] = useState([]);
 	const [loading, setLoading] = useState(true);
 
 	const token = localStorage.getItem("token");
 	const role = localStorage.getItem("role");
 
+	// Check if user is admin or regular
 	const fetchProducts = async () => {
 		try {
 			if (!token) {
@@ -30,7 +31,7 @@ const ProductList = () => {
 
 			const response = await fetch(url, {
 				headers: {
-					Authorization: `Bearer ${token}`, // Ensure token is attached
+					Authorization: `Bearer ${token}`,
 					"Content-Type": "application/json",
 				},
 			});
@@ -72,7 +73,11 @@ const ProductList = () => {
 			words.splice(words.length - 1, 0, "and");
 		}
 		const formattedWords = words.map((word, index, array) => {
-			if (index !== array.length - 2 && index !== array.length - 1 && !word.endsWith("s")) {
+			if (
+				index !== array.length - 2 &&
+				index !== array.length - 1 &&
+				!word.endsWith("s")
+			) {
 				word += "s";
 			}
 			return word.charAt(0).toUpperCase() + word.slice(1);
