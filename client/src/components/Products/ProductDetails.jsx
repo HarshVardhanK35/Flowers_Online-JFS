@@ -2,12 +2,13 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AdminNavbar from "../Common/AdminNavbar";
 import Navbar from "../Common/Navbar";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ProductDetails = () => {
+	const navigate = useNavigate();
 	const { id } = useParams();
 
 	const [product, setProduct] = useState(null);
@@ -93,11 +94,10 @@ const ProductDetails = () => {
 			);
 
 			if (response.ok) {
-
 				alert(
 					`Added ${selectedQuantity} product(s) of size ${selectedSize} to cart.`
 				);
-        window.location.reload();
+				window.location.reload();
 			} else {
 				alert("Error adding product to cart");
 			}
@@ -228,7 +228,7 @@ const ProductDetails = () => {
 						</div>
 
 						{role === "ROLE_ADMIN" ? (
-							<div className="mt-3 gap-x-4">
+							<div className="mt-3 flex justify-between space-x-4">
 								<motion.a
 									href="#"
 									className="rounded-md bg-indigo-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -252,16 +252,25 @@ const ProductDetails = () => {
 								</motion.a>
 							</div>
 						) : (
-							<button
-								type="button"
-								onClick={handleAddToCart}
-								className="mt-3 w-full flex items-center justify-center rounded-md bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700"
-								disabled={!selectedSize || product.availableQuantity === 0}
-							>
-								{product.availableQuantity > 0
-									? `Add ${selectedQuantity} to cart`
-									: "Out of Stock"}
-							</button>
+							<div className="mt-4 flex space-x-4">
+								<button
+									type="button"
+									onClick={handleAddToCart}
+									className="w-1/2 flex items-center justify-center rounded-md bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700"
+									disabled={!selectedSize || product.availableQuantity === 0}
+								>
+									{product.availableQuantity > 0
+										? `Add ${selectedQuantity} to cart`
+										: "Out of Stock"}
+								</button>
+								<button
+									type="button"
+									onClick={() => navigate(-1)} // Navigates back to the previous page
+									className="w-1/2 flex items-center justify-center rounded-md bg-gray-600 px-8 py-3 text-base font-medium text-white hover:bg-gray-700"
+								>
+									Cancel
+								</button>
+							</div>
 						)}
 					</div>
 				</div>

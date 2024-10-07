@@ -237,7 +237,7 @@ const CartPage = () => {
 								className="text-sm font-semibold leading-6 text-black rounded-md px-3 py-1"
 								whileHover={{
 									scale: 1.1,
-									boxShadow: "0px 4px 8px rgba(38, 38, 38, 0.2)",
+									boxShadow: "0px 4px 8px black",
 									backgroundColor: "#f0f4f8",
 									color: "#000000",
 								}}
@@ -350,7 +350,7 @@ const CartPage = () => {
 								className="text-sm font-semibold leading-6 text-black rounded-md px-2 py-1"
 								whileHover={{
 									scale: 1.1,
-									boxShadow: "0px 4px 8px rgba(38, 38, 38, 0.2)",
+									boxShadow: "0px 4px 8px black",
 									backgroundColor: "#f0f4f8",
 									color: "#000000",
 								}}

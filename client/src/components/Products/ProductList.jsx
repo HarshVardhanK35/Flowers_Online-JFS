@@ -1,31 +1,38 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Navbar from "../Common/Navbar";
 import AdminNavbar from "../Common/AdminNavbar";
 import ProductFilter from "../Common/ProductFilter";
 
 const ProductList = () => {
+	const navigate = useNavigate();
+
 	const { categoryName } = useParams(); // Get category from URL
 	const [products, setProducts] = useState([]);
 	const [filteredProducts, setFilteredProducts] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [selectedCategory, setSelectedCategory] = useState("all");
+
+	const handleCategoryFilterChange = (category) => {
+		setSelectedCategory(category);
+	};
 
 	const token = localStorage.getItem("token");
 	const role = localStorage.getItem("role");
 
-	// Check if user is admin or regular
-	const fetchProducts = async () => {
+	// Fetch products with filtering logic
+	const fetchFilteredProducts = async () => {
 		try {
 			if (!token) {
 				throw new Error("Unauthorized: No token provided.");
 			}
 
-			const category = categoryName ? categoryName.toLowerCase() : "all";
+			const category =
+				selectedCategory !== "all" ? selectedCategory.toLowerCase() : "all";
 			const url =
 				category === "all"
 					? "http://localhost:8080/api/products"
@@ -59,12 +66,12 @@ const ProductList = () => {
 
 	useEffect(() => {
 		if (token) {
-			fetchProducts(); // Fetch products if the token exists
+			fetchFilteredProducts(); // Fetch products if the token exists
 		} else {
 			alert("Authorization required. Please log in.");
 			console.error("No token found.");
 		}
-	}, [categoryName, token]);
+	}, [selectedCategory, token]);
 
 	const handleSearch = (searchTerm) => {
 		const filtered = products.filter((product) =>
@@ -90,30 +97,13 @@ const ProductList = () => {
 		setFilteredProducts(filtered);
 	};
 
+	const handleResetFilters = () => {
+		setFilteredProducts(products); // Reset to all products
+	};
+
 	if (loading) {
 		return <div>Loading...</div>;
 	}
-
-	// const formatProductName = (productName) => {
-	// 	let words = productName.trim().toLowerCase().split(" ");
-	// 	if (words.length > 1 && words[words.length - 2] !== "and") {
-	// 		words.splice(words.length - 1, 0, "and");
-	// 	}
-	// 	const formattedWords = words.map((word, index, array) => {
-	// 		if (
-	// 			index !== array.length - 2 &&
-	// 			index !== array.length - 1 && !word.endsWith("s")
-	// 		) {
-	// 			word += "s";
-	// 		}
-	// 		return word.charAt(0).toUpperCase() + word.slice(1);
-	// 	});
-	// 	if (formattedWords.length > 3) {
-	// 		const lastTwoWords = formattedWords.splice(-2);
-	// 		return `${formattedWords.join(", ")} ${lastTwoWords.join(" ")} Bouquet`;
-	// 	}
-	// 	return formattedWords.join(" ") + " Bouquet";
-	// };
 
 	return (
 		<div>
@@ -134,6 +124,9 @@ const ProductList = () => {
 						onSearch={handleSearch}
 						onSort={handleSort}
 						onSizeFilter={handleSizeFilter}
+						onCategoryFilter={handleCategoryFilterChange} // Category filtering
+						onResetFilters={handleResetFilters} // Reset functionality
+						showCategoryFilter={categoryName === "all"} // Show only on "All Products"
 					/>
 
 					<div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
@@ -219,6 +212,30 @@ const ProductList = () => {
 						) : (
 							<p>No products available in this category or Out of stock</p>
 						)}
+					</div>
+
+					<div className="mt-2 lg:flex lg:flex-1 lg:justify-end">
+						{/* Animated back button */}
+						<motion.button
+							onClick={() => {
+								if (role === "ROLE_ADMIN") {
+									navigate("/admin");
+								} else {
+									navigate(-1);
+								}
+							}}
+							className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+							whileHover={{
+								scale: 1.1,
+								boxShadow: "0px 4px 8px black",
+								backgroundColor: "#000000",
+								color: "#f0f4f8",
+							}}
+							whileTap={{ scale: 0.95 }}
+							transition={{ duration: 0.2, ease: "easeInOut" }}
+						>
+							Back
+						</motion.button>
 					</div>
 				</div>
 			</div>

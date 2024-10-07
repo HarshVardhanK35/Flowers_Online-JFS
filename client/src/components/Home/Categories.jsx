@@ -110,7 +110,7 @@ const Categories = () => {
 								}}
 								whileHover={{
                   scale: 1.1,
-                  boxShadow: "0px 4px 8px rgba(38, 38, 38, 0.2)",
+                  boxShadow: "0px 4px 8px black",
                   backgroundColor: "#000000",
                   color: "#f0f4f8",
                 }}

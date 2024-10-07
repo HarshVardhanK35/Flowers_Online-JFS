@@ -216,10 +216,10 @@ const UserLanding = () => {
           </motion.a>
           <motion.a
             href="/login"
-            className="text-sm font-semibold leading-6 text-white rounded-md px-2 py-1"
+            className="text-sm font-semibold leading-6 text-white rounded-md px-2 py-1 shadow-md md:ml-2 md:mr-4"
             whileHover={{
               scale: 1.1,
-              boxShadow: "0px 4px 8px rgba(38, 38, 38, 0.2)",
+              boxShadow: "0px 4px 8px black",
               backgroundColor: "#000000",
               color: "#f0f4f8",
             }}
