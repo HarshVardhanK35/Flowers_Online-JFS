@@ -79,7 +79,7 @@ const Categories = () => {
 										<div className="mt-2 relative h-40 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-56">
 											{/* Image with subtle zoom on hover */}
 											<motion.img
-												alt={callout.imageAlt}
+												alt={callout.name}
 												src={callout.imageSrc}
 												className="h-full w-full object-cover object-center"
 												whileHover={{ scale: 1.1 }}

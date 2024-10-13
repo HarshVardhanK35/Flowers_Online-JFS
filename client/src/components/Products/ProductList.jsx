@@ -16,77 +16,90 @@ const ProductList = () => {
 	const [filteredProducts, setFilteredProducts] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [selectedCategory, setSelectedCategory] = useState("all");
-  const [sortOption, setSortOption] = useState("");
-  const [sizeOption, setSizeOption] = useState("");
+	const [sortOption, setSortOption] = useState("");
+	const [sizeOption, setSizeOption] = useState("");
+	const [searchTerm, setSearchTerm] = useState("");
 
 	const token = localStorage.getItem("token");
 	const role = localStorage.getItem("role");
 
-	const fetchFilteredProducts = async () => {
-		try {
-			if (!token) {
-				throw new Error("Unauthorized: No token provided.");
-			}
+	const fetchProducts = async () => {
+    try {
+      if (!token) {
+        throw new Error("Unauthorized: No token provided.");
+      }
 
-			const category =
-				selectedCategory && selectedCategory !== "all"
-					? selectedCategory.toLowerCase()
-					: "all";
+      const category =
+        selectedCategory && selectedCategory !== "all"
+          ? selectedCategory.toLowerCase()
+          : "all";
 
-			const url =
-				category === "all"
-					? "http://localhost:8080/api/products"
-					: `http://localhost:8080/api/products/category/${category}`;
+      const url =
+        category === "all"
+          ? "http://localhost:8080/api/products"
+          : `http://localhost:8080/api/products/category/${category}`;
 
-			const response = await fetch(url, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-					"Content-Type": "application/json",
-				},
-			});
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
-			if (!response.ok) {
-				throw new Error("Error fetching products");
-			}
+      if (!response.ok) {
+        throw new Error("Error fetching products");
+      }
 
-			const data = await response.json();
-			setProducts(data);
-      setFilteredProducts(data); // Load all products initially
-		} catch (error) {
-			console.error(error.message);
-			alert(error.message);
-		} finally {
-			setLoading(false);
-		}
-	};
+      const data = await response.json();
+
+      // Check if data is empty
+      if (data.length === 0) {
+        setProducts([]); // Set to empty array if no products
+        setFilteredProducts([]);
+      } else {
+        setProducts(data); // Set all products to the main products state
+        setFilteredProducts(data); // Initially show all fetched products
+      }
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
 	useEffect(() => {
 		if (categoryName) {
 			setSelectedCategory(categoryName);
-			// console.log(categoryName)
 		}
 	}, [categoryName]);
 
 	useEffect(() => {
+		setFilteredProducts([]);
 		if (token) {
-			fetchFilteredProducts();
-		} else {
-			console.log("No token found.");
+			fetchProducts();
 		}
-	}, [selectedCategory, token]);
+	}, [token, selectedCategory]);
 
-  // Apply all filters at once (size, sort by quantity, sort by price)
-  const applyFilters = () => {
-    let filtered = [...products];
+	const applyFilters = () => {
+    let filtered = [...products]; // Use the main product list
 
-    // Apply size filter if selected
-    if (sizeOption) {
-      filtered = filtered.filter(
-        (product) => product.size.toLowerCase() === sizeOption.toLowerCase()
+    // Search filter
+    if (searchTerm) {
+      filtered = filtered.filter((product) =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    // Apply sorting for quantity or price
+    // Size filter
+    if (sizeOption) {
+      filtered = filtered.filter(
+        (product) =>
+          product.size &&
+          product.size.toLowerCase() === sizeOption.toLowerCase()
+      );
+    }
+
+    // Sorting
     if (sortOption === "lowToHigh") {
       filtered.sort((a, b) => a.availableQuantity - b.availableQuantity);
     } else if (sortOption === "highToLow") {
@@ -97,40 +110,37 @@ const ProductList = () => {
       filtered.sort((a, b) => b.price - a.price);
     }
 
-    setFilteredProducts(filtered); // Update with all applied filters
-  };
-
-	const handleSearch = (searchTerm) => {
-    const filtered = products.filter((product) =>
-      product.name.toLowerCase().startsWith(searchTerm.toLowerCase())
-    );
     setFilteredProducts(filtered);
   };
-
-  const handleSort = (option) => {
-    setSortOption(option);
-    applyFilters(); // Apply all filters after updating sort
-  };
-
-  const handleSizeFilter = (size) => {
-    setSizeOption(size);
-    applyFilters(); // Apply all filters after updating size
-  };
-
-  const handleCategoryFilterChange = (category) => {
-    setSelectedCategory(category);
-    applyFilters(); // Apply all filters after updating category
-  };
-
-  const handleResetFilters = () => {
-    setSortOption("");
-    setSizeOption("");
-    setSelectedCategory("all");
-    setFilteredProducts(products); // Reset to all products
-  };
+  useEffect(() => {
+    applyFilters();
+  }, [products, searchTerm, sizeOption, sortOption]);
 
 
-	// console.log(filteredProducts);
+	const handleSearch = (searchTerm) => {
+		setSearchTerm(searchTerm);
+	};
+
+	const handleSort = (option) => {
+		setSortOption(option);
+	};
+
+	const handleSizeFilter = (size) => {
+		setSizeOption(size);
+	};
+
+	const handleCategoryFilterChange = (category) => {
+		setSelectedCategory(category);
+		applyFilters();
+	};
+
+	const handleResetFilters = () => {
+		setSortOption("");
+		setSizeOption("");
+		setSearchTerm("");
+		setSelectedCategory("all");
+		setFilteredProducts(products); // Reset to all products
+	};
 
 	if (!token) {
 		return (
@@ -144,29 +154,14 @@ const ProductList = () => {
 						<motion.button
 							onClick={() => navigate(-1)}
 							className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none"
-							whileHover={{
-								scale: 1.1,
-								boxShadow: "0px 4px 8px black",
-								backgroundColor: "#000000",
-								color: "#f0f4f8",
-							}}
-							transition={{ duration: 0.2, ease: "easeInOut" }}
 						>
 							Cancel
 						</motion.button>
-
 						<motion.a
 							href="/login"
-							className="text-sm font-semibold leading-6 text-black rounded-md px-2 py-1 shadow-md md:ml-2 md:mr-4"
-							whileHover={{
-								scale: 1.1,
-								boxShadow: "0px 4px 8px black",
-								backgroundColor: "#f0f4f8",
-								color: "#000000",
-							}}
-							transition={{ duration: 0.2, ease: "easeInOut" }}
+							className="text-sm font-semibold leading-6 text-black rounded-md px-2 py-1 shadow-md"
 						>
-							Already a user? Login here <span aria-hidden="true">→</span>
+							Already a user? Login here
 						</motion.a>
 					</div>
 				</div>
@@ -190,14 +185,14 @@ const ProductList = () => {
 					</h2>
 
 					<ProductFilter
-            onSearch={handleSearch}
-            onSort={handleSort}
-            onSizeFilter={handleSizeFilter}
-            onCategoryFilter={handleCategoryFilterChange}
-            onResetFilters={handleResetFilters}
-            showCategoryFilter={categoryName === "all"}
-            selectedCategory={selectedCategory} // Pass selectedCategory to ProductFilter
-          />
+						onSearch={handleSearch}
+						onSort={handleSort}
+						onSizeFilter={handleSizeFilter}
+						onCategoryFilter={handleCategoryFilterChange}
+						onResetFilters={handleResetFilters}
+						showCategoryFilter={true}
+						selectedCategory={selectedCategory}
+					/>
 
 					<div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
 						{filteredProducts.length > 0 ? (
@@ -217,7 +212,7 @@ const ProductList = () => {
 										<a href={`/product/${product.id}`}>
 											<motion.img
 												src={`http://localhost:8080${product.photo}`}
-												alt={`${product.name}+ " Bouquet"`}
+												alt={`${product.name} Bouquet`}
 												className="h-full w-full object-cover object-center"
 												whileHover={{ scale: 1.15 }}
 												transition={{ duration: 0.5 }}
@@ -291,7 +286,7 @@ const ProductList = () => {
 								if (role === "ROLE_ADMIN") {
 									navigate("/admin");
 								} else {
-									navigate(-1);
+									navigate("/categories");
 								}
 							}}
 							className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

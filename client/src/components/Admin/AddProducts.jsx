@@ -80,7 +80,7 @@ const AddProducts = () => {
 						animate={{ opacity: 1, scale: 1 }}
 						transition={{ duration: 0.3, delay: 0.2 }}
 					>
-						Add a new flower
+						Add a new flower bouquet
 					</motion.h2>
 
 					<div className="space-y-1">
@@ -91,7 +91,7 @@ const AddProducts = () => {
 										htmlFor="productName"
 										className="pl-1 block text-sm font-medium leading-6 text-gray-900"
 									>
-										Enter Flower Name
+										Enter bouquet Name
 									</label>
 
 									<div className="mt-1">

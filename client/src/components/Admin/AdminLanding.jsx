@@ -20,7 +20,7 @@ const AdminLanding = () => {
 						<h2 className="text-xl font-bold mb-2">
               Edit Your Details <span aria-hidden="true" className="mt-1 text-sm text-gray-500">&rarr;</span>
             </h2>
-						<p>Modify / Edit AdminLanding details here.</p>
+						<p>Modify / Edit your details here.</p>
 					</div>
 
 					<div
@@ -28,9 +28,9 @@ const AdminLanding = () => {
 						onClick={() => navigate("/admin/add-product")}
 					>
 						<h2 className="text-xl font-bold mb-2">
-              Add Flowers <span aria-hidden="true" className="mt-1 text-sm text-gray-500">&rarr;</span>
+              Add Flower Bouquets <span aria-hidden="true" className="mt-1 text-sm text-gray-500">&rarr;</span>
             </h2>
-						<p>Add new flowers to the inventory.</p>
+						<p>Add new flower bouquets to the inventory.</p>
 					</div>
 
 					<div
@@ -38,9 +38,9 @@ const AdminLanding = () => {
 						onClick={() => navigate("/admin/products")}
 					>
 						<h2 className="text-xl font-bold mb-2">
-              Modify Flowers Listed <span aria-hidden="true" className="mt-1 text-sm text-gray-500">&rarr;</span>
+              Modify Bouquets Listed <span aria-hidden="true" className="mt-1 text-sm text-gray-500">&rarr;</span>
             </h2>
-						<p>Modify flowers that were already present in the inventory.</p>
+						<p>Modify flower bouquets that were already present in the inventory.</p>
 					</div>
 
 					<div
@@ -50,7 +50,7 @@ const AdminLanding = () => {
 						<h2 className="text-xl font-bold mb-2">
               Add Shop Location <span aria-hidden="true" className="mt-1 text-sm text-gray-500">&rarr;</span>
             </h2>
-						<p>Add a new shop location to start your flowers business.</p>
+						<p>Add a new shop location to start your flower bouquet business.</p>
 					</div>
 				</div>
 			</div>

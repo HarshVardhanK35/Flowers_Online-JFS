@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const ProductFilter = ({
   onSearch,
@@ -16,6 +17,7 @@ const ProductFilter = ({
   const [sizeOption, setSizeOption] = useState("");
   const [resetClicked, setResetClicked] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const navigate = useNavigate();
 
 	const handleSearchChange = (e) => {
 		setSearchTerm(e.target.value);
@@ -33,33 +35,43 @@ const ProductFilter = ({
 	};
 
 	const handleResetFilters = () => {
-    // Reset all states
     setSearchTerm("");
     setSortOption("");
     setSizeOption("");
 
-    // Call parent function to reset filters
     onResetFilters();
 
-    // Briefly disable the reset button or change appearance for feedback
+    localStorage.setItem("filtersVisible", JSON.stringify(showFilters));
+
     setResetClicked(true);
     setTimeout(() => {
       setResetClicked(false);
-    }, 1000); // Button will revert after 1 second
+    }, 1000);
+
+    window.location.reload();
   };
+
+  useEffect(() => {
+    const filtersVisible = JSON.parse(localStorage.getItem("filtersVisible"));
+    if (filtersVisible !== null) {
+      setShowFilters(filtersVisible); // Set the filter visibility based on previous state
+    }
+
+    return () => {
+      localStorage.removeItem("filtersVisible");
+    };
+  }, []);
 
 	return (
     <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 justify-between w-full mb-6">
-      {/* Search Box */}
-      <div className="flex space-x-4 w-full md:w-1/5">
+      <div className="flex space-x-4 w-full md:w-1/2">
         <input
           type="text"
           value={searchTerm}
           onChange={handleSearchChange}
           placeholder="Search for products..."
-          className="border px-2 py-2 rounded-md w-full"
+          className="border px-2 py-1 rounded-md w-1/2"
         />
-        {/* Apply Filters Button */}
         <motion.button
           onClick={() => setShowFilters(!showFilters)}
           className="text-sm font-semibold text-white bg-indigo-600 py-2 px-3 rounded-md shadow-md hover:bg-indigo-500"
@@ -72,11 +84,8 @@ const ProductFilter = ({
           {showFilters ? "Hide Filters" : "Apply Filters"}
         </motion.button>
       </div>
-
-      {/* Filters Section - Shown when 'Apply Filters' is clicked */}
       {showFilters && (
         <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 justify-between w-full">
-          {/* Sort Radio Buttons for Quantity */}
           <div className="flex items-start space-x-2">
             <span className="text-sm font-semibold text-gray-700">Quantity:</span>
             <div className="flex flex-col space-y-1">
@@ -104,8 +113,6 @@ const ProductFilter = ({
               </label>
             </div>
           </div>
-
-          {/* Sort Radio Buttons for Price */}
           <div className="flex items-start space-x-2">
             <span className="text-sm font-semibold text-gray-700">Price:</span>
             <div className="flex flex-col space-y-1">
@@ -133,8 +140,6 @@ const ProductFilter = ({
               </label>
             </div>
           </div>
-
-          {/* Size Filter Radio Buttons */}
           <div className="flex items-start space-x-2">
             <span className="text-sm font-semibold text-gray-700">Size:</span>
             <div className="flex flex-col space-y-1">
@@ -162,8 +167,6 @@ const ProductFilter = ({
               </label>
             </div>
           </div>
-
-          {/* Category Filter - Conditionally rendered */}
           {showCategoryFilter && (
             <div className="flex items-center space-x-2">
               <span className="text-sm font-semibold text-gray-700">Category:</span>

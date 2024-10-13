@@ -56,15 +56,17 @@ public class ProductController {
     }
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts(Principal principal) {
+        if (principal == null) { // Non-logged-in users can see products with available stock
+            List<Product> productsWithStock = productService.getProductsWithStock();
+            return ResponseEntity.ok(productsWithStock);
+        }
+
         User user = userService.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Check if the user is an admin
-        if (user.getRole().equals("ROLE_ADMIN")) {
-            // Admins can see all products
+        if (user.getRole().equals("ROLE_ADMIN")) { // Admins can see all products
             List<Product> products = productService.getAllProducts();
             return ResponseEntity.ok(products);
-        } else {
-            // Regular users can only see products with available stock
+        } else { // Regular users can only see products with available stock
             List<Product> productsWithStock = productService.getProductsWithStock();
             return ResponseEntity.ok(productsWithStock);
         }
