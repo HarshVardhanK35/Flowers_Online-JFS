@@ -1,205 +1,113 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 
-const ProductFilter = ({
-  onSearch,
-  onSort,
-  onSizeFilter,
-  onCategoryFilter,
-  onResetFilters,
-  showCategoryFilter,
-  selectedCategory // Accept the selectedCategory prop from parent
-}) => {
+const ProductFilter = ({ onSearch, onFilter }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortOption, setSortOption] = useState("");
-  const [sizeOption, setSizeOption] = useState("");
-  const [resetClicked, setResetClicked] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
-  const navigate = useNavigate();
 
-	const handleSearchChange = (e) => {
-		setSearchTerm(e.target.value);
-		onSearch(e.target.value);
-	};
-
-	const handleSortChange = (e) => {
-		setSortOption(e.target.value);
-		onSort(e.target.value);
-	};
-
-	const handleSizeChange = (e) => {
-		setSizeOption(e.target.value);
-		onSizeFilter(e.target.value);
-	};
-
-	const handleResetFilters = () => {
-    setSearchTerm("");
-    setSortOption("");
-    setSizeOption("");
-
-    onResetFilters();
-
-    localStorage.setItem("filtersVisible", JSON.stringify(showFilters));
-
-    setResetClicked(true);
-    setTimeout(() => {
-      setResetClicked(false);
-    }, 1000);
-
-    window.location.reload();
+  const handleSearchChange = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+    onSearch(term);
   };
 
-  useEffect(() => {
-    const filtersVisible = JSON.parse(localStorage.getItem("filtersVisible"));
-    if (filtersVisible !== null) {
-      setShowFilters(filtersVisible); // Set the filter visibility based on previous state
-    }
+  const handleFilterChange = (type, value) => {
+    onFilter(type, value);
+  };
 
-    return () => {
-      localStorage.removeItem("filtersVisible");
-    };
-  }, []);
+  return (
+    <div className="flex flex-col sm:flex-row items-center justify-between mb-6 space-y-4 sm:space-y-0 sm:space-x-6">
+      {/* Search Box */}
+      <input
+        type="text"
+        placeholder="Search products..."
+        value={searchTerm}
+        onChange={handleSearchChange}
+        className="border px-3 py-2 rounded-md w-full sm:w-1/3"
+      />
 
-	return (
-    <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 justify-between w-full mb-6">
-      <div className="flex space-x-4 w-full md:w-1/2">
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          placeholder="Search for products..."
-          className="border px-2 py-1 rounded-md w-1/2"
-        />
-        <motion.button
-          onClick={() => setShowFilters(!showFilters)}
-          className="text-sm font-semibold text-white bg-indigo-600 py-2 px-3 rounded-md shadow-md hover:bg-indigo-500"
-          whileHover={{
-            scale: 1.1,
-            boxShadow: "0px 4px 8px black",
-          }}
-          transition={{ duration: 0.2, ease: "easeInOut" }}
-        >
-          {showFilters ? "Hide Filters" : "Apply Filters"}
-        </motion.button>
-      </div>
-      {showFilters && (
-        <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 justify-between w-full">
-          <div className="flex items-start space-x-2">
-            <span className="text-sm font-semibold text-gray-700">Quantity:</span>
-            <div className="flex flex-col space-y-1">
-              <label className="inline-flex items-center">
-                <input
-                  type="radio"
-                  name="sortOption"
-                  value="lowToHigh"
-                  checked={sortOption === "lowToHigh"}
-                  onChange={handleSortChange}
-                  className="form-radio"
-                />
-                <span className="ml-1 text-sm">Low to High</span>
-              </label>
-              <label className="inline-flex items-center">
-                <input
-                  type="radio"
-                  name="sortOption"
-                  value="highToLow"
-                  checked={sortOption === "highToLow"}
-                  onChange={handleSortChange}
-                  className="form-radio"
-                />
-                <span className="ml-1 text-sm">High to Low</span>
-              </label>
-            </div>
+      {/* Filters */}
+      <div className="flex flex-wrap items-center space-x-4">
+        {/* Size Filter */}
+        <div>
+          <label className="text-sm font-medium text-gray-700">Size:</label>
+          <div className="flex items-center space-x-2">
+            <label>
+              <input
+                type="radio"
+                name="size"
+                value="small"
+                onChange={() => handleFilterChange("size", "small")}
+                className="mr-1"
+              />
+              Small
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="size"
+                value="large"
+                onChange={() => handleFilterChange("size", "large")}
+                className="mr-1"
+              />
+              Large
+            </label>
           </div>
-          <div className="flex items-start space-x-2">
-            <span className="text-sm font-semibold text-gray-700">Price:</span>
-            <div className="flex flex-col space-y-1">
-              <label className="inline-flex items-center">
-                <input
-                  type="radio"
-                  name="sortOption"
-                  value="priceLowToHigh"
-                  checked={sortOption === "priceLowToHigh"}
-                  onChange={handleSortChange}
-                  className="form-radio"
-                />
-                <span className="ml-1 text-sm">Low to High</span>
-              </label>
-              <label className="inline-flex items-center">
-                <input
-                  type="radio"
-                  name="sortOption"
-                  value="priceHighToLow"
-                  checked={sortOption === "priceHighToLow"}
-                  onChange={handleSortChange}
-                  className="form-radio"
-                />
-                <span className="ml-1 text-sm">High to Low</span>
-              </label>
-            </div>
-          </div>
-          <div className="flex items-start space-x-2">
-            <span className="text-sm font-semibold text-gray-700">Size:</span>
-            <div className="flex flex-col space-y-1">
-              <label className="inline-flex items-center">
-                <input
-                  type="radio"
-                  name="sizeOption"
-                  value="Small"
-                  checked={sizeOption === "Small"}
-                  onChange={handleSizeChange}
-                  className="form-radio"
-                />
-                <span className="ml-1 text-sm">Small</span>
-              </label>
-              <label className="inline-flex items-center">
-                <input
-                  type="radio"
-                  name="sizeOption"
-                  value="Large"
-                  checked={sizeOption === "Large"}
-                  onChange={handleSizeChange}
-                  className="form-radio"
-                />
-                <span className="ml-1 text-sm">Large</span>
-              </label>
-            </div>
-          </div>
-          {showCategoryFilter && (
-            <div className="flex items-center space-x-2">
-              <span className="text-sm font-semibold text-gray-700">Category:</span>
-              <select
-                value={selectedCategory} // Bind to selectedCategory state
-                onChange={(e) => onCategoryFilter(e.target.value)} // Trigger filtering on change
-                className="p-1 rounded-md border border-gray-300"
-              >
-                <option value="all">All</option>
-                <option value="birthdays">Birthdays</option>
-                <option value="love">Love</option>
-                <option value="marriages">Marriages</option>
-                <option value="grand-openings">Grand Openings</option>
-                <option value="sympathy">Sympathy</option>
-              </select>
-            </div>
-          )}
         </div>
-      )}
 
-      <motion.button
-        onClick={handleResetFilters}
-        className={`text-sm font-semibold leading-6 text-white py-2 px-3 rounded-md shadow-md ${
-          resetClicked ? "bg-green-500" : "bg-black"
-        }`}
-        whileHover={{
-          scale: 1.1,
-          boxShadow: "0px 4px 8px black",
-        }}
-        transition={{ duration: 0.2, ease: "easeInOut" }}
-      >
-        {resetClicked ? "Done!" : "Reset"}
-      </motion.button>
+        {/* Price Filter */}
+        <div>
+          <label className="text-sm font-medium text-gray-700">Price:</label>
+          <div className="flex items-center space-x-2">
+            <label>
+              <input
+                type="radio"
+                name="price"
+                value="lowToHigh"
+                onChange={() => handleFilterChange("price", "lowToHigh")}
+                className="mr-1"
+              />
+              Low to High
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="price"
+                value="highToLow"
+                onChange={() => handleFilterChange("price", "highToLow")}
+                className="mr-1"
+              />
+              High to Low
+            </label>
+          </div>
+        </div>
+
+        {/* Quantity Filter */}
+        <div>
+          <label className="text-sm font-medium text-gray-700">Quantity:</label>
+          <div className="flex items-center space-x-2">
+            <label>
+              <input
+                type="radio"
+                name="quantity"
+                value="lowToHigh"
+                onChange={() => handleFilterChange("quantity", "lowToHigh")}
+                className="mr-1"
+              />
+              Low to High
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="quantity"
+                value="highToLow"
+                onChange={() => handleFilterChange("quantity", "highToLow")}
+                className="mr-1"
+              />
+              High to Low
+            </label>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

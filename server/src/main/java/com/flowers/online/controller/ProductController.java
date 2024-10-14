@@ -54,6 +54,7 @@ public class ProductController {
         Product newProduct = new Product(name, parsedPrice, category, "/uploads/" + photoFilename, size, currency, about, quantityAvailable);
         return productService.saveProduct(newProduct);
     }
+
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts(Principal principal) {
         if (principal == null) { // Non-logged-in users can see products with available stock
@@ -71,18 +72,19 @@ public class ProductController {
             return ResponseEntity.ok(productsWithStock);
         }
     }
+
+    @GetMapping("/category/{category}")
+    public List<Product> getProductsByCategory(@PathVariable String category) {
+        return productService.getProductsByCategory(category.toLowerCase());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductDetails(@PathVariable Long id) {
         Product product = productService.getProductById(id);
         if (product == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(null);  // Ensure no HTML response is returned
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         return ResponseEntity.ok(product);
-    }
-    @GetMapping("/category/{category}")
-    public List<Product> getProductsByCategory(@PathVariable String category) {
-        return productService.getProductsByCategory(category.toLowerCase());
     }
 
     @DeleteMapping("/{id}")
@@ -90,6 +92,7 @@ public class ProductController {
     public void deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
     }
+
     @PutMapping("/edit/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public Product editProduct(

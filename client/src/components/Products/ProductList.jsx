@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Navbar from "../Common/Navbar";
@@ -10,136 +10,89 @@ import ProductFilter from "../Common/ProductFilter";
 
 const ProductList = () => {
 	const navigate = useNavigate();
-
-	const { categoryName } = useParams(); // Get category from URL
+	const { categoryName } = useParams();
+	const location = useLocation();
 	const [products, setProducts] = useState([]);
 	const [filteredProducts, setFilteredProducts] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const [selectedCategory, setSelectedCategory] = useState("all");
-	const [sortOption, setSortOption] = useState("");
-	const [sizeOption, setSizeOption] = useState("");
-	const [searchTerm, setSearchTerm] = useState("");
+	const [selectedCategory, setSelectedCategory] = useState(
+		categoryName || "all"
+	);
 
 	const token = localStorage.getItem("token");
 	const role = localStorage.getItem("role");
 
 	const fetchProducts = async () => {
-    try {
-      if (!token) {
-        throw new Error("Unauthorized: No token provided.");
-      }
+		try {
+			setLoading(true);
+			const category =
+				selectedCategory !== "all" ? selectedCategory.toLowerCase() : "all";
+			const url =
+				category === "all"
+					? "http://localhost:8080/api/products"
+					: `http://localhost:8080/api/products/category/${category}`;
 
-      const category =
-        selectedCategory && selectedCategory !== "all"
-          ? selectedCategory.toLowerCase()
-          : "all";
+			const response = await fetch(url, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-Type": "application/json",
+				},
+			});
 
-      const url =
-        category === "all"
-          ? "http://localhost:8080/api/products"
-          : `http://localhost:8080/api/products/category/${category}`;
+			if (!response.ok) {
+				throw new Error("Error fetching products");
+			}
 
-      const response = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Error fetching products");
-      }
-
-      const data = await response.json();
-
-      // Check if data is empty
-      if (data.length === 0) {
-        setProducts([]); // Set to empty array if no products
-        setFilteredProducts([]);
-      } else {
-        setProducts(data); // Set all products to the main products state
-        setFilteredProducts(data); // Initially show all fetched products
-      }
-    } catch (error) {
-      console.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-	useEffect(() => {
-		if (categoryName) {
-			setSelectedCategory(categoryName);
+			const data = await response.json();
+			setProducts(data);
+			setFilteredProducts(data);
+		} catch (error) {
+			console.error(error.message);
+		} finally {
+			setLoading(false);
 		}
-	}, [categoryName]);
+	};
 
 	useEffect(() => {
-		setFilteredProducts([]);
 		if (token) {
 			fetchProducts();
+		} else {
+			alert("Authorization required. Please log in.");
 		}
-	}, [token, selectedCategory]);
-
-	const applyFilters = () => {
-    let filtered = [...products]; // Use the main product list
-
-    // Search filter
-    if (searchTerm) {
-      filtered = filtered.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // Size filter
-    if (sizeOption) {
-      filtered = filtered.filter(
-        (product) =>
-          product.size &&
-          product.size.toLowerCase() === sizeOption.toLowerCase()
-      );
-    }
-
-    // Sorting
-    if (sortOption === "lowToHigh") {
-      filtered.sort((a, b) => a.availableQuantity - b.availableQuantity);
-    } else if (sortOption === "highToLow") {
-      filtered.sort((a, b) => b.availableQuantity - a.availableQuantity);
-    } else if (sortOption === "priceLowToHigh") {
-      filtered.sort((a, b) => a.price - b.price);
-    } else if (sortOption === "priceHighToLow") {
-      filtered.sort((a, b) => b.price - a.price);
-    }
-
-    setFilteredProducts(filtered);
-  };
-  useEffect(() => {
-    applyFilters();
-  }, [products, searchTerm, sizeOption, sortOption]);
-
+	}, [selectedCategory, token]);
 
 	const handleSearch = (searchTerm) => {
-		setSearchTerm(searchTerm);
+		const filtered = products.filter((product) =>
+			product.name.toLowerCase().includes(searchTerm)
+		);
+		setFilteredProducts(filtered);
 	};
 
-	const handleSort = (option) => {
-		setSortOption(option);
-	};
-
-	const handleSizeFilter = (size) => {
-		setSizeOption(size);
-	};
-
-	const handleCategoryFilterChange = (category) => {
-		setSelectedCategory(category);
-		applyFilters();
-	};
-
-	const handleResetFilters = () => {
-		setSortOption("");
-		setSizeOption("");
-		setSearchTerm("");
-		setSelectedCategory("all");
-		setFilteredProducts(products); // Reset to all products
+	const handleFilter = (type, value) => {
+		let sortedProducts = [...products];
+		switch (type) {
+			case "size":
+				setFilteredProducts(
+					products.filter((product) => product.size.toLowerCase() === value)
+				);
+				break;
+			case "price":
+				sortedProducts.sort((a, b) =>
+					value === "lowToHigh" ? a.price - b.price : b.price - a.price
+				);
+				setFilteredProducts(sortedProducts);
+				break;
+			case "quantity":
+				sortedProducts.sort((a, b) =>
+					value === "lowToHigh"
+						? a.availableQuantity - b.availableQuantity
+						: b.availableQuantity - a.availableQuantity
+				);
+				setFilteredProducts(sortedProducts);
+				break;
+			default:
+				break;
+		}
 	};
 
 	if (!token) {
@@ -175,24 +128,22 @@ const ProductList = () => {
 			<div className="bg-white">
 				<div className="mx-auto max-w-2xl px-4 py-4 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
 					<h2 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-						{categoryName && categoryName === "all"
+						{selectedCategory && selectedCategory === "all"
 							? "All Flower Bouquets"
-							: categoryName
+							: selectedCategory
 							? `${
-									categoryName.charAt(0).toUpperCase() + categoryName.slice(1)
+									selectedCategory.charAt(0).toUpperCase() +
+									selectedCategory.slice(1)
 							  } Bouquets`
 							: "Category Not Found"}
 					</h2>
 
-					<ProductFilter
-						onSearch={handleSearch}
-						onSort={handleSort}
-						onSizeFilter={handleSizeFilter}
-						onCategoryFilter={handleCategoryFilterChange}
-						onResetFilters={handleResetFilters}
-						showCategoryFilter={true}
-						selectedCategory={selectedCategory}
-					/>
+					{/* Render the ProductFilter */}
+					{/* Render the ProductFilter only for regular users and not on /admin/products */}
+					{role !== "ROLE_ADMIN" &&
+						!location.pathname.includes("/admin/products") && (
+							<ProductFilter onSearch={handleSearch} onFilter={handleFilter} />
+						)}
 
 					<div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
 						{filteredProducts.length > 0 ? (
@@ -280,7 +231,6 @@ const ProductList = () => {
 					</div>
 
 					<div className="mt-2 lg:flex lg:flex-1 lg:justify-end">
-						{/* Animated back button */}
 						<motion.button
 							onClick={() => {
 								if (role === "ROLE_ADMIN") {

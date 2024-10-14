@@ -119,7 +119,7 @@ const EditProduct = () => {
 					onSubmit={handleUpdate}
 				>
 					<h2 className="mt-0 text-center text-2xl font-bold leading-9 text-gray-900">
-						{`Update "${product.name}" Flower Bouquet`}
+						{`Update "${product.name}"`}
 					</h2>
 
 					<div className="space-y-10">

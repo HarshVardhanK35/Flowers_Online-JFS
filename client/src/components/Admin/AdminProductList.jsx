@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "../Common/Navbar";
 import AdminNavbar from "../Common/AdminNavbar";
-import ProductFilter from "../Common/ProductFilter";
+import ProductFilter from "../Common/ProductFilter"; // Keep this import, but you will not use it
 
 const AdminProductList = () => {
 	const navigate = useNavigate();
@@ -82,8 +82,6 @@ const AdminProductList = () => {
 		};
 	}, [fetchProducts]);
 
-	// console.log(products);
-
 	const handleEdit = (id) => {
 		navigate(`/admin/edit-product/${id}`);
 	};
@@ -138,11 +136,14 @@ const AdminProductList = () => {
 						{products.length === 0 ? `No Products` : "Products Available..."}
 					</h2>
 
-					<ProductFilter
-						onSearch={handleSearch}
-						onSort={handleSort}
-						onSizeFilter={handleSizeFilter}
-					/>
+					{/* Only render ProductFilter for non-admin roles */}
+					{role !== "ROLE_ADMIN" && (
+						<ProductFilter
+							onSearch={handleSearch}
+							onSort={handleSort}
+							onSizeFilter={handleSizeFilter}
+						/>
+					)}
 
 					<div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2">
 						{filteredProducts.length > 0 ? (
@@ -175,7 +176,7 @@ const AdminProductList = () => {
 											<motion.a href={`/admin/products`}>
 												<h3 className="text-gray-700">
 													<p className="text-2xl font-semibold text-gray-900">
-														{(product.name)}
+														{product.name}
 													</p>
 												</h3>
 											</motion.a>
