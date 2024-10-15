@@ -62,49 +62,53 @@ const ProductDetails = () => {
 	};
 
 	const handleAddToCart = async () => {
-		const userId = localStorage.getItem("userId");
+    const userId = localStorage.getItem("userId");
+    
+    console.log("Selected Size at Add to Cart:", selectedSize);
 
-		if (!userId) {
-			alert("User is not authenticated. Please log in.");
-			return;
-		}
+    // Check if user is authenticated
+    if (!userId) {
+      alert("User is not authenticated. Please log in.");
+      return;
+    }
 
-		if (!selectedSize) {
-			alert("Please select a size!");
-			return;
-		}
+    // Check if size is selected
+    if (!selectedSize) {
+      alert("Please select a size before adding the product to the cart!"); // Alert if no size selected
+      return;
+    }
 
-		const cartItem = {
-			productId: product.id,
-			size: selectedSize,
-			quantity: selectedQuantity,
-		};
+    const cartItem = {
+      productId: product.id,
+      size: selectedSize,
+      quantity: selectedQuantity,
+    };
 
-		try {
-			const response = await fetch(
-				`http://localhost:8080/api/cart/${userId}/add`,
-				{
-					method: "POST",
-					headers: {
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(cartItem),
-				}
-			);
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/cart/${userId}/add`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(cartItem),
+        }
+      );
 
-			if (response.ok) {
-				alert(
-					`Added ${selectedQuantity} product(s) of size ${selectedSize} to cart.`
-				);
-				window.location.reload();
-			} else {
-				alert("Error adding product to cart");
-			}
-		} catch (error) {
-			console.error("Error adding product to cart:", error);
-		}
-	};
+      if (response.ok) {
+        alert(
+          `Added ${selectedQuantity} product(s) of size ${selectedSize} to cart.`
+        );
+        window.location.reload();
+      } else {
+        alert("Error adding product to cart");
+      }
+    } catch (error) {
+      console.error("Error adding product to cart:", error);
+    }
+  };
 
 	if (error) {
 		return <div className="text-red-500">Error fetching product: {error}</div>;
@@ -210,6 +214,9 @@ const ProductDetails = () => {
 								)}
 							</div>
 						</div>
+						<p className="text-sm font-light text-gray-500">
+							available in quantity: {`${product.availableQuantity}`}
+						</p>
 
 						<div className="mt-3">
 							<h3 className="text-sm font-medium text-gray-900">
@@ -221,21 +228,38 @@ const ProductDetails = () => {
 									<motion.button
 										key={size}
 										className={`cursor-pointer text-gray-900 shadow-sm group relative flex items-center justify-center rounded-md border px-4 py-3 text-sm font-medium uppercase
-                      ${product.size.includes(size)
-                        ? selectedSize === size ? "bg-gray-300 text-black hover:bg-gray-300" : "bg-white hover:bg-gray-100"
-                        : "opacity-50 cursor-not-allowed"}`}
-                    disabled={!product.size.includes(size)}
-                    onClick={() => handleSizeChange(size)}
-                    whileHover={{
-                      scale: product.size.includes(size) ? 1.05 : 1,
-                    }}
-                    transition={{ duration: 0.2 }}
+                      ${
+												product.size.includes(size)
+													? selectedSize === size
+														? "bg-gray-300 text-black hover:bg-gray-300"
+														: "bg-white hover:bg-gray-100"
+													: "opacity-50 cursor-not-allowed"
+											}`}
+										disabled={!product.size.includes(size)}
+										onClick={() => handleSizeChange(size)}
+										whileHover={{
+											scale: product.size.includes(size) ? 1.05 : 1,
+										}}
+										transition={{ duration: 0.2 }}
 									>
 										{size.charAt(0).toUpperCase() + size.slice(1)}
 									</motion.button>
 								))}
 							</div>
 						</div>
+
+						<p className="text-sm font-light text-gray-500">
+							This product belongs to the category: "
+							<span className="text-sm font-medium text-gray-900">
+								{`${
+									product.category
+										? product.category.charAt(0).toUpperCase() +
+										  product.category.slice(1)
+										: "Unknown"
+								}`}
+							</span>
+							"
+						</p>
 
 						{role === "ROLE_ADMIN" ? (
 							<div className="mt-3 flex justify-between space-x-4">

@@ -16,7 +16,7 @@ import AddShopLocation from "./components/Admin/AddShopLocation";
 import EditProduct from './components/Admin/EditProduct.jsx'
 import ProductDetails from "./components/Products/ProductDetails.jsx";
 import CartPage from "./components/Products/CartPage.jsx";
-import AdminProductList from "./components/Admin/AdminProductList.jsx";
+// import AdminProductList from "./components/Admin/AdminProductList.jsx";
 
 function App() {
   return (
@@ -40,12 +40,12 @@ function App() {
         <Route path="/admin" element={<ProtectedRoute adminOnly={true}><AdminLanding /></ProtectedRoute>} />
 
         <Route path="/admin/edit-product/:productId" element={<ProtectedRoute adminOnly={true}><EditProduct /></ProtectedRoute>} />
-        <Route path="/admin/products" element={<ProtectedRoute adminOnly={true}><AdminProductList /></ProtectedRoute>} />
+        <Route path="/admin/products" element={<ProtectedRoute adminOnly={true}><ProductList /></ProtectedRoute>} />
         <Route path="/admin/add-product" element={<ProtectedRoute adminOnly={true}><AddProducts /></ProtectedRoute>} />
 
         <Route path="/admin/add-shop" element={<ProtectedRoute adminOnly={true}><AddShopLocation /></ProtectedRoute>} />
         <Route path="/admin/details" element={<ProtectedRoute adminOnly={true}><AdminDetails /></ProtectedRoute>} />
-        
+
         {/* Fallback error page */}
         <Route path="*" element={<Error />} />
       </Routes>

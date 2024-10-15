@@ -1,8 +1,13 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
+import { FaTimes } from "react-icons/fa";
 
-const ProductFilter = ({ onSearch, onFilter }) => {
+const ProductFilter = ({ onSearch, onFilter, onClearFilter, onResetFilters, showCategoryFilter, onCategoryChange }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedFilters, setSelectedFilters] = useState({
+    size: "",
+    price: "",
+    quantity: "",
+  });
 
   const handleSearchChange = (e) => {
     const term = e.target.value.toLowerCase();
@@ -11,105 +16,114 @@ const ProductFilter = ({ onSearch, onFilter }) => {
   };
 
   const handleFilterChange = (type, value) => {
+    setSelectedFilters((prevFilters) => ({
+      ...prevFilters,
+      [type]: value,
+    }));
     onFilter(type, value);
   };
 
+  const handleClearFilter = (type) => {
+    setSelectedFilters((prevFilters) => ({
+      ...prevFilters,
+      [type]: "",
+    }));
+    onClearFilter(type);
+  };
+
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between mb-6 space-y-4 sm:space-y-0 sm:space-x-6">
-      {/* Search Box */}
+    <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0 sm:space-x-4">
       <input
         type="text"
         placeholder="Search products..."
         value={searchTerm}
         onChange={handleSearchChange}
-        className="border px-3 py-2 rounded-md w-full sm:w-1/3"
+        className="border px-3 py-2 rounded-md w-auto sm:w-40"
       />
 
-      {/* Filters */}
       <div className="flex flex-wrap items-center space-x-4">
-        {/* Size Filter */}
-        <div>
-          <label className="text-sm font-medium text-gray-700">Size:</label>
-          <div className="flex items-center space-x-2">
-            <label>
-              <input
-                type="radio"
-                name="size"
-                value="small"
-                onChange={() => handleFilterChange("size", "small")}
-                className="mr-1"
-              />
-              Small
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="size"
-                value="large"
-                onChange={() => handleFilterChange("size", "large")}
-                className="mr-1"
-              />
-              Large
-            </label>
-          </div>
+        <div className="relative">
+          <label className="text-sm font-medium text-gray-700 mb-1 block">Size:</label>
+          <select
+            value={selectedFilters.size}
+            onChange={(e) => handleFilterChange("size", e.target.value)}
+            className="border px-2 py-1 rounded-md"
+          >
+            <option value="">Select Size</option>
+            <option value="small">Small</option>
+            <option value="large">Large</option>
+          </select>
+          {selectedFilters.size && (
+            <FaTimes
+              onClick={() => handleClearFilter("size")}
+              className="inline ml-2 cursor-pointer text-red-500"
+            />
+          )}
         </div>
 
-        {/* Price Filter */}
-        <div>
-          <label className="text-sm font-medium text-gray-700">Price:</label>
-          <div className="flex items-center space-x-2">
-            <label>
-              <input
-                type="radio"
-                name="price"
-                value="lowToHigh"
-                onChange={() => handleFilterChange("price", "lowToHigh")}
-                className="mr-1"
-              />
-              Low to High
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="price"
-                value="highToLow"
-                onChange={() => handleFilterChange("price", "highToLow")}
-                className="mr-1"
-              />
-              High to Low
-            </label>
-          </div>
+        <div className="relative">
+          <label className="text-sm font-medium text-gray-700 mb-1 block">Price:</label>
+          <select
+            value={selectedFilters.price}
+            onChange={(e) => handleFilterChange("price", e.target.value)}
+            className="border px-2 py-1 rounded-md"
+          >
+            <option value="">Select Price Order</option>
+            <option value="lowToHigh">Low to High</option>
+            <option value="highToLow">High to Low</option>
+          </select>
+          {selectedFilters.price && (
+            <FaTimes
+              onClick={() => handleClearFilter("price")}
+              className="inline ml-2 cursor-pointer text-red-500"
+            />
+          )}
         </div>
 
-        {/* Quantity Filter */}
-        <div>
-          <label className="text-sm font-medium text-gray-700">Quantity:</label>
-          <div className="flex items-center space-x-2">
-            <label>
-              <input
-                type="radio"
-                name="quantity"
-                value="lowToHigh"
-                onChange={() => handleFilterChange("quantity", "lowToHigh")}
-                className="mr-1"
-              />
-              Low to High
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="quantity"
-                value="highToLow"
-                onChange={() => handleFilterChange("quantity", "highToLow")}
-                className="mr-1"
-              />
-              High to Low
-            </label>
-          </div>
+        <div className="relative">
+          <label className="text-sm font-medium text-gray-700 mb-1 block">Quantity:</label>
+          <select
+            value={selectedFilters.quantity}
+            onChange={(e) => handleFilterChange("quantity", e.target.value)}
+            className="border px-2 py-1 rounded-md"
+          >
+            <option value="">Select Quantity Order</option>
+            <option value="lowToHigh">Low to High</option>
+            <option value="highToLow">High to Low</option>
+          </select>
+          {selectedFilters.quantity && (
+            <FaTimes
+              onClick={() => handleClearFilter("quantity")}
+              className="inline ml-2 cursor-pointer text-red-500"
+            />
+          )}
         </div>
+
+        {showCategoryFilter && (
+          <div className="relative">
+            <label className="text-sm font-medium text-gray-700 mb-1 block">Category:</label>
+            <select
+              onChange={(e) => onCategoryChange(e.target.value)}
+              className="border px-2 py-1 rounded-md"
+            >
+              <option value="all">All</option>
+              <option value="love">Love</option>
+              <option value="birthdays">Birthdays</option>
+              <option value="marriages">Marriages</option>
+              <option value="grand-openings">Grand Openings</option>
+              <option value="sympathy">Sympathy</option>
+            </select>
+          </div>
+        )}
+
+        <button
+          onClick={onResetFilters}
+          className="mt-1 ml-4 px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+        >
+          Reset
+        </button>
       </div>
     </div>
   );
-};
-
+}
 export default ProductFilter;
