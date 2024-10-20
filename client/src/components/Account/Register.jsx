@@ -11,10 +11,35 @@ export default function Register() {
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [phone, setPhone] = useState("");
 	const [city, setCity] = useState("");
+	const [availableShops, setAvailableShops] = useState([]);
 	const [acceptedTerms, setAcceptedTerms] = useState(false);
 	const [emailExists, setEmailExists] = useState(false);
 
 	const navigate = useNavigate();
+
+	const fetchShopsByCity = async (selectedCity) => {
+		try {
+			const response = await fetch(
+				`http://localhost:8080/api/shops/city/${selectedCity}`
+			);
+			if (response.ok) {
+				const data = await response.json();
+				setAvailableShops(data);
+			} else {
+				setAvailableShops([]); // No shops found
+			}
+		} catch (error) {
+			console.error("Error fetching shops:", error);
+		}
+	};
+
+	const handleCityChange = (e) => {
+		const selectedCity = e.target.value;
+		setCity(selectedCity);
+		fetchShopsByCity(selectedCity);
+	};
+
+  console.log(availableShops)
 
 	const handleRegister = (e) => {
 		e.preventDefault();
@@ -54,7 +79,7 @@ export default function Register() {
 				}
 			})
 			.catch((error) => {
-				console.error("Error checking email:", error); 
+				console.error("Error checking email:", error);
 			});
 	};
 
@@ -244,7 +269,7 @@ export default function Register() {
 										name="city"
 										autoComplete="city"
 										value={city}
-										onChange={(e) => setCity(e.target.value)}
+										onChange={handleCityChange}
 										required
 									>
 										<option value="">Select City</option>
@@ -261,6 +286,18 @@ export default function Register() {
 										<option>Haryana</option>
 										<option>Goa</option>
 									</select>
+									{availableShops.length > 0 && (
+										<div className="mt-2">
+											<p>Available shops in {city}:</p>
+											<ul>
+												{availableShops.map((shop) => (
+													<li key={shop.id}>
+														{shop.shopName} - {shop.address}
+													</li>
+												))}
+											</ul>
+										</div>
+									)}
 								</div>
 							</div>
 

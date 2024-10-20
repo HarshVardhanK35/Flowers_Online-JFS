@@ -1,6 +1,5 @@
 package com.flowers.online.Model;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,8 +16,11 @@ public class ShopLocation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String name; // shop name
     private String address;
     private String city;
     private String phoneNumber;
+
+    private boolean isAdminShop;  // To mark admin-specific shops
+    private boolean isNormalShop; // To mark normal shops
 }

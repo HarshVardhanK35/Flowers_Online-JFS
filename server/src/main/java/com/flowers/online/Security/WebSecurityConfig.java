@@ -26,6 +26,7 @@ public class WebSecurityConfig {
     private JwtTokenProvider jwtTokenProvider;
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -45,7 +46,11 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/products/**", "/uploads/**").permitAll() // Public product-related routes
                         .requestMatchers("/admin/**", "/api/products/edit/**").hasRole("ADMIN") // Admin-only routes
                         .requestMatchers("/api/products/**").permitAll()
-                        .requestMatchers("/api/cart/**").hasRole("USER") // User role for cart-related routes
+                        .requestMatchers("/api/shops").permitAll()
+                        .requestMatchers("/api/shops/cities").permitAll()
+                        .requestMatchers("/api/shops/city/**").permitAll()
+                        .requestMatchers("/api/shops").hasRole("ADMIN")
+                        .requestMatchers("/api/cart/**").hasRole("USER")
                         .anyRequest().authenticated() // Any other request must be authenticated
                 )
                 .sessionManagement(session -> session
@@ -72,6 +77,7 @@ public class WebSecurityConfig {
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }
+
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
                 registry.addResourceHandler("/uploads/**")

@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import AdminNavbar from "../Common/AdminNavbar";
 
-const EditProduct = () => {
+const AdminEditProduct = () => {
 	const { productId } = useParams();
 
 	const navigate = useNavigate();
@@ -133,7 +133,7 @@ const EditProduct = () => {
 										<input
 											type="text"
 											value={name}
-											maxLength={25}
+											maxLength={35}
 											className="form-control pl-3 py-1.5 block w-full rounded-md border-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 											onChange={(e) => setName(e.target.value)}
 										/>
@@ -254,7 +254,7 @@ const EditProduct = () => {
 										<textarea
 											id="about"
 											name="about"
-											rows={2}
+											rows={4}
 											value={about}
 											onChange={(e) => setAbout(e.target.value)}
 											className="form-control pl-2 block w-full rounded-md border-1 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -309,4 +309,4 @@ const EditProduct = () => {
 		<p>Loading...</p>
 	);
 };
-export default EditProduct;
+export default AdminEditProduct;

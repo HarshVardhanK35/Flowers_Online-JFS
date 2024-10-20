@@ -101,7 +101,7 @@ const AddProducts = () => {
 											value={productName}
 											onChange={(e) => setProductName(e.target.value)}
 											autoComplete="productName"
-											maxLength={25}
+											maxLength={35}
 											className="form-control pl-3 py-1.5 block w-full rounded-md border-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 											whileFocus={{
 												scale: 1.02,
@@ -256,8 +256,7 @@ const AddProducts = () => {
 										<motion.textarea
 											id="about"
 											name="about"
-											rows={2}
-											maxLength={25}
+											rows={4}
 											onChange={(e) => {
 												setAbout(e.target.value);
 											}}

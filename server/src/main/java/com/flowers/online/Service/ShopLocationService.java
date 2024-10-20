@@ -17,6 +17,10 @@ public class ShopLocationService {
         return shopLocationRepository.findAll();
     }
 
+    public List<ShopLocation> getShopLocationsByCity(String city) {
+        return shopLocationRepository.findByCity(city);
+    }
+
     public ShopLocation addShopLocation(ShopLocation shopLocation) {
         return shopLocationRepository.save(shopLocation);
     }

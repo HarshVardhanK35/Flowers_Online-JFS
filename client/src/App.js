@@ -13,10 +13,9 @@ import AdminLanding from "./components/Admin/AdminLanding";
 import AddProducts from "./components/Admin/AddProducts";
 import AdminDetails from "./components/Admin/AdminDetails";
 import AddShopLocation from "./components/Admin/AddShopLocation";
-import EditProduct from './components/Admin/EditProduct.jsx'
 import ProductDetails from "./components/Products/ProductDetails.jsx";
 import CartPage from "./components/Products/CartPage.jsx";
-// import AdminProductList from "./components/Admin/AdminProductList.jsx";
+import AdminEditProduct from "./components/Admin/AdminEditProduct.jsx";
 
 function App() {
   return (
@@ -39,7 +38,7 @@ function App() {
 
         <Route path="/admin" element={<ProtectedRoute adminOnly={true}><AdminLanding /></ProtectedRoute>} />
 
-        <Route path="/admin/edit-product/:productId" element={<ProtectedRoute adminOnly={true}><EditProduct /></ProtectedRoute>} />
+        <Route path="/admin/edit-product/:productId" element={<ProtectedRoute adminOnly={true}><AdminEditProduct /></ProtectedRoute>} />
         <Route path="/admin/products" element={<ProtectedRoute adminOnly={true}><ProductList /></ProtectedRoute>} />
         <Route path="/admin/add-product" element={<ProtectedRoute adminOnly={true}><AddProducts /></ProtectedRoute>} />
 
