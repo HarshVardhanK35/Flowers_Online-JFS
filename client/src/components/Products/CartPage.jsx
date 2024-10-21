@@ -11,8 +11,6 @@ const CartPage = () => {
 	const token = localStorage.getItem("token");
 	const userId = localStorage.getItem("userId");
 
-	// console.log("Authorization Header:", `Bearer ${token}`);
-
 	useEffect(() => {
 		const fetchCartItems = async () => {
 			try {

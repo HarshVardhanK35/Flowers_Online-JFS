@@ -18,6 +18,20 @@ const ProductDetails = () => {
 	const [token] = useState(localStorage.getItem("token"));
 	const [role] = useState(localStorage.getItem("role"));
 
+	const checkServiceAvailability = async () => {
+		const userCity = localStorage.getItem("userCity");
+		try {
+			const response = await fetch(
+				`http://localhost:8080/api/shops/city/${userCity}`
+			);
+			const data = await response.json();
+			return data.length > 0; // Returns true if shops are available, false otherwise
+		} catch (error) {
+			console.error("Error checking service availability:", error);
+			return false;
+		}
+	};
+
 	useEffect(() => {
 		const fetchProduct = async () => {
 			try {
@@ -62,53 +76,61 @@ const ProductDetails = () => {
 	};
 
 	const handleAddToCart = async () => {
-    const userId = localStorage.getItem("userId");
-    
-    console.log("Selected Size at Add to Cart:", selectedSize);
+		const userId = localStorage.getItem("userId");
+		console.log("Selected Size at Add to Cart:", selectedSize);
 
-    // Check if user is authenticated
-    if (!userId) {
-      alert("User is not authenticated. Please log in.");
-      return;
-    }
+		// Check if user is authenticated
+		if (!userId) {
+			alert("User is not authenticated. Please log in.");
+			return;
+		}
 
-    // Check if size is selected
-    if (!selectedSize) {
-      alert("Please select a size before adding the product to the cart!"); // Alert if no size selected
-      return;
-    }
+		// Check if size is selected
+		if (!selectedSize) {
+			alert("Please select a size before adding the product to the cart!");
+			return;
+		}
 
-    const cartItem = {
-      productId: product.id,
-      size: selectedSize,
-      quantity: selectedQuantity,
-    };
+		// **Check if service is available at the user's location**
+		const isServiceAvailable = await checkServiceAvailability();
+		if (!isServiceAvailable) {
+			// alert("Service is not available at your location.");
+			navigate("/service-not-available");
+			return; // Stop if no service is available
+		}
 
-    try {
-      const response = await fetch(
-        `http://localhost:8080/api/cart/${userId}/add`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(cartItem),
-        }
-      );
+		// Proceed with adding the product to the cart
+		const cartItem = {
+			productId: product.id,
+			size: selectedSize,
+			quantity: selectedQuantity,
+		};
 
-      if (response.ok) {
-        alert(
-          `Added ${selectedQuantity} product(s) of size ${selectedSize} to cart.`
-        );
-        window.location.reload();
-      } else {
-        alert("Error adding product to cart");
-      }
-    } catch (error) {
-      console.error("Error adding product to cart:", error);
-    }
-  };
+		try {
+			const response = await fetch(
+				`http://localhost:8080/api/cart/${userId}/add`,
+				{
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(cartItem),
+				}
+			);
+
+			if (response.ok) {
+				alert(
+					`Added ${selectedQuantity} product(s) of size ${selectedSize} to cart.`
+				);
+				window.location.reload();
+			} else {
+				alert("Error adding product to cart");
+			}
+		} catch (error) {
+			console.error("Error adding product to cart:", error);
+		}
+	};
 
 	if (error) {
 		return <div className="text-red-500">Error fetching product: {error}</div>;

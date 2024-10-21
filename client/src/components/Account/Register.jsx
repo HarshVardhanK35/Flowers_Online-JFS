@@ -39,7 +39,6 @@ export default function Register() {
 		setCity(selectedCity);
 		fetchShopsByCity(selectedCity);
 	};
-
 	// console.log(availableShops)
 
 	const handleRegister = (e) => {
@@ -87,6 +86,8 @@ export default function Register() {
 					})
 						.then((response) => response.json())
 						.then(() => {
+							localStorage.setItem("userCity", city); // Save the user's city to localStorage
+
 							alert("Account created successfully! Please log in.");
 							navigate("/login");
 						});

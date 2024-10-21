@@ -16,6 +16,7 @@ import AddShopLocation from "./components/Admin/AddShopLocation";
 import ProductDetails from "./components/Products/ProductDetails.jsx";
 import CartPage from "./components/Products/CartPage.jsx";
 import AdminEditProduct from "./components/Admin/AdminEditProduct.jsx";
+import ServiceNotAvailable from "./components/Common/ServiceNotAvailable.jsx";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
 
         <Route path="/product/:id" element={ <ProductDetails /> } />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/service-not-available" element={<ServiceNotAvailable />} />
 
         <Route path="/admin" element={<ProtectedRoute adminOnly={true}><AdminLanding /></ProtectedRoute>} />
 
