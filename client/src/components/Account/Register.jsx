@@ -14,6 +14,7 @@ export default function Register() {
 	const [availableShops, setAvailableShops] = useState([]);
 	const [acceptedTerms, setAcceptedTerms] = useState(false);
 	const [emailExists, setEmailExists] = useState(false);
+	const [confirmNoShop, setConfirmNoShop] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -39,7 +40,7 @@ export default function Register() {
 		fetchShopsByCity(selectedCity);
 	};
 
-  console.log(availableShops)
+	// console.log(availableShops)
 
 	const handleRegister = (e) => {
 		e.preventDefault();
@@ -48,6 +49,19 @@ export default function Register() {
 			alert("Passwords do not match!");
 			return;
 		}
+
+		// Check if no shops are available for the selected city
+		if (availableShops.length === 0) {
+			const proceed = window.confirm(
+				"No shops available at your location! Would you like to proceed with the registration anyway?"
+			);
+
+			if (!proceed) {
+				return; // Stop registration if the user doesn't confirm
+			}
+		}
+
+		// Continue with existing registration process...
 		fetch(`http://localhost:8080/api/users/check-email?email=${email}`)
 			.then((response) => response.json())
 			.then((data) => {
@@ -286,17 +300,23 @@ export default function Register() {
 										<option>Haryana</option>
 										<option>Goa</option>
 									</select>
-									{availableShops.length > 0 && (
+									{availableShops.length > 0 ? (
 										<div className="mt-2">
 											<p>Available shops in {city}:</p>
 											<ul>
 												{availableShops.map((shop) => (
 													<li key={shop.id}>
-														{shop.shopName} - {shop.address}
+														{shop.name} - {shop.address}
 													</li>
 												))}
 											</ul>
 										</div>
+									) : (
+										city && (
+											<p className="mt-2 text-sm text-red-500">
+												No shops available at your location.
+											</p>
+										)
 									)}
 								</div>
 							</div>
