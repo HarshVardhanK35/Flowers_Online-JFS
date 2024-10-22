@@ -4,7 +4,6 @@ import com.flowers.online.Model.ShopLocation;
 import com.flowers.online.Repository.ShopLocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -22,10 +21,12 @@ public class ShopLocationService {
     }
 
     public ShopLocation addShopLocation(ShopLocation shopLocation) {
+        // Add validation logic if needed
         return shopLocationRepository.save(shopLocation);
     }
 
     public void deleteShopLocation(Long id) {
+        // Optionally, check if the shop exists before deleting
         shopLocationRepository.deleteById(id);
     }
 }

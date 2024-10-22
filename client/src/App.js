@@ -11,12 +11,13 @@ import ProtectedRoute from "./components/Admin/ProtectedRoute";
 import Error from "./components/Common/Error";
 import AdminLanding from "./components/Admin/AdminLanding";
 import AddProducts from "./components/Admin/AddProducts";
-import AdminDetails from "./components/Admin/AdminDetails";
+// import AdminDetails from "./components/Admin/AdminDetails";
 import AddShopLocation from "./components/Admin/AddShopLocation";
 import ProductDetails from "./components/Products/ProductDetails.jsx";
 import CartPage from "./components/Products/CartPage.jsx";
 import AdminEditProduct from "./components/Admin/AdminEditProduct.jsx";
 import ServiceNotAvailable from "./components/Common/ServiceNotAvailable.jsx";
+import AdminShopList from "./components/Admin/AdminShopList.jsx";
 
 function App() {
   return (
@@ -45,7 +46,9 @@ function App() {
         <Route path="/admin/add-product" element={<ProtectedRoute adminOnly={true}><AddProducts /></ProtectedRoute>} />
 
         <Route path="/admin/add-shop" element={<ProtectedRoute adminOnly={true}><AddShopLocation /></ProtectedRoute>} />
-        <Route path="/admin/details" element={<ProtectedRoute adminOnly={true}><AdminDetails /></ProtectedRoute>} />
+        <Route path="/admin/shops" element={<ProtectedRoute adminOnly={true}><AdminShopList /></ProtectedRoute>} />
+        {/* <Route path="/admin/details" element={<ProtectedRoute adminOnly={true}><AdminDetails /></ProtectedRoute>} /> */}
+
 
         {/* Fallback error page */}
         <Route path="*" element={<Error />} />

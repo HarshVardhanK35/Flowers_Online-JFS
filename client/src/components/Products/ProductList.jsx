@@ -10,8 +10,9 @@ import ProductFilter from "../Common/ProductFilter";
 
 const ProductList = () => {
 	const navigate = useNavigate();
-	const { categoryName } = useParams();
 	const location = useLocation();
+
+	const { categoryName } = useParams();
 
 	const [products, setProducts] = useState([]);
 	const [filteredProducts, setFilteredProducts] = useState([]);
@@ -183,16 +184,13 @@ const ProductList = () => {
 									selectedCategory.slice(1)
 							  } Bouquets`}
 					</h2>
-
-					{/* Render ProductFilter with category filter on the /products/all route */}
-					{/* Render ProductFilter on all category and individual category pages */}
 					{role !== "ROLE_ADMIN" && (
 						<ProductFilter
 							onSearch={handleSearch}
 							onFilter={handleFilter}
 							onClearFilter={handleClearFilter}
 							onResetFilters={handleResetFilters}
-							showCategoryFilter={selectedCategory === "all"} // Show category filter only on 'All Categories' page
+							showCategoryFilter={selectedCategory === "all"}
 							onCategoryChange={handleCategoryChange}
 						/>
 					)}
@@ -281,7 +279,6 @@ const ProductList = () => {
 											</span>
 										</div>
 
-										{/* Admin Actions */}
 										{role === "ROLE_ADMIN" && (
 											<motion.div className="mt-9 space-x-3 flex">
 												<motion.button

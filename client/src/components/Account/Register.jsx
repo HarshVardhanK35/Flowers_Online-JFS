@@ -302,11 +302,11 @@ export default function Register() {
 										<option>Goa</option>
 									</select>
 									{availableShops.length > 0 ? (
-										<div className="mt-2">
-											<p>Available shops in {city}:</p>
+										<div className="mt-2 text-xs font-light">
+											<p className="">Available shops in {city}:</p>
 											<ul>
 												{availableShops.map((shop) => (
-													<li key={shop.id}>
+													<li key={shop.id} className="font-medium">
 														{shop.name} - {shop.address}
 													</li>
 												))}

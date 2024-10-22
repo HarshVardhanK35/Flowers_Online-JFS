@@ -15,16 +15,6 @@ const AdminLanding = () => {
 
 					<div
 						className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl cursor-pointer transition duration-300"
-						onClick={() => navigate("/admin/details")}
-					>
-						<h2 className="text-xl font-bold mb-2">
-              Edit Your Details <span aria-hidden="true" className="mt-1 text-sm text-gray-500">&rarr;</span>
-            </h2>
-						<p>Modify / Edit your details here.</p>
-					</div>
-
-					<div
-						className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl cursor-pointer transition duration-300"
 						onClick={() => navigate("/admin/add-product")}
 					>
 						<h2 className="text-xl font-bold mb-2">
@@ -48,9 +38,19 @@ const AdminLanding = () => {
 						onClick={() => navigate("/admin/add-shop")}
 					>
 						<h2 className="text-xl font-bold mb-2">
-              Add Shop Location <span aria-hidden="true" className="mt-1 text-sm text-gray-500">&rarr;</span>
+              Add Shop Details <span aria-hidden="true" className="mt-1 text-sm text-gray-500">&rarr;</span>
             </h2>
 						<p>Add a new shop location to start your flower bouquet business.</p>
+					</div>
+
+          <div
+						className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl cursor-pointer transition duration-300"
+						onClick={() => navigate("/admin/shops")}
+					>
+						<h2 className="text-xl font-bold mb-2">
+              All Shops List <span aria-hidden="true" className="mt-1 text-sm text-gray-500">&rarr;</span>
+            </h2>
+						<p>Modify / Edit and Delete shops listed.</p>
 					</div>
 				</div>
 			</div>

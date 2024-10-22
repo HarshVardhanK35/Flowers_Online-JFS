@@ -21,6 +21,4 @@ public class ShopLocation {
     private String city;
     private String phoneNumber;
 
-    private boolean isAdminShop;  // To mark admin-specific shops
-    private boolean isNormalShop; // To mark normal shops
 }

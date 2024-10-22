@@ -17,8 +17,8 @@ const AdminNavbar = () => {
 	const navigate = useNavigate();
 
 	const navigation = [
+		{ name: "Dashboard", href: "/admin", current: false },
 		{ name: "Categories", href: "/categories", current: false },
-		{ name: "Edit Bouquets", href: "/admin/products", current: false },
 		{ name: "Users", href: "/user-profiles", current: false },
 	];
 
