@@ -46,6 +46,18 @@ public class ShopLocationController {
         return shopLocationService.addShopLocation(shopLocation);
     }
 
+    // Update existing shop location - restricted to ADMIN only
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ShopLocation> updateShopLocation(@PathVariable Long id, @RequestBody ShopLocation updatedShop) {
+        ShopLocation shop = shopLocationService.updateShopLocation(id, updatedShop);
+        if (shop != null) {
+            return ResponseEntity.ok(shop);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     // Delete shop location - restricted to ADMIN only
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")

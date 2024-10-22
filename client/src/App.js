@@ -18,6 +18,7 @@ import CartPage from "./components/Products/CartPage.jsx";
 import AdminEditProduct from "./components/Admin/AdminEditProduct.jsx";
 import ServiceNotAvailable from "./components/Common/ServiceNotAvailable.jsx";
 import AdminShopList from "./components/Admin/AdminShopList.jsx";
+import AdminEditShop from "./components/Admin/AdminEditShops.jsx";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
 
         <Route path="/admin/add-shop" element={<ProtectedRoute adminOnly={true}><AddShopLocation /></ProtectedRoute>} />
         <Route path="/admin/shops" element={<ProtectedRoute adminOnly={true}><AdminShopList /></ProtectedRoute>} />
+        <Route path="/admin/edit-shop/:shopId" element={<ProtectedRoute adminOnly={true}><AdminEditShop /></ProtectedRoute>} />
         {/* <Route path="/admin/details" element={<ProtectedRoute adminOnly={true}><AdminDetails /></ProtectedRoute>} /> */}
 
 

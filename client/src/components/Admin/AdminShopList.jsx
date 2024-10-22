@@ -69,6 +69,8 @@ const AdminShopList = () => {
 		}
 	};
 
+  console.log(shops)
+
 	return (
 		<div>
 			<AdminNavbar />

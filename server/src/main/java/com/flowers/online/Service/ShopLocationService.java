@@ -5,6 +5,7 @@ import com.flowers.online.Repository.ShopLocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ShopLocationService {
@@ -21,12 +22,23 @@ public class ShopLocationService {
     }
 
     public ShopLocation addShopLocation(ShopLocation shopLocation) {
-        // Add validation logic if needed
         return shopLocationRepository.save(shopLocation);
     }
 
+    public ShopLocation updateShopLocation(Long id, ShopLocation updatedShop) {
+        Optional<ShopLocation> existingShopOpt = shopLocationRepository.findById(id);
+        if (existingShopOpt.isPresent()) {
+            ShopLocation existingShop = existingShopOpt.get();
+            existingShop.setName(updatedShop.getName());
+            existingShop.setAddress(updatedShop.getAddress());
+            existingShop.setCity(updatedShop.getCity());
+            existingShop.setPhoneNumber(updatedShop.getPhoneNumber());
+            return shopLocationRepository.save(existingShop);
+        }
+        return null; // Shop not found
+    }
+
     public void deleteShopLocation(Long id) {
-        // Optionally, check if the shop exists before deleting
         shopLocationRepository.deleteById(id);
     }
 }
