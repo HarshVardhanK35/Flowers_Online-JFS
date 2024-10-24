@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -6,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "../Common/Navbar";
 import AdminNavbar from "../Common/AdminNavbar";
-import ProductFilter from "../Common/ProductFilter";
+import ProductFilter from "./ProductFilter";
 
 const ProductList = () => {
 	const navigate = useNavigate();
@@ -100,8 +99,8 @@ const ProductList = () => {
 	};
 
 	const handleResetFilters = () => {
-		setFilteredProducts(products);
-		window.location.reload(); // Reload the page
+		setFilteredProducts(products); // Reset the products to the original list
+		setSelectedCategory("all"); // Reset the category filter to 'all'
 	};
 
 	const handleCategoryChange = (category) => {
@@ -190,7 +189,7 @@ const ProductList = () => {
 							onFilter={handleFilter}
 							onClearFilter={handleClearFilter}
 							onResetFilters={handleResetFilters}
-							showCategoryFilter={selectedCategory === "all"}
+							showCategoryFilter={true}
 							onCategoryChange={handleCategoryChange}
 						/>
 					)}
@@ -338,7 +337,13 @@ const ProductList = () => {
 
 						{role === "ROLE_ADMIN" && (
 							<motion.button
-								onClick={() => navigate(-1)}
+								onClick={() => {
+									if (role === "ROLE_ADMIN") {
+										navigate("/admin");
+									} else {
+										navigate("/categories");
+									}
+								}}
 								className="text-sm font-semibold leading-6 text-black rounded-md px-2 py-1"
 								whileHover={{
 									scale: 1.1,

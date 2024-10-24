@@ -23,6 +23,17 @@ public class ShopLocationController {
         return shopLocationService.getAllShopLocations();
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ShopLocation> getShopById(@PathVariable Long id) {
+        ShopLocation shop = shopLocationService.getShopById(id);
+        if (shop != null) {
+            return ResponseEntity.ok(shop);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     // Get distinct city names for the dropdown in registration
     @GetMapping("/cities")
     public List<String> getCities() {
@@ -46,7 +57,6 @@ public class ShopLocationController {
         return shopLocationService.addShopLocation(shopLocation);
     }
 
-    // Update existing shop location - restricted to ADMIN only
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ShopLocation> updateShopLocation(@PathVariable Long id, @RequestBody ShopLocation updatedShop) {
@@ -58,7 +68,6 @@ public class ShopLocationController {
         }
     }
 
-    // Delete shop location - restricted to ADMIN only
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteShopLocation(@PathVariable Long id) {

@@ -19,13 +19,18 @@ const AddProducts = () => {
 
 	const handleFileChange = (e) => {
 		const selectedFile = e.target.files[0];
-
 		setFile(selectedFile);
 
 		if (selectedFile) {
 			const fileUrl = URL.createObjectURL(selectedFile);
 			setFilePreview(fileUrl);
 		}
+	};
+
+	const handleRemoveImage = () => {
+		// Clear the file and preview without refreshing the page
+		setFile(null);
+		setFilePreview(null);
 	};
 
 	const handleAddProducts = async (e) => {
@@ -185,9 +190,7 @@ const AddProducts = () => {
 									</label>
 									<div className="relative mt-1 rounded-md shadow-sm">
 										<div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2">
-											<span className="text-gray-500 sm:text-sm">
-												{/* {currency === "₹" ? "₹" : "$"} */}₹
-											</span>
+											<span className="text-gray-500 sm:text-sm">₹</span>
 										</div>
 										<motion.input
 											id="productPrice"
@@ -204,10 +207,7 @@ const AddProducts = () => {
 											transition={{ duration: 0.2 }}
 											required
 										/>
-										<div className="absolute inset-y-0 right-0 ">
-											<label htmlFor="currency" className="sr-only">
-												Currency
-											</label>
+										<div className="absolute inset-y-0 right-0">
 											<select
 												id="currency"
 												name="currency"
@@ -217,7 +217,6 @@ const AddProducts = () => {
 												}}
 												className="block h-full rounded-md border-0 bg-transparent py-1.5 pl-2 pr-2 text-gray-500 sm:text-sm"
 											>
-												{/* <option value="$">USD</option> */}
 												<option value="₹">INR</option>
 											</select>
 										</div>
@@ -272,24 +271,23 @@ const AddProducts = () => {
 									</div>
 								</div>
 
+								{/* Image Upload with Remove Button */}
 								<div className="-mt-2 col-span-3">
 									<div className="flex items-center">
 										<label className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-1 hover:text-indigo-500">
-											Upload an image!{" "}
-											<span aria-hidden="true">→</span>
+											Upload an image! <span aria-hidden="true">→</span>
 											<input
 												id="file-upload"
 												name="file-upload"
 												type="file"
 												onChange={handleFileChange}
 												className="sr-only"
-												required
 											/>
 										</label>
 
 										{filePreview && (
 											<motion.div
-												className=" absolute relative"
+												className="relative p-2"
 												initial={{ opacity: 0 }}
 												animate={{ opacity: 1 }}
 												transition={{ duration: 0.3 }}
@@ -297,11 +295,21 @@ const AddProducts = () => {
 												<motion.img
 													src={filePreview}
 													alt="Selected file preview"
-													className="p-2 h-40 w-40 object-cover rounded-md"
+													className="h-40 w-40 object-cover rounded-md"
 												/>
+												{/* "X" Button to Remove Image */}
+												<motion.button
+													className="absolute top-0 right-0 text-red-600 bg-white rounded-full px-2 py-0.5 hover:bg-gray-200"
+													onClick={handleRemoveImage}
+													whileHover={{ scale: 1.2 }}
+													whileTap={{ scale: 0.95 }}
+												>
+													X
+												</motion.button>
 											</motion.div>
 										)}
 									</div>
+
 									{file && (
 										<div className="-mt-1 text-sm text-gray-600">
 											{file.name}
@@ -338,4 +346,5 @@ const AddProducts = () => {
 		</div>
 	);
 };
+
 export default AddProducts;

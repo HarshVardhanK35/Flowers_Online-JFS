@@ -17,6 +17,11 @@ public class ShopLocationService {
         return shopLocationRepository.findAll();
     }
 
+    public ShopLocation getShopById(Long id) {
+        Optional<ShopLocation> shop = shopLocationRepository.findById(id);
+        return shop.orElse(null);
+    }
+
     public List<ShopLocation> getShopLocationsByCity(String city) {
         return shopLocationRepository.findByCity(city);
     }

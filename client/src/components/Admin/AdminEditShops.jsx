@@ -13,7 +13,7 @@ const AdminEditShop = () => {
 	const [address, setAddress] = useState("");
 	const [city, setCity] = useState("");
 	const [phoneNumber, setPhoneNumber] = useState("");
-	const [shopType, setShopType] = useState(""); // To handle radio buttons
+
 	const token = localStorage.getItem("token");
 	const role = localStorage.getItem("role");
 
@@ -31,6 +31,11 @@ const AdminEditShop = () => {
 			},
 		})
 			.then((res) => {
+				if (res.status === 401) {
+					// alert("Unauthorized. Please login again.");
+					// navigate("/login");
+					return;
+				}
 				if (!res.ok) {
 					if (res.status === 404) {
 						alert("Shop not found");
@@ -46,7 +51,6 @@ const AdminEditShop = () => {
 				setAddress(data.address);
 				setCity(data.city);
 				setPhoneNumber(data.phoneNumber);
-				setShopType(data.adminShop ? "admin" : "normal"); // Set the correct shop type
 			})
 			.catch((error) => {
 				console.error(error);
@@ -60,8 +64,6 @@ const AdminEditShop = () => {
 			address,
 			city,
 			phoneNumber,
-			adminShop: shopType === "admin",
-			normalShop: shopType === "normal",
 		};
 
 		fetch(`http://localhost:8080/api/shops/${shopId}`, {
@@ -87,7 +89,7 @@ const AdminEditShop = () => {
 			});
 	};
 
-  console.log(shop)
+	console.log(shop);
 
 	return shop ? (
 		<div>
@@ -151,32 +153,6 @@ const AdminEditShop = () => {
 								required
 								className="form-control block w-full border-1 p-2 rounded-md"
 							/>
-						</div>
-
-						<div>
-							<label className="block text-sm font-medium text-gray-900">
-								Shop Type
-							</label>
-							<div className="flex space-x-4">
-								<label>
-									<input
-										type="radio"
-										value="admin"
-										checked={shopType === "admin"}
-										onChange={() => setShopType("admin")}
-									/>
-									Admin Shop
-								</label>
-								<label>
-									<input
-										type="radio"
-										value="normal"
-										checked={shopType === "normal"}
-										onChange={() => setShopType("normal")}
-									/>
-									Normal Shop
-								</label>
-							</div>
 						</div>
 
 						<div className="mt-6 flex justify-end">

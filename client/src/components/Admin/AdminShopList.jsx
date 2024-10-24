@@ -168,7 +168,7 @@ const AdminShopList = () => {
 						</motion.button>
 
 						<motion.button
-							onClick={() => navigate(-1)}
+							onClick={() => navigate("/admin")}
 							className="text-sm font-semibold leading-6 text-black rounded-md px-2 py-1"
 							whileHover={{
 								scale: 1.1,

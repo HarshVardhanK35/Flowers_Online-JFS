@@ -18,7 +18,7 @@ const CartPage = () => {
 					`http://localhost:8080/api/cart/${userId}`,
 					{
 						headers: {
-							Authorization: `Bearer ${token}`, // Use the token from localStorage
+							Authorization: `Bearer ${token}`,
 						},
 					}
 				);
@@ -34,7 +34,7 @@ const CartPage = () => {
 					`http://localhost:8080/api/products?ids=${productIds.join(",")}`,
 					{
 						headers: {
-							Authorization: `Bearer ${token}`, // Use the token from localStorage
+							Authorization: `Bearer ${token}`,
 						},
 					}
 				);
@@ -98,9 +98,14 @@ const CartPage = () => {
 		}
 	};
 
-	const handleIncreaseQuantity = (productId, currentQuantity) => {
-		if (currentQuantity < 3) {
-			handleQuantityChange(productId, currentQuantity + 1);
+	// Correct logic for handling the "+" button based on available stock
+	const handleIncreaseQuantity = (
+		productId,
+		currentQuantity,
+		availableQuantity
+	) => {
+		if (availableQuantity !== 0) {
+			handleQuantityChange(productId, currentQuantity + 1); // Properly increase quantity
 		}
 	};
 
@@ -183,27 +188,6 @@ const CartPage = () => {
 		}
 	};
 
-	useEffect(() => {
-		if (cartItems.length > 0) {
-			cartItems.forEach((item) => {
-				// console.log(item);
-
-				if (item.product && item.availableQuantity !== undefined) {
-
-          const initialAvailableQuantity =
-						item.initialAvailableQuantity || item.availableQuantity;
-
-          const selectedQuantity = item.quantity;
-            item.initialAvailableQuantity = initialAvailableQuantity;
-
-					const currentAvailableQuantity = item.availableQuantity;
-					const isMinQuantitySelected = selectedQuantity === 1;
-					const isMaxQuantitySelected = selectedQuantity === initialAvailableQuantity;
-				}
-			});
-		}
-	}, [cartItems]);
-
 	return (
 		<>
 			<Navbar />
@@ -275,7 +259,7 @@ const CartPage = () => {
 													item.availableQuantity
 												)
 											}
-											disabled={item.quantity >= 3}
+											disabled={item.availableQuantity === 0} // Disable when quantity reaches availableQuantity
 										>
 											+
 										</button>
@@ -317,7 +301,10 @@ const CartPage = () => {
 					<div className="w-full md:w-1/3 bg-gray-100 p-4 rounded-lg flex items justify-between">
 						<div>
 							<h3 className="text-lg font-bold">Order Summary</h3>
-							<p className="text-gray-700">Total: {'₹'}{cartTotal.toFixed(2)}</p>
+							<p className="text-gray-700">
+								Total: {"₹"}
+								{cartTotal.toFixed(2)}
+							</p>
 							<button
 								onClick={() => navigate("#")}
 								className="mt-2 bg-blue-500 text-white rounded-md px-4 py-2"

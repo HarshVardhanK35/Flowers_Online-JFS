@@ -44,10 +44,10 @@ public class WebSecurityConfig {
                         .requestMatchers("/categories/**", "/products/**", "/profile").authenticated()
                         .requestMatchers("/home", "/categories", "/manifest.json", "/favicon.ico", "/static/**").permitAll()
                         .requestMatchers("/api/products/**", "/uploads/**").permitAll()
-                        .requestMatchers("/api/shops").permitAll()  // GET Requests only should be accessible publicly
+                        .requestMatchers("/api/shops").permitAll()
                         .requestMatchers("/api/shops/cities").permitAll()
                         .requestMatchers("/api/shops/city/**").permitAll()
-                        .requestMatchers("/api/shops").hasRole("ADMIN")  // Ensure POST and DELETE are only accessible to admins
+                        .requestMatchers("/api/shops/**").hasRole("ADMIN") // Ensure all shop-related admin routes are accessible
                         .requestMatchers("/api/cart/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
