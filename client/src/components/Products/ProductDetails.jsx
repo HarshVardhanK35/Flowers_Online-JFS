@@ -1,11 +1,8 @@
-/* eslint-disable react/jsx-no-duplicate-props */
-/* eslint-disable no-unused-vars */
-/* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminNavbar from "../Common/AdminNavbar";
 import Navbar from "../Common/Navbar";
-import { motion, AnimatePresence } from "framer-motion"; // Import motion and AnimatePresence
+import { motion, AnimatePresence } from "framer-motion";
 
 const ProductDetails = () => {
 	const navigate = useNavigate();
@@ -94,8 +91,7 @@ const ProductDetails = () => {
 		// **Check if service is available at the user's location**
 		const isServiceAvailable = await checkServiceAvailability();
 		if (!isServiceAvailable) {
-			// alert("Service is not available at your location.");
-			navigate("/service-not-available");
+			alert("Service is not available at your location.");
 			return; // Stop if no service is available
 		}
 
@@ -123,7 +119,7 @@ const ProductDetails = () => {
 				alert(
 					`Added ${selectedQuantity} product(s) of size ${selectedSize} to cart.`
 				);
-				window.location.reload();
+				navigate("/cart");
 			} else {
 				alert("Error adding product to cart");
 			}
@@ -140,8 +136,6 @@ const ProductDetails = () => {
 		return <div>Loading product details...</div>;
 	}
 
-	// console.log(product);
-
 	const productDetails = {
 		description:
 			"Express your sentiments with our exquisite flower bouquets. Whether you're celebrating a birthday, expressing love and affection, commemorating a wedding, offering condolences, or marking a grand opening, our blooms speak volumes. Each bouquet is a unique arrangement of fresh, vibrant flowers, carefully selected to convey your message.",
@@ -151,26 +145,27 @@ const ProductDetails = () => {
 			"emphasizes the freshness and careful selection of flowers, highlighting the artistry involved.",
 		],
 	};
+
 	return (
 		<div className="bg-white">
 			{role === "ROLE_ADMIN" ? <AdminNavbar /> : <Navbar />}
 			<div className="pt-6">
 				<div className="mx-auto max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
 					<div className="aspect-h-4 aspect-w-3 overflow-hidden rounded-lg lg:block">
-						<motion.img // Wrap the img tag
+						<motion.img
 							src={`http://localhost:8080${product.photo}`}
 							alt={product.name}
 							className="h-full w-full object-cover object-center"
-							whileHover={{ scale: 1.1 }} // Zoom effect on hover
+							whileHover={{ scale: 1.1 }}
 							transition={{ duration: 0.3, ease: "easeInOut" }}
 						/>
 					</div>
 
 					<div className=" lg:col-span-2 lg:mt-0">
-						<motion.h1 // Wrap the h1 tag
+						<motion.h1
 							className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"
-							initial={{ opacity: 0, y: -10 }} // Start slightly off-screen and transparent
-							animate={{ opacity: 1, y: 0 }} // Fade in and move to original position
+							initial={{ opacity: 0, y: -10 }}
+							animate={{ opacity: 1, y: 0 }}
 							transition={{ duration: 0.5, ease: "easeOut" }}
 						>
 							{product.name}
