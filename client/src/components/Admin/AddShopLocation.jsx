@@ -66,11 +66,13 @@ export default function AddShopLocation() {
 						animate={{ opacity: 1, scale: 1 }} // Animate to: fully visible and normal size
 						transition={{ duration: 0.3, delay: 0.2 }} // Slight delay for a smoother effect
 					>
-						Add A Shop 
+						Add A Shop
 					</motion.h2>
 
 					<div className="mb-4">
-						<label className="block text-sm font-medium">Shop Name</label>
+						<label className="pl-1 text-sm font-medium leading-6 text-gray-900">
+							Shop Name
+						</label>
 						<input
 							type="text"
 							value={shopName}
@@ -86,31 +88,40 @@ export default function AddShopLocation() {
 					</div>
 
 					<div className="mb-4">
-						<label className="block text-sm font-medium">City</label>
-						<select
+						<label className="pl-1 text-sm font-medium leading-6 text-gray-900">
+							Select City
+						</label>
+						<motion.select
 							value={city}
 							onChange={(e) => setCity(e.target.value)}
 							required
-							className="form-control block w-full border-1 p-2 rounded-md"
+							className="block w-full rounded-md border-1 pl-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+							whileFocus={{
+								scale: 1.02,
+								boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.1)",
+							}}
+							transition={{ duration: 0.2 }}
 						>
 							<option value="">Select City</option>
-							<option>Vizag</option>
-							<option>Pune</option>
-							<option>Hyderabad</option>
-							<option>Mumbai</option>
-							<option>Chennai</option>
-							<option>Kolkata</option>
-							<option>Bangalore</option>
-							<option>Greater-Noida</option>
-							<option>Kochin</option>
-							<option>Ahmedabad</option>
-							<option>Haryana</option>
-							<option>Goa</option>
-						</select>
+							<option value="Vizag">Vizag</option>
+							<option value="Pune">Pune</option>
+							<option value="Hyderabad">Hyderabad</option>
+							<option value="Mumbai">Mumbai</option>
+							<option value="Chennai">Chennai</option>
+							<option value="Kolkata">Kolkata</option>
+							<option value="Bangalore">Bangalore</option>
+							<option value="Greater-Noida">Greater-Noida</option>
+							<option value="Kochin">Kochin</option>
+							<option value="Ahmedabad">Ahmedabad</option>
+							<option value="Haryana">Haryana</option>
+							<option value="Goa">Goa</option>
+						</motion.select>
 					</div>
 
 					<div className="mb-4">
-						<label className="block text-sm font-medium">Address</label>
+						<label className="pl-1 text-sm font-medium leading-6 text-gray-900">
+							Address
+						</label>
 						<textarea
 							value={address}
 							onChange={(e) => setAddress(e.target.value)}
@@ -120,7 +131,9 @@ export default function AddShopLocation() {
 					</div>
 
 					<div className="mb-4">
-						<label className="block text-sm font-medium">Phone Number</label>
+						<label className="pl-1 text-sm font-medium leading-6 text-gray-900">
+							Phone Number
+						</label>
 						<input
 							type="tel"
 							pattern="[6789][0-9]{9}"

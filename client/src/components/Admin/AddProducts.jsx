@@ -92,7 +92,8 @@ const AddProducts = () => {
 						<div className="border-b border-gray-900/10 pb-1">
 							<div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-4">
 								<div className="sm:col-span-2">
-									<label
+
+                  <label
 										htmlFor="productName"
 										className="pl-1 block text-sm font-medium leading-6 text-gray-900"
 									>

@@ -1,16 +1,21 @@
 package com.flowers.online.Model;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
 @Getter
 @Entity
 @Table(name = "app_user", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})  // Ensure email is unique
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Setter
     private String title;
+
     @Setter
     private String firstName;
 

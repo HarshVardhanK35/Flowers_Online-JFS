@@ -1,7 +1,6 @@
 package com.flowers.online.Model;
-import jakarta.persistence.*;
-import org.eclipse.angus.mail.imap.protocol.Item;
 
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 

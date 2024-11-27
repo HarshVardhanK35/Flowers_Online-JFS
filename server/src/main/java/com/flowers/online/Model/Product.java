@@ -29,11 +29,9 @@ public class Product {
     @Column(name = "stock")
     private Map<String, Integer> stockBySize = new HashMap<>();
 
-    // Default constructor
     public Product() {
     }
 
-    // Constructor with corrected quantity parameter
     public Product(String name, double price, String category, String photo, String size, String currency, String about, int availableQuantity) {
         this.name = name;
         this.price = price;
