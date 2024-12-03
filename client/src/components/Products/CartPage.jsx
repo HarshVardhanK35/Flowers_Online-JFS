@@ -105,7 +105,7 @@ const CartPage = () => {
 		availableQuantity
 	) => {
 		if (availableQuantity !== 0) {
-			handleQuantityChange(productId, currentQuantity + 1); // Properly increase quantity
+			handleQuantityChange(productId, currentQuantity + 1 ); // Properly increase quantity
 		}
 	};
 
@@ -240,7 +240,7 @@ const CartPage = () => {
 											onClick={() =>
 												handleDecreaseQuantity(item.product.id, item.quantity)
 											}
-											disabled={item.quantity <= 1}
+											disabled={item.quantity === 1}
 										>
 											-
 										</button>
@@ -259,7 +259,7 @@ const CartPage = () => {
 													item.availableQuantity
 												)
 											}
-											disabled={item.availableQuantity === 0} // Disable when quantity reaches availableQuantity
+											disabled={item.availableQuantity === 3} // Disable when quantity reaches availableQuantity
 										>
 											+
 										</button>
